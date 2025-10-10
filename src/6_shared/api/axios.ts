@@ -1,13 +1,8 @@
-import http from 'http';
-import axios from 'axios';
-
+import axios from "axios";
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_STRAPI_URL,
+  baseURL: "/api",
   withCredentials: true,
-  httpAgent: new http.Agent({ family: 4 }),
-
-  headers: { 'Content-Type': 'application/json' },
-  
+  headers: { "Content-Type": "application/json" },
 });
 

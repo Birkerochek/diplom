@@ -1,0 +1,12 @@
+@use "@shared/styles/variables" as *;
+.logoCont{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: $color-brand-primary;
+    margin: 14px 0;
+}
+

@@ -1,0 +1,55 @@
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
+
+const VOLUNTEER_ROOT = "/volunteer";
+const ORGANIZER_ROOT = "/organizer";
+const LOGIN_PATH = "/auth/login";
+
+export async function middleware(req: NextRequest) {
+  const secret = process.env.NEXTAUTH_SECRET;
+
+  if (!secret) {
+    return NextResponse.next();
+  }
+
+  const token = await getToken({ req, secret });
+
+  const { pathname } = req.nextUrl;
+
+  if (!token) {
+    const loginUrl = req.nextUrl.clone();
+    loginUrl.pathname = LOGIN_PATH;
+    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  const role = typeof token?.role === "string" ? token.role : undefined;
+
+  if (!role) {
+    const loginUrl = req.nextUrl.clone();
+    loginUrl.pathname = LOGIN_PATH;
+    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  if (pathname.startsWith(VOLUNTEER_ROOT) && role !== "volunteer") {
+    const redirectUrl = req.nextUrl.clone();
+    redirectUrl.pathname = ORGANIZER_ROOT + "/dashboard";
+    redirectUrl.searchParams.delete("callbackUrl");
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  if (pathname.startsWith(ORGANIZER_ROOT) && role !== "organizer") {
+    const redirectUrl = req.nextUrl.clone();
+    redirectUrl.pathname = VOLUNTEER_ROOT + "/dashboard";
+    redirectUrl.searchParams.delete("callbackUrl");
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ["/volunteer/:path*", "/organizer/:path*"],
+};

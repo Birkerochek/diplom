@@ -6,6 +6,7 @@ import "@shared/styles/reset.scss";
 import "@shared/styles/variables.scss";
 import "@shared/styles/globals.scss";
 import './globals.css'
+import { Header } from "@widgets/Header";
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -21,7 +22,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.variable}>
         <AppProviders>
-      
+          <Header/>
+          
           {children}
           <ReactQueryDevtools initialIsOpen={false} />
         </AppProviders>
