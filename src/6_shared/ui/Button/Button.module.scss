@@ -1,0 +1,176 @@
+@use "@shared/styles/variables.scss" as *;
+.button {
+  border-radius: 10px;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+
+  gap: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-size: $fs-14;
+  font-weight: $fw-500;
+  background: $color-brand-primary;
+  color: $color-basic-white;
+  svg {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  @media (max-width: 320px) {
+    font-size: var(--fs-12);
+  }
+  &--fullWidth {
+    width: 100%;
+    height: 35px;
+  }
+
+  &--direction-ltr {
+    flex-direction: row;
+  }
+
+  &--direction-rtl {
+    flex-direction: row-reverse;
+  }
+
+  &--color-primary {
+    background: $color-brand-primary;
+    color: $color-basic-white;
+    transition: 0.3s;
+    box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.1),
+      0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    svg {
+      path {
+        stroke: $color-basic-white;
+        transition: 0.3s;
+      }
+    }
+    &:hover {
+      background: $color-basic-white;
+      color: $color-basic-black;
+      border: 1px solid $color-basic-gray;
+      svg {
+        path {
+          stroke: $color-basic-black;
+        }
+      }
+    }
+  }
+  &--color-white {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    background: $color-basic-white;
+    color: $color-basic-black;
+    border: 1px solid $color-basic-gray;
+    svg {
+      path {
+        stroke: $color-basic-black;
+        transition: 0.3s;
+      }
+    }
+    transition: 0.3s;
+    &:hover {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      background: $color-brand-secondary;
+      color: $color-basic-white;
+      border: 1px solid transparent;
+      svg {
+        path {
+          stroke: $color-basic-white;
+        }
+      }
+    }
+  }
+  &--size-big {
+    width: 402px;
+    height: 35px;
+    color: $color-basic-white;
+    background: $color-brand-primary;
+    transition: 0.3s;
+    box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.1),
+      0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    @media (max-width: 960px) {
+      width: 326px;
+    }
+    @media (max-width: 480px) {
+      width: 402px;
+    }
+    @media (max-width: 320px) {
+      width: 240px;
+    }
+    &:hover {
+      color: $color-basic-black;
+      background: $color-basic-white;
+      border: 1px solid $color-basic-gray;
+    }
+  }
+
+  &--tag {
+    padding: 6px 10px;
+    font-size: var(--fs-12);
+    font-weight: var(--fw-400);
+    @media (max-width: 480px) {
+      font-size: var(--fs-10);
+    }
+    &-white {
+      background: $color-basic-white;
+      color: $color-basic-black;
+      border: 1px solid $color-basic-gray;
+      transition: 0.3s;
+      &:hover {
+        background: $color-basic-gray;
+        color: $color-basic-white;
+      }
+    }
+    &-green {
+      background: $color-brand-primary;
+      color: $color-basic-white;
+      transition: 0.3s;
+      border: 1px solid $color-brand-primary;
+      &:hover {
+        background: $color-basic-white;
+        color: $color-basic-black;
+        border: 1px solid $color-basic-gray;
+      }
+    }
+    &-outline {
+      background: none;
+      border: 1px solid $color-basic-white;
+      color: $color-basic-white;
+      transition: 0.3s;
+      &:hover {
+        background: $color-brand-primary;
+        border: 1px solid transparent;
+      }
+    }
+  }
+
+  &--delete {
+    background: transparent;
+    color: $color-brand-primary;
+    
+    border: 1px solid $color-basic-gray;
+    font-size: $fs-14;
+    font-weight: $fw-500;
+    transition: 0.3s;
+
+    svg {
+      path {
+        stroke: $color-brand-primary;
+        transition: 0.3s;
+      }
+    }
+
+    &:hover {
+      color: $color-basic-white;
+      background: $color-brand-primary;
+      border: 1px solid transparent;
+      svg {
+        path {
+          stroke: $color-basic-white;
+        }
+      }
+    }
+  }
+}

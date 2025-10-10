@@ -1,0 +1,2 @@
+export const MEDIA_IMAGE_MAX_SIZE = 7 * 1024 * 1024;
+export const MEDIA_TRAILER_MAX_SIZE = 10 * 1024 * 1024;

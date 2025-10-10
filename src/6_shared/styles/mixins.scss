@@ -1,0 +1,48 @@
+@use "variables" as *;
+
+@mixin media-xxl {
+  @media (max-width: #{$breakpoint-xxl}) {
+    @content;
+  }
+}
+@mixin media-xl {
+  @media (max-width: #{$breakpoint-xl}) {
+    @content;
+  }
+}
+@mixin media-lg {
+  @media (max-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
+@mixin media-md {
+  @media (max-width: #{$breakpoint-md}) {
+    @content;
+  }
+}
+@mixin media-sm {
+  @media (max-width: #{$breakpoint-sm}) {
+    @content;
+  }
+}
+@mixin media-xs {
+  @media (max-width: #{$breakpoint-xs}) {
+    @content;
+  }
+}
+@mixin media-xxs {
+  @media (max-width: #{$breakpoint-xxs}) {
+    @content;
+  }
+}
+@mixin media-tn {
+  @media (max-width: #{$breakpoint-tn}) {
+    @content;
+  }
+}
+
+@mixin input-focus {
+  outline: none;
+  border: 1px solid $color-brand-primary;
+  box-shadow: 0 0 0 2px rgba(235, 80, 80, 0.1);
+}

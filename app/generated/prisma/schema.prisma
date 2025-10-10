@@ -1,0 +1,274 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------------
+// ENUMS
+// ------------------------------------------------------------
+
+enum Role {
+  volunteer
+  organizer
+}
+
+enum EventStatus {
+  draft
+  published
+  active
+  completed
+  cancelled
+}
+
+enum RegistrationStatus {
+  pending
+  approved
+  rejected
+  cancelled
+  completed
+}
+
+enum SourceType {
+  auto
+  manual
+}
+
+// ------------------------------------------------------------
+// USERS
+// ------------------------------------------------------------
+
+model User {
+  id                  String   @id @default(uuid()) @db.Uuid
+  email               String   @unique
+  passwordHash        String
+  name                String
+  role                Role
+  phone               String?
+  bio                 String?
+  avatarUrl           String?
+  preferredActivities String[] @default([])
+
+  organizationName        String?
+  organizationDescription String?
+
+  isActive  Boolean   @default(true)
+  lastLogin DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relations
+  events                Event[]             @relation("OrganizerEvents")
+  registrations         EventRegistration[] @relation("VolunteerRegistrations")
+  volunteerHours        VolunteerHour[]
+  certificates          Certificate[]
+  notifications         Notification[]
+  auditLogs             AuditLog[]
+  verifiedHours         VolunteerHour[]     @relation("VerifiedByRelation")
+  reviewedRegistrations EventRegistration[] @relation("ReviewedByRelation")
+  issuedCertificates    Certificate[]       @relation("IssuedByRelation")
+
+  @@index([role])
+  @@index([createdAt])
+}
+
+// ------------------------------------------------------------
+// EVENTS
+// ------------------------------------------------------------
+
+model Event {
+  id                  String      @id @default(uuid()) @db.Uuid
+  organizerId         String      @db.Uuid
+  title               String
+  description         String?
+  activityType        String
+  eventDate           DateTime
+  startTime           DateTime
+  endTime             DateTime
+  location            String
+  address             String?
+  requiredHours       Int
+  maxParticipants     Int?
+  currentParticipants Int?        @default(0)
+  requirements        String?
+  skillsNeeded        String[]    @default([])
+  status              EventStatus @default(draft)
+  tags                String[]    @default([])
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  publishedAt         DateTime?
+
+  // Relations
+  organizer      User                @relation("OrganizerEvents", fields: [organizerId], references: [id], onDelete: Cascade)
+  registrations  EventRegistration[]
+  volunteerHours VolunteerHour[]
+
+  @@index([organizerId])
+  @@index([status])
+  @@index([eventDate])
+  @@index([activityType])
+  @@index([createdAt])
+}
+
+// ------------------------------------------------------------
+// EVENT REGISTRATIONS
+// ------------------------------------------------------------
+
+model EventRegistration {
+  id               String             @id @default(uuid()) @db.Uuid
+  eventId          String             @db.Uuid
+  volunteerId      String             @db.Uuid
+  motivationLetter String?
+  status           RegistrationStatus @default(pending)
+  rejectionReason  String?
+  attended         Boolean            @default(false)
+  hoursCompleted   Int?
+  feedback         String?
+  rating           Int?
+  reviewedById     String?            @db.Uuid
+  registeredAt     DateTime           @default(now())
+  reviewedAt       DateTime?
+  completedAt      DateTime?
+
+  // Relations
+  event          Event           @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer      User            @relation("VolunteerRegistrations", fields: [volunteerId], references: [id], onDelete: Cascade)
+  reviewedBy     User?           @relation("ReviewedByRelation", fields: [reviewedById], references: [id])
+  volunteerHours VolunteerHour[]
+
+  @@unique([eventId, volunteerId])
+  @@index([eventId])
+  @@index([volunteerId])
+  @@index([status])
+}
+
+// ------------------------------------------------------------
+// VOLUNTEER HOURS
+// ------------------------------------------------------------
+
+model VolunteerHour {
+  id             String     @id @default(uuid()) @db.Uuid
+  volunteerId    String     @db.Uuid
+  eventId        String?    @db.Uuid
+  registrationId String?    @db.Uuid
+  hours          Int
+  activityType   String
+  date           DateTime
+  title          String?
+  description    String?
+  verified       Boolean    @default(false)
+  verifiedById   String?    @db.Uuid
+  verifiedAt     DateTime?
+  source         SourceType @default(auto)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  // Relations
+  volunteer    User               @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  event        Event?             @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  registration EventRegistration? @relation(fields: [registrationId], references: [id], onDelete: SetNull)
+  verifiedBy   User?              @relation("VerifiedByRelation", fields: [verifiedById], references: [id])
+
+  @@index([volunteerId])
+  @@index([eventId])
+  @@index([date])
+  @@index([activityType])
+  @@index([verified])
+}
+
+// ------------------------------------------------------------
+// CERTIFICATES
+// ------------------------------------------------------------
+
+model Certificate {
+  id                String   @id @default(uuid()) @db.Uuid
+  volunteerId       String   @db.Uuid
+  certificateNumber String   @unique
+  totalHours        Int
+  periodStart       DateTime
+  periodEnd         DateTime
+  fileUrl           String?
+  verificationToken String   @default(uuid()) @db.Uuid
+  isValid           Boolean  @default(true)
+  issuedById        String?  @db.Uuid
+  issuedAt          DateTime @default(now())
+
+  // Relations
+  volunteer User  @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  issuedBy  User? @relation("IssuedByRelation", fields: [issuedById], references: [id])
+
+  @@index([volunteerId])
+  @@index([certificateNumber])
+  @@index([issuedAt])
+}
+
+// ------------------------------------------------------------
+// ACTIVITY TYPES
+// ------------------------------------------------------------
+
+model ActivityType {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  color       String?
+  category    String?
+  orderIndex  Int?     @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+// ------------------------------------------------------------
+// NOTIFICATIONS
+// ------------------------------------------------------------
+
+model Notification {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  type      String
+  title     String
+  message   String
+  link      String?
+  icon      String?
+  priority  Int      @default(1)
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+// ------------------------------------------------------------
+// AUDIT LOG
+// ------------------------------------------------------------
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String?  @db.Uuid
+  action     String
+  entityType String
+  entityId   String?  @db.Uuid
+  oldValues  Json?
+  newValues  Json?
+  ipAddress  String?
+  userAgent  String?
+  method     String?
+  sessionId  String?
+  createdAt  DateTime @default(now())
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}

@@ -1,0 +1,212 @@
+@use "@shared/styles/variables.scss" as *;
+@use "@shared/styles/mixins.scss" as *;
+.typography{
+  &--h1 {
+    font-weight: $fw-600;
+    font-size: $fs-60;
+    line-height: 100%;
+  
+    @media (max-width: 1530px) {
+      font-size: 3.5rem;
+    }
+    @media (max-width: 1440px) {
+      font-size: 3.25rem;
+    }
+    @media (max-width: 1200px) {
+      font-size: 3rem;
+    }
+    @media (max-width: 960px) {
+      font-size: 2.625rem;
+    }
+    @media (max-width: 640px) {
+      font-size: 2.25rem;
+    }
+    @media (max-width: 480px) {
+      font-size: 2rem;
+    }
+    @media (max-width: 320px) {
+      font-size: 1.75rem;
+    }
+  }
+  
+  &--h2 {
+    font-weight: $fw-600;
+    font-size: $fs-36;
+    line-height: 100%;
+  
+    @media (max-width: 1530px) {
+      font-size: 1.375rem;
+    }
+    @media (max-width: 1440px) {
+      font-size: 1.375rem;
+    }
+    @media (max-width: 1200px) {
+      font-size: 1.25rem;
+    }
+    @media (max-width: 960px) {
+      font-size: 1.25rem;
+    }
+    @media (max-width: 640px) {
+      font-size: 1.375rem;
+      font-weight: var(--fw-700);
+    }
+    @media (max-width: 480px) {
+      font-size: 1.375rem;
+      font-weight: var(--fw-700);
+    }
+    @media (max-width: 320px) {
+      font-size: 1.25rem;
+      font-weight: var(--fw-700);
+    }
+  }
+  &--productName{
+    font-weight: 600;
+    font-size: 1.875rem;
+    line-height: 100%;
+    letter-spacing: -0.04em;
+  
+    
+    @media (max-width: 960px) {
+      font-size: 1.75rem;
+    }
+   
+    @media (max-width: 480px) {
+      font-size: 1.625rem;
+    }
+    @media (max-width: 320px) {
+      font-size: 1.5rem;
+    }
+  }
+  &--h3 {
+    font-weight: $fw-600;
+    font-size: $fs-20;
+    line-height: 100%;
+  
+    @media (max-width: 1530px) {
+      font-size: 1.25rem;
+    }
+    @media (max-width: 1440px) {
+      font-size: 1.125rem;
+    }
+    @media (max-width: 1200px) {
+      font-size: 1.125rem;
+    }
+    @media (max-width: 960px) {
+      font-size: 1.25rem;
+    }
+    @media (max-width: 640px) {
+      font-size: 1.25rem;
+    }
+    @media (max-width: 480px) {
+      font-size: 1.25rem;
+    }
+    @media (max-width: 320px) {
+      font-size: 1.125rem;
+    }
+  }
+  &--h4 {
+    line-height: 100%;
+    font-weight: $fw-400;
+    font-size: $fs-20;
+    @media (max-width: 1530px) {
+      font-size: 1.125rem;
+    }
+    @media (max-width: 1440px) {
+      font-size: 1.125rem;
+    }
+    @media (max-width: 1200px) {
+      font-size: 1.125rem;
+    }
+    @media (max-width: 960px) {
+      font-size: 1rem;
+    }
+    @media (max-width: 640px) {
+      font-size: 1.125rem;
+    }
+    @media (max-width: 480px) {
+      font-size: 1.125rem;
+    }
+    @media (max-width: 320px) {
+      font-size: 1rem;
+    }
+  }
+  
+ 
+  
+  
+    &--body{
+      font-size: $fs-14;
+      font-weight: $fw-400;
+    
+    @media (max-width: 320px) {
+      font-size: var(--fs-14);
+    }
+    }
+    &--bodyBold{
+      font-size: $fs-14;
+      font-weight: var(--fw-500);
+    
+    @media (max-width: 320px) {
+      font-size: var(--fs-14);
+    }
+    }
+    &--button{
+      font-size: $fs-14;
+      font-weight: $fw-400;
+      @media (max-width: 320px) {
+      font-size: var(--fs-12);
+    }
+    }
+    &--background{
+       font-size: var(--fs-14);
+      font-weight: var(--fw-500);
+      @media (max-width: 320px) {
+      font-size: var(--fs-12);
+    }
+    }
+    &--tag{
+      font-size: var(--fs-12);
+      font-weight: var(--fw-400);
+       @media (max-width: 480px) {
+      font-size: var(--fs-10);
+    }
+    }
+    &--author{
+      font-size: var(--fs-12);
+      font-weight: var(--fw-400);
+       @media (max-width: 480px) {
+      font-size: var(--fs-10);
+    }
+    }
+    &--settings{
+      font-size: var(--fs-14);
+      font-weight: var(--fw-400);
+       @media (max-width: 320px) {
+      font-size: var(--fs-12);
+    }
+    }
+    &--subtitle{
+      font-size: $fs-16;
+      font-weight: $fw-400;
+      @include media-tn{
+        font-size: $fs-16;
+      }
+    }
+
+ &--color-green{
+  color: $color-brand-primary;
+ }
+  &--color-secondary{
+  color: $color-brand-secondary;
+ }
+  &--color-gray{
+  color: $color-basic-gray;
+ }
+  &--color-black{
+  color: $color-basic-black;
+ }
+ &--color-white{
+  color: $color-basic-white;
+ }
+  
+}
