@@ -1,23 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { DefaultValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import cn from "classnames";
-import {
-  registerSchema,
-  RegisterFormValues,
-  passwordRequirements,
-} from "@shared/zod/auth";
+import { registerSchema, RegisterFormValues } from "@shared/zod/auth";
 import { Container, Input, Button } from "@shared/ui";
-import { PAGES } from "@shared/constants";
+import { PAGES, ROLES } from "@shared/constants";
 import { api, signIn, getSession } from "@shared/api";
 import { AxiosError } from "axios";
 import {
-  HeartHandshake,
-  CalendarDays,
   Mail,
   UserRound,
   Building2,
@@ -25,21 +19,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import styles from "./RegisterPage.module.scss";
-
-const roles = [
-  {
-    value: "volunteer" as const,
-    title: "Волонтёр",
-    description: "Участвую в мероприятиях",
-    icon: <HeartHandshake size={22} strokeWidth={1.4} />,
-  },
-  {
-    value: "organizer" as const,
-    title: "Организатор",
-    description: "Создаю мероприятия",
-    icon: <CalendarDays size={22} strokeWidth={1.4} />,
-  },
-];
+import { roles } from "../model/RolesCards";
+import { getPasswordRequirementList } from "../model/requirementsList";
 
 export const RegisterPage = () => {
   const router = useRouter();
@@ -70,40 +51,22 @@ export const RegisterPage = () => {
   const selectedRole = watch("role");
   const passwordValue = watch("password");
 
-  const requirementList = [
-    {
-      id: "length",
-      label: `Минимум ${passwordRequirements.minLength} символов`,
-      met: passwordValue.length >= passwordRequirements.minLength,
-    },
-    {
-      id: "uppercase",
-      label: "Хотя бы одна заглавная буква",
-      met: passwordRequirements.hasUppercase.test(passwordValue),
-    },
-    {
-      id: "number",
-      label: "Хотя бы одна цифра",
-      met: passwordRequirements.hasNumber.test(passwordValue),
-    },
-    {
-      id: "special",
-      label: "Хотя бы один спецсимвол",
-      met: passwordRequirements.hasSpecial.test(passwordValue),
-    },
-  ];
+  const requirementList = useMemo(
+    () => getPasswordRequirementList(passwordValue ?? ""),
+    [passwordValue]
+  );
 
   const onSubmit: SubmitHandler<RegisterFormValues> = async (values) => {
     try {
       setIsSubmitting(true);
       setServerError(null);
 
-      await api.post("/auth/register", values);
+      await api.post("api/auth/register", values);
 
       const redirectTo =
-        values.role === "volunteer"
-          ? "/volunteer/dashboard"
-          : "/organizer/dashboard";
+        values.role === ROLES.VOLUNTEER
+          ? PAGES.VOLUNTEER_DASHBOARD
+          : PAGES.ORGANIZER_DASHBOARD;
 
       const signInResult = await signIn(values.email, values.password);
 
