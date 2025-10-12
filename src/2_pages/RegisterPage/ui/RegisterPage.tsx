@@ -1,120 +1,61 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { DefaultValues, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import cn from "classnames";
-import { registerSchema, RegisterFormValues } from "@shared/zod/auth";
-import { Container, Input, Button } from "@shared/ui";
+import { Container, Input, Button, Typography } from "@shared/ui";
 import { PAGES, ROLES } from "@shared/constants";
-import { api, signIn, getSession } from "@shared/api";
-import { AxiosError } from "axios";
 import {
   Mail,
   UserRound,
   Building2,
   Lock,
   ShieldCheck,
+  Phone,
 } from "lucide-react";
-import styles from "./RegisterPage.module.scss";
+import s from "./RegisterPage.module.scss";
 import { roles } from "../model/RolesCards";
-import { getPasswordRequirementList } from "../model/requirementsList";
-
+import { useRegisterForm } from "../model/useRegisterForm";
 export const RegisterPage = () => {
-  const router = useRouter();
-  const [serverError, setServerError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const defaultValues: DefaultValues<RegisterFormValues> = {
-    role: "volunteer",
-    firstName: "",
-    lastName: "",
-    email: "",
-    organizationName: "",
-    password: "",
-    confirmPassword: "",
-  };
+  const {
+    form,
+    selectedRole,
+    requirementList,
+    serverError,
+    isSubmitting,
+    onSubmit,
+    setRole,
+  } = useRegisterForm();
 
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors },
-  } = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
-    defaultValues,
-  });
-
-  const selectedRole = watch("role");
-  const passwordValue = watch("password");
-
-  const requirementList = useMemo(
-    () => getPasswordRequirementList(passwordValue ?? ""),
-    [passwordValue]
-  );
-
-  const onSubmit: SubmitHandler<RegisterFormValues> = async (values) => {
-    try {
-      setIsSubmitting(true);
-      setServerError(null);
-
-      await api.post("api/auth/register", values);
-
-      const redirectTo =
-        values.role === ROLES.VOLUNTEER
-          ? PAGES.VOLUNTEER_DASHBOARD
-          : PAGES.ORGANIZER_DASHBOARD;
-
-      const signInResult = await signIn(values.email, values.password);
-
-      if (signInResult?.error) {
-        setServerError("Не удалось войти автоматически. Попробуйте авторизоваться вручную.");
-        router.push(PAGES.LOGIN);
-        return;
-      }
-
-      await getSession();
-      router.push(redirectTo);
-    } catch (error) {
-      console.error("Register error", error);
-      if (error instanceof AxiosError) {
-        const message = (error.response?.data as { message?: string } | undefined)?.message;
-        setServerError(message ?? "Не удалось завершить регистрацию");
-      } else {
-        setServerError("Что-то пошло не так. Попробуйте снова.");
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  } = form;
 
   return (
-    <section className={styles.page}>
+    <section className={s.page}>
       <Container>
-        <div className={styles.heading}>
-          <h1>Присоединяйтесь к нам!</h1>
-          <p>Создайте аккаунт и начните помогать</p>
+        <div className={s.heading}>
+          <Typography variant="h1" as={"h2"}>Присоединяйтесь к нам!</Typography>
+          <Typography variant="body" as={"p"} color="gray">Создайте аккаунт и начните помогать</Typography>
         </div>
 
-        <div className={styles.cardWrapper}>
-          <div className={styles.card}>
-            <div className={styles.cardHeading}>
-              <h2>Регистрация</h2>
-              <span>Заполните форму для создания аккаунта</span>
+        <div className={s.cardWrapper}>
+          <div className={s.card}>
+            <div className={s.cardHeading}>
+              <Typography variant="h2" as={'h1'}>Регистрация</Typography>
+              <Typography variant="settings" color="gray">Заполните форму для создания аккаунта</Typography>
             </div>
 
-            <div className={styles.roles}>
+            <div className={s.roles}>
               {roles.map((role) => (
                 <button
                   key={role.value}
                   type="button"
-                  className={cn(styles.roleButton, {
-                    [styles.roleButtonActive]: selectedRole === role.value,
+                  className={cn(s.roleButton, {
+                    [s.roleButtonActive]: selectedRole === role.value,
                   })}
-                  onClick={() => setValue("role", role.value, { shouldValidate: true })}
+                  onClick={() => setRole(role.value)}
                 >
                   {role.icon}
                   <span>{role.title}</span>
@@ -123,13 +64,13 @@ export const RegisterPage = () => {
               ))}
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+            <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
               <input type="hidden" {...register("role")} />
               {serverError ? (
-                <p className={styles.serverError}>{serverError}</p>
+                <p className={s.serverError}>{serverError}</p>
               ) : null}
 
-              <div className={styles.nameRow}>
+              <div className={s.nameRow}>
                 <Input
                   label="Имя"
                   placeholder="Иван"
@@ -155,7 +96,17 @@ export const RegisterPage = () => {
                 {...register("email")}
               />
 
-              {selectedRole === "organizer" ? (
+              <Input
+                label="Телефон"
+                placeholder="+7 (999) 123-45-67"
+                type="tel"
+                icon={<Phone size={18} strokeWidth={1.6} />}
+                error={errors.phone?.message}
+                maskOptions={{ mask: "+{7} (000) 000-00-00" }}
+                {...register("phone")}
+              />
+
+              {selectedRole === ROLES.ORGANIZER ? (
                 <Input
                   label="Организация"
                   placeholder="Название организации"
@@ -174,12 +125,12 @@ export const RegisterPage = () => {
                 {...register("password")}
               />
 
-              <div className={styles.requirements}>
+              <div className={s.requirements}>
                 {requirementList.map((item) => (
                   <div
                     key={item.id}
-                    className={cn(styles.requirementItem, {
-                      [styles.completed]: item.met,
+                    className={cn(s.requirementItem, {
+                      [s.completed]: item.met,
                     })}
                   >
                     <ShieldCheck size={16} strokeWidth={1.6} />
@@ -207,7 +158,7 @@ export const RegisterPage = () => {
               </Button>
             </form>
 
-            <div className={styles.footer}>
+            <div className={s.footer}>
               Уже есть аккаунт? <Link href={PAGES.LOGIN}>Войти</Link>
             </div>
           </div>

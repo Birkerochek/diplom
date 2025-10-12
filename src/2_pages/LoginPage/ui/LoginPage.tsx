@@ -1,32 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import { Container } from "@shared/ui";
+import { Container, Typography } from "@shared/ui";
 import { PAGES } from "@shared/constants";
-import styles from "./LoginPage.module.scss";
+import s from "./LoginPage.module.scss";
 import { LoginForm } from "./LoginForm";
 
 
 export const LoginPage = () => {
 
   return (
-    <section className={styles.page}>
+    <section className={s.page}>
       <Container>
-        <div className={styles.heading}>
-          <h1>Добро пожаловать</h1>
-          <p>Войдите в свою учетную запись</p>
+        <div className={s.heading}>
+          <Typography variant="h1" as={'h2'}>Добро пожаловать</Typography>
+          <Typography variant="body" as={'p'} color="gray">Войдите в свою учетную запись</Typography>
         </div>
        
-        <div className={styles.cardWrapper}>
-          <div className={styles.card}>
-            <div className={styles.cardHeading}>
-              <h2>Вход в систему</h2>
-              <span>Введите свои данные для входа</span>
+        <div className={s.cardWrapper}>
+          <div className={s.card}>
+            <div className={s.cardHeading}>
+              <Typography variant="h2" as={'h1'}>Вход в систему</Typography>
+              <Typography variant="settings" color="gray">Введите свои данные для входа</Typography>
             </div>
 
             <LoginForm />
 
-            <div className={styles.footer}>
+            <div className={s.footer}>
               Нет аккаунта? <Link href={PAGES.REGISTER}>Зарегистрироваться</Link>
             </div>
           </div>

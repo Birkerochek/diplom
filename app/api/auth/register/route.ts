@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message }, { status: 400 });
     }
 
-    const { firstName, lastName, email, password, role, organizationName } = parsed.data;
+    const { firstName, lastName, email, password, role, organizationName, phone } = parsed.data;
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
@@ -34,6 +34,7 @@ export async function POST(request: Request) {
         passwordHash,
         name,
         role,
+        phone,
         organizationName: role === "organizer" ? organizationName ?? null : null,
       },
     });

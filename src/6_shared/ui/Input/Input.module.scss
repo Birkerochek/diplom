@@ -19,7 +19,10 @@
 .field {
   position: relative;
 }
-
+.required{
+  color: #eb5050;
+  font-size: inherit;
+}
 .input {
   width: 100%;
   height: 48px;

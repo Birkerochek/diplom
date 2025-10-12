@@ -25,6 +25,10 @@ export const registerSchema = z
       .trim()
       .toLowerCase()
       .email("Некорректный email"),
+    phone: z
+      .string()
+      .trim()
+      .min(1, "Укажите номер телефона"),
     organizationName: z
       .string()
       .trim()
