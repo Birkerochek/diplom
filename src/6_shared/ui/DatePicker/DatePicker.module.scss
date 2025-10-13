@@ -1,0 +1,87 @@
+@use '@shared/styles/variables.scss' as *;
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #121212;
+}
+
+.required {
+  margin-left: 4px;
+  color: #eb5050;
+}
+
+.field {
+  position: relative;
+}
+
+.trigger {
+  width: 100%;
+  min-height: 48px;
+  padding: 14px 44px 14px 44px;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #121212;
+  font-size: 16px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #c7c7c7;
+  }
+
+  &:focus-visible,
+  &[data-state="open"] {
+    outline: none;
+    border-color: #007c4f;
+    box-shadow: 0 0 0 2px rgba(0, 124, 79, 0.1);
+  }
+}
+
+.value {
+  flex: 1;
+  color: #121212;
+}
+
+.placeholder {
+  color: #b8b8b8;
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  color: $color-basic-gray;
+  display: inline-flex;
+  pointer-events: none;
+}
+
+.error {
+  border-color: #d14343;
+  box-shadow: 0 0 0 2px rgba(209, 67, 67, 0.1);
+}
+
+.errorMessage {
+  font-size: 13px;
+  color: #d14343;
+}
+
+.content {
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  padding: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}

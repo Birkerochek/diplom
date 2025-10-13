@@ -1,0 +1,139 @@
+@use "@shared/styles/mixins.scss" as mixins;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #121212;
+}
+
+.required {
+  
+  color: #eb5050;
+}
+
+.control {
+  position: relative;
+}
+
+.trigger {
+  width: 100%;
+  min-height: 48px;
+  padding: 14px 44px 14px 16px;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #121212;
+  font-size: 16px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+
+  &:focus-visible {
+    outline: none;
+    border-color: #007c4f;
+    box-shadow: 0 0 0 2px rgba(0, 124, 79, 0.1);
+  }
+
+  &:hover {
+    border-color: #c7c7c7;
+  }
+}
+
+.value {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.placeholder {
+  color: #b8b8b8;
+}
+
+.arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  color: #7f7f7f;
+  transition: transform 0.2s ease;
+}
+
+.open {
+  .arrow {
+    transform: translateY(-50%) rotate(180deg);
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  padding: 8px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e2e2;
+  list-style: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 20;
+  @include mixins.shadow();
+
+ 
+}
+
+.option {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 15px;
+  color: #121212;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    background: rgba(0, 124, 79, 0.08);
+  }
+}
+
+.optionSelected {
+  background: rgba(0, 124, 79, 0.12);
+  color: #007c4f;
+}
+
+.error {
+  border-color: #d14343;
+  box-shadow: 0 0 0 2px rgba(209, 67, 67, 0.1);
+}
+
+.errorMessage {
+  font-size: 13px;
+  color: #d14343;
+}
+
+.disabled {
+  pointer-events: none;
+  background: #f3f3f3;
+  color: #9b9b9b;
+}

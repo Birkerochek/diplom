@@ -1,5 +1,5 @@
 import { api, signIn, getSession } from "@shared/api";
-import type { RegisterFormValues } from "@shared/zod/auth";
+import type { RegisterFormValues } from "@shared/zod/auth.schema";
 
 export const registerUser = (payload: RegisterFormValues) =>
   api.post("api/auth/register", payload);

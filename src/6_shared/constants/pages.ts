@@ -4,4 +4,5 @@ export const PAGES = {
   LOGIN: "/auth/login",
   ORGANIZER_DASHBOARD: "/organizer/dashboard",
   VOLUNTEER_DASHBOARD: "/volunteer/dashboard",
+  ORGANIZER_EVENTS: '/organizer/events'
 };

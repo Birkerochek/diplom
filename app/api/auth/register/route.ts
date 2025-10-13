@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { hash } from "argon2";
 import { prisma } from "@shared/lib";
-import { registerSchema } from "@shared/zod/auth";
+import { registerSchema } from "@shared/zod/auth.schema";
 
 export async function POST(request: Request) {
   try {

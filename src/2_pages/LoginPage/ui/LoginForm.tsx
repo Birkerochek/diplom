@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock } from "lucide-react";
 import { Input } from "@shared/ui";
-import { loginSchema, LoginFormValues } from "@shared/zod/auth";
+import { loginSchema, LoginFormValues } from "@shared/zod/auth.schema";
 import { useLoginForm } from "../model/useLoginForm";
 import styles from "./LoginPage.module.scss";
 import { LoginButton } from "./LoginButton";

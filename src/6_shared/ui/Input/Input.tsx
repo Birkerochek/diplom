@@ -21,31 +21,42 @@ type MaskOptions = Omit<
   onBlur?: ComponentProps<typeof IMaskInput>["onBlur"];
 };
 
-export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+type BaseInputProps = {
   label?: string;
   error?: string;
   icon?: React.ReactNode;
-  maskOptions?: MaskOptions;
   required?: boolean;
+  subtitle?: string;
 };
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
+type TextInputProps = BaseInputProps &
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    maskOptions?: MaskOptions;
+    isTextarea?: false;
+  };
+
+type TextareaProps = BaseInputProps &
+  React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+    isTextarea: true;
+    maskOptions?: never;
+  };
+
+export type InputProps = TextInputProps | TextareaProps;
+
+export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
+  (props, ref) => {
+    const {
       label,
       error,
       icon,
       className,
       id,
-      maskOptions,
-      onChange,
-      onBlur,
       name,
       required,
+      isTextarea,
+      subtitle,
       ...rest
-    },
-    ref
-  ) => {
+    } = props;
     const inputId = useId();
     const resolvedId = id ?? inputId;
 
@@ -56,65 +67,116 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       className
     );
 
-    const { inputRef, onAccept: maskAccept, onBlur: maskBlur, ...restMask } =
-      maskOptions ?? {};
-
-    const assignRef = (node: HTMLInputElement | null) => {
+    const setForwardedRef = (
+      node: HTMLInputElement | HTMLTextAreaElement | null
+    ) => {
       if (typeof ref === "function") {
         ref(node);
       } else if (ref) {
         ref.current = node;
       }
-
-      if (typeof inputRef === "function") {
-        inputRef(node);
-      } else if (inputRef) {
-        (inputRef as MutableRefObject<HTMLInputElement | null>).current = node;
-      }
     };
 
-    const handleAccept: IMaskInputProps<HTMLInputElement>["onAccept"] = (
-      value,
-      maskRef,
-      event
-    ) => {
-      maskAccept?.(value, maskRef, event);
+    let control: React.ReactNode;
 
-      if (typeof onChange === "function" && typeof name === "string") {
-        const syntheticEvent = {
-          target: { name, value },
-          currentTarget: { name, value },
-        } as unknown as ChangeEvent<HTMLInputElement>;
+    if (isTextarea) {
+      const { onChange, onBlur, ...textareaRest } =
+        rest as React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
-        onChange(syntheticEvent);
-      }
-    };
-
-    const handleBlur: IMaskInputProps<HTMLInputElement>["onBlur"] = (event) => {
-      maskBlur?.(event);
-
-      if (typeof onBlur === "function") {
-        onBlur(event as unknown as FocusEvent<HTMLInputElement>);
-      }
-    };
-
-    const renderMaskedInput = () => {
-      const maskElementProps = { ...rest } as Record<string, unknown>;
-      delete maskElementProps.type;
-
-      return (
-        <IMaskInput
+      control = (
+        <textarea
+          ref={(node) => setForwardedRef(node)}
           id={resolvedId}
           className={inputClassName}
-          {...(restMask as IMaskInputProps<HTMLInputElement>)}
-          {...maskElementProps}
           name={name}
-          inputRef={assignRef}
-          onAccept={handleAccept}
-          onBlur={handleBlur}
+          onChange={onChange}
+          onBlur={onBlur}
+          {...textareaRest}
+          rows={5}
         />
       );
-    };
+    } else {
+      const {
+        maskOptions,
+        onChange,
+        onBlur,
+        ...inputRest
+      } = rest as React.InputHTMLAttributes<HTMLInputElement> & {
+        maskOptions?: MaskOptions;
+      };
+
+      const { inputRef, onAccept: maskAccept, onBlur: maskBlur, ...restMask } =
+        maskOptions ?? {};
+
+      const assignRef = (node: HTMLInputElement | null) => {
+        setForwardedRef(node);
+
+        if (typeof inputRef === "function") {
+          inputRef(node);
+        } else if (inputRef) {
+          (inputRef as MutableRefObject<HTMLInputElement | null>).current = node;
+        }
+      };
+
+      const handleAccept: IMaskInputProps<HTMLInputElement>["onAccept"] = (
+        value,
+        maskRef,
+        event
+      ) => {
+        maskAccept?.(value, maskRef, event);
+
+        if (typeof onChange === "function" && typeof name === "string") {
+          const syntheticEvent = {
+            target: { name, value },
+            currentTarget: { name, value },
+          } as unknown as ChangeEvent<HTMLInputElement>;
+
+          onChange(syntheticEvent);
+        }
+      };
+
+      const handleBlur: IMaskInputProps<HTMLInputElement>["onBlur"] = (
+        event
+      ) => {
+        maskBlur?.(event);
+
+        if (typeof onBlur === "function") {
+          onBlur(event as unknown as FocusEvent<HTMLInputElement>);
+        }
+      };
+
+      const renderMaskedInput = () => {
+        const maskElementProps = { ...inputRest } as Record<string, unknown>;
+        delete maskElementProps.type;
+
+        return (
+          <IMaskInput
+            id={resolvedId}
+            className={inputClassName}
+            {...(restMask as IMaskInputProps<HTMLInputElement>)}
+            {...maskElementProps}
+            name={name}
+            inputRef={assignRef}
+            onAccept={handleAccept}
+            onBlur={handleBlur}
+          />
+        );
+      };
+
+      control = maskOptions ? (
+        renderMaskedInput()
+      ) : (
+        <input
+          ref={(node) => setForwardedRef(node)}
+          id={resolvedId}
+          className={inputClassName}
+          name={name}
+          onChange={onChange}
+          onBlur={onBlur}
+          {...inputRest}
+        />
+      );
+    }
 
     return (
       <div className={s.wrapper}>
@@ -126,22 +188,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <div className={s.field}>
           {icon ? <span className={s.icon}>{icon}</span> : null}
-          {maskOptions ? (
-            renderMaskedInput()
-          ) : (
-            <input
-              ref={ref}
-              id={resolvedId}
-              className={inputClassName}
-              name={name}
-              onChange={onChange}
-              onBlur={onBlur}
-              {...rest}
-            />
-          )}
+          {control}
         </div>
 
         {error ? <span className={s.errorMessage}>{error}</span> : null}
+        {subtitle ? <span className={s.subtitle}>{subtitle}</span> : null}
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PAGES, ROLES } from "@shared/constants";
-import { LoginFormValues } from "@shared/zod/auth";
+import { LoginFormValues } from "@shared/zod/auth.schema";
 import { loginUser, fetchUserSession } from "../api/login";
 
 export const useLoginForm = () => {

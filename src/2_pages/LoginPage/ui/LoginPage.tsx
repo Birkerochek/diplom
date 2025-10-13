@@ -7,7 +7,7 @@ import s from "./LoginPage.module.scss";
 import { LoginForm } from "./LoginForm";
 
 
-export const LoginPage = () => {
+export const LoginPage:React.FC = () => {
 
   return (
     <section className={s.page}>

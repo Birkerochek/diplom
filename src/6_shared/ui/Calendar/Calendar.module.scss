@@ -1,0 +1,116 @@
+@use "@shared/styles/variables.scss" as *;
+
+.calendar {
+  padding: 12px;
+  min-width: 260px;
+
+  --rdp-accent-color: #{$color-brand-primary};
+  --rdp-accent-background-color: #{rgba($color-brand-primary, 0.12)};
+  --rdp-weekday-padding: 6px 0;
+  --rdp-weekday-text-align: center;
+  --rdp-months-gap: 12px;
+  --rdp-day-height: 36px;
+  --rdp-day-width: 36px;
+  --rdp-day_button-height: 36px;
+  --rdp-day_button-width: 36px;
+  --rdp-day_button-border-radius: 10px;
+}
+
+.calendar :global(.rdp-months) {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.calendar :global(.rdp-month) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.calendar :global(.rdp-caption) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.calendar :global(.rdp-caption_label) {
+  font-size: 15px;
+  font-weight: 600;
+  color: #121212;
+}
+
+.calendar :global(.rdp-nav) {
+  display: flex;
+  gap: 8px;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+}
+
+.calendar :global(.rdp-nav_button) {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid #e2e2e2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: $color-brand-primary !important;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+
+  svg {
+    stroke: currentColor;
+  }
+
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    border-color: rgba($color-brand-primary, 0.6);
+    background: rgba($color-brand-primary, 0.12);
+  }
+}
+
+
+.calendar :global(.rdp-table) {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.calendar :global(.rdp-head_row),
+.calendar :global(.rdp-row) {
+  width: 100%;
+  display: table-row;
+}
+
+.calendar :global(.rdp-head_cell),
+.calendar :global(.rdp-cell) {
+  width: calc(100% / 7);
+  text-align: center;
+  padding: 4px 0;
+  display: table-cell;
+}
+
+.calendar :global(.rdp-weekday) {
+  font-size: 13px;
+  font-weight: 500;
+  color: #7f7f7f;
+  text-transform: capitalize;
+}
+
+.calendar :global(.rdp-day_button) {
+  border-radius: 10px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.calendar :global(.rdp-day_button:hover),
+.calendar :global(.rdp-day_button:focus-visible) {
+  outline: none;
+  background: rgba($color-brand-primary, 0.12);
+  color: $color-brand-primary;
+}

@@ -1,11 +1,13 @@
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Inter } from "next/font/google";
 import AppProviders from "@app/providers";
+import { ToastContainer } from "react-toastify";
 
 import "@shared/styles/reset.scss";
 import "@shared/styles/variables.scss";
 import "@shared/styles/globals.scss";
 import './globals.css'
+import "react-toastify/dist/ReactToastify.css";
 import { Header } from "@widgets/Header";
 const inter = Inter({
   subsets: ["latin"],
@@ -26,6 +28,7 @@ export default function RootLayout({
           
           {children}
           <ReactQueryDevtools initialIsOpen={false} />
+          <ToastContainer position="top-right" closeOnClick newestOnTop={false} />
         </AppProviders>
       </body>
     </html>

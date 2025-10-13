@@ -1,0 +1,70 @@
+@use '@shared/styles/variables.scss' as *;
+@use '@shared/styles/mixins.scss' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 32px;
+}
+
+.inputsCont {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-radius: 20px;
+  background: $color-basic-white;
+  @include shadow();
+}
+
+.title {
+  font-size: $fs-36;
+  font-weight: $fw-600;
+  color: $color-basic-black;
+}
+
+.titleCont {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.timeField {
+  width: 100%;
+}
+
+.actions {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@include media-sm {
+  .inputsCont {
+    padding: 24px;
+  }
+
+  .timeRow {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    justify-content: stretch;
+
+    :global(button) {
+      width: 100%;
+    }
+  }
+}

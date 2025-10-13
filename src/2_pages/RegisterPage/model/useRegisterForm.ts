@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { PAGES, ROLES } from "@shared/constants";
 import { authDefaultValues } from "@shared/zod";
-import { registerSchema, RegisterFormValues } from "@shared/zod/auth";
+import { registerSchema, RegisterFormValues } from "@shared/zod/auth.schema";
 import { registerUser, signInAfterRegister, fetchSession } from "../api/register";
 import { getPasswordRequirementList } from "./requirementsList";
 
