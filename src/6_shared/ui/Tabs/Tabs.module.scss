@@ -1,0 +1,57 @@
+@use "@shared/styles/variables.scss" as *;
+
+.tabs {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.tabs__list {
+  display: inline-flex;
+  gap: 4px;
+  padding: 6px 8px;
+  border-radius: $br-10;
+  background: rgba($color-brand-primary, 0.06);
+}
+
+.tabs__tab {
+  border: none;
+  border-radius: $br-8;
+  background: transparent;
+  color: rgba($color-basic-black, 0.7);
+  font-size: $fs-14;
+  font-weight: $fw-500;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  &:focus-visible {
+    outline: none;
+    background: rgba($color-brand-primary, 0.15);
+  }
+}
+
+.tabs__tab--active {
+  background: $color-basic-white;
+  color: $color-brand-primary;
+  box-shadow: 0 1px 3px rgba($color-brand-primary, 0.16);
+}
+
+.tabs__tab--disabled {
+  color: rgba($color-basic-gray, 0.6);
+  cursor: not-allowed;
+}
+
+.tabs__panel {
+  border-radius: $br-12;
+  border: 1px solid rgba($color-brand-primary, 0.1);
+  background: $color-basic-white;
+  padding: 18px;
+  color: $color-basic-black;
+  box-shadow: none;
+}

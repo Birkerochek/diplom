@@ -6,3 +6,4 @@ export * from "./Input";
 export * from "./Select";
 export * from "./Calendar";
 export * from "./DatePicker";
+export * from "./Tabs";
