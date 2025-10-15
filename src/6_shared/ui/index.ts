@@ -9,3 +9,5 @@ export * from "./DatePicker";
 export * from "./Tabs";
 export * from "./EventStatusBadge";
 export * from "./ProgressBar";
+export * from "./Modal";
+export * from './Avatar'

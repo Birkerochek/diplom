@@ -1,0 +1,239 @@
+@use "@shared/styles/variables.scss" as *;
+@use "@shared/styles/mixins.scss" as *;
+
+.section {
+  background: $color-basic-white;
+  border-radius: 16px;
+  padding: 24px;
+  @include shadow;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (max-width: 640px) {
+    padding: 20px;
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sectionHeaderTitle {
+  margin-bottom: -4px;
+}
+
+.sectionDescription {
+  color: $color-basic-black;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.infoItem {
+  display: flex;
+  gap: 12px;
+}
+
+.infoItemIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-brand-primary;
+}
+
+.infoItemContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.requirementsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tabsList {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tabsTab {
+  background: #f4f4f5;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: $fs-14;
+}
+
+.tabsPanel {
+  margin-top: 12px;
+}
+
+.emptyState {
+  padding: 24px;
+  background: #f9fafb;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.volunteerList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.volunteerCard {
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.volunteerCardHeader {
+  display: flex;
+  gap: 12px;
+}
+
+.volunteerCardAvatar {
+  flex-shrink: 0;
+}
+
+.volunteerCardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.volunteerCardInfoRow,
+.volunteerCardStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.volunteerCardNote {
+  font-style: italic;
+}
+
+.volunteerCardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.infoBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  background: #f4f4f5;
+  padding: 6px 12px;
+  font-size: $fs-12;
+  color: $color-basic-black;
+}
+
+.infoBadgeLink {
+  text-decoration: none;
+}
+
+.progressBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progressBlockHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.organizerCard {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+
+
+.organizerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contactList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.contactItemIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #f4f4f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-brand-primary;
+}
+
+.contactItemContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modalTextarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  resize: vertical;
+  font-size: $fs-14;
+  min-height: 120px;
+
+  &:focus {
+    outline: 2px solid rgba($color-brand-primary, 0.4);
+  }
+}

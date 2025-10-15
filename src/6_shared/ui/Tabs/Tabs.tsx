@@ -16,7 +16,6 @@ import styles from "./Tabs.module.scss";
 import type { TabItemProps, TabsProps } from "./types";
 
 const TabItemComponent: FC<TabItemProps> = () => null;
-TabItemComponent.displayName = "Tabs.Item";
 
 const TabsRoot: FC<TabsProps> = ({
   value,

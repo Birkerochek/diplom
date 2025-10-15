@@ -40,6 +40,14 @@
   }
 }
 
+.updatingBanner {
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  width: fit-content;
+}
+
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
@@ -206,6 +214,26 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+  }
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modalTextarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  resize: vertical;
+  font-size: $fs-14;
+  min-height: 120px;
+
+  &:focus {
+    outline: 2px solid rgba($color-brand-primary, 0.4);
   }
 }
 

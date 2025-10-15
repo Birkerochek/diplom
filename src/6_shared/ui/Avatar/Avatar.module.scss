@@ -1,0 +1,36 @@
+@use "@shared/styles/variables.scss" as *;
+@use "@shared/styles/mixins.scss" as *;
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatarFallback {
+  background: $color-brand-primary;
+  border-radius: 50%;
+  font-weight: $fw-600;
+  display: flex;
+  
+  align-items: center;
+  justify-content: center;
+  color: $color-basic-white;
+}
+
+.avatar_sm {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+
+.avatar_md {
+  width: 48px;
+  height: 48px;
+  font-size: 16px;
+}
+
+.avatar_lg {
+  width: 64px;
+  height: 64px;
+  font-size: 20px;
+}

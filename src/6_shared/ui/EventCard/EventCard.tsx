@@ -81,9 +81,11 @@ export const EventCard: FC<EventCardProps> = ({
           </Typography>
 
         </div>
-        <Button color="white" asChild>
-          <Link href={`/organizer/events/${id}`}>Подробнее</Link>
+        <Link href={`/organizer/events/${id}`}>
+        <Button color="white">
+          Подробнее
         </Button>
+        </Link>
       </div>
     </div>
   );
