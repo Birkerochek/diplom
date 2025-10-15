@@ -1,0 +1,32 @@
+@use '@shared/styles/variables.scss' as *;
+@use '@shared/styles/mixins.scss' as *;
+.card{
+    padding: 25px;
+    background: $color-basic-white;
+    @include shadow;
+    border-radius: 10px;
+    &__top{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    &__status{
+        margin: 10px 0 40px 0;
+    }
+    &__info{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+    &__bottom{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        &_left{
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    }
+}

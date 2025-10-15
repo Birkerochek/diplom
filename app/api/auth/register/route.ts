@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { hash } from "argon2";
-import { prisma } from "@shared/lib";
+import { prisma } from "@shared/lib/prisma";
 import { registerSchema } from "@shared/zod/auth.schema";
 
 export async function POST(request: Request) {

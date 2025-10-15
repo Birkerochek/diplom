@@ -1,5 +1,5 @@
 import { EventStatus, RegistrationStatus } from "../../../generated/prisma";
-import { prisma } from "@shared/lib";
+import { prisma } from "@shared/lib/prisma";
 import { z } from "zod";
 
 // -----------------------------------------------------------------------------

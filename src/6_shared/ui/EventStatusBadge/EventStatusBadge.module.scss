@@ -1,0 +1,39 @@
+@use '@shared/styles/variables.scss' as *;
+
+.badge {
+  width: fit-content;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.badgeActive {
+  color: #0f5132;
+  background: #d1fae5;
+  border: 1px solid #86efac;
+}
+
+.badgePublished {
+  color: #644d02;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+}
+
+.badgeCancelled {
+  color: #842029;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+}
+
+.badgeDraft {
+  color: #374151;
+  background: #e5e7eb;
+  border: 1px solid #d1d5db;
+}
+
+.badgeCompleted {
+  color: #111827;
+  background: transparent;
+  border: 1px solid #111827;
+}

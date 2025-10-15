@@ -1,5 +1,5 @@
 import { EventStatus } from "../../../generated/prisma";
-import { prisma } from "@shared/lib";
+import { prisma } from "@shared/lib/prisma";
 import { eventCreateSchema } from "@shared/zod";
 import { z } from "zod";
 
