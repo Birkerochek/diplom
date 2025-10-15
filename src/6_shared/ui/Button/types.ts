@@ -8,4 +8,5 @@ export interface ButtonProps
   iconPosition?: "left" | "right";
   fullWidth?: boolean;
   direction?: "ltr" | "rtl";
+  asChild?: boolean;
 }

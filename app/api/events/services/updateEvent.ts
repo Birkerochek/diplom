@@ -17,7 +17,7 @@ type UpdateEventResult =
   | { status: 400 | 403 | 404; body: { message: string } };
 
 const eventUpdateSchema = eventCreateSchema
-  .extend({
+  .safeExtend({
     status: z.nativeEnum(EventStatus).optional(),
   })
   .partial()

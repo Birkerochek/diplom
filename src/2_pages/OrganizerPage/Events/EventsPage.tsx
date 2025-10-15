@@ -29,6 +29,7 @@ export const EventsPage = () => {
       {events.map((event) => (
         <EventCard
           key={event.id}
+          id={event.id}
           title={event.title}
           status={event.status}
           schedule={{

@@ -21,6 +21,19 @@ type EventWithOrganizer = Prisma.EventGetPayload<{
 }>;
 
 type RegistrationSummary = Record<RegistrationStatus, number> & { total: number };
+type RegistrationWithVolunteer = Prisma.EventRegistrationGetPayload<{
+  include: {
+    volunteer: {
+      select: {
+        id: true;
+        name: true;
+        email: true;
+        phone: true;
+        avatarUrl: true;
+      };
+    };
+  };
+}>;
 
 // -----------------------------------------------------------------------------
 // Constants
@@ -59,7 +72,25 @@ export const getEvent = async ({ userId, role, eventId }: GetEventInput) => {
     } as const;
   }
 
-  const [registrations, volunteerHours] = await Promise.all([
+  const registrationDetails = await prisma.eventRegistration.findMany({
+    where: { eventId },
+    include: {
+      volunteer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          avatarUrl: true,
+        },
+      },
+    },
+    orderBy: { registeredAt: "asc" },
+  });
+
+  const volunteerIds = registrationDetails.map((registration) => registration.volunteerId);
+
+  const [registrations, volunteerHours, volunteerTotals] = await Promise.all([
     prisma.eventRegistration.groupBy({
       by: ["eventId", "status"],
       where: { eventId },
@@ -70,14 +101,28 @@ export const getEvent = async ({ userId, role, eventId }: GetEventInput) => {
       where: { eventId },
       _sum: { hours: true },
     }),
+    volunteerIds.length
+      ? prisma.volunteerHour.groupBy({
+          by: ["volunteerId"],
+          where: { volunteerId: { in: volunteerIds } },
+          _sum: { hours: true },
+        })
+      : Promise.resolve([] as Array<{ volunteerId: string | null; _sum: { hours: number | null } }>),
   ]);
 
   const registrationMap = mapRegistrations(registrations);
-  const volunteerHoursMap = mapVolunteerHours(volunteerHours);
+  const volunteerHoursMap = mapVolunteerHoursByEvent(volunteerHours);
+  const volunteerTotalsMap = mapVolunteerHoursByVolunteer(volunteerTotals);
 
   return {
     status: 200,
-    body: serializeEvent(event, registrationMap, volunteerHoursMap),
+    body: serializeEvent(
+      event,
+      registrationMap,
+      volunteerHoursMap,
+      registrationDetails,
+      volunteerTotalsMap
+    ),
   } as const;
 };
 
@@ -114,7 +159,7 @@ const mapRegistrations = (
   return map;
 };
 
-const mapVolunteerHours = (
+const mapVolunteerHoursByEvent = (
   aggregates: Array<{ eventId: string | null; _sum: { hours: number | null } }>
 ) => {
   const map = new Map<string, number>();
@@ -127,13 +172,28 @@ const mapVolunteerHours = (
   return map;
 };
 
+const mapVolunteerHoursByVolunteer = (
+  aggregates: Array<{ volunteerId: string | null; _sum: { hours: number | null } }>
+) => {
+  const map = new Map<string, number>();
+
+  for (const item of aggregates) {
+    if (!item.volunteerId) continue;
+    map.set(item.volunteerId, item._sum.hours ?? 0);
+  }
+
+  return map;
+};
+
 // -----------------------------------------------------------------------------
 // Formatting
 // -----------------------------------------------------------------------------
 const serializeEvent = (
   event: EventWithOrganizer,
   registrations: Map<string, RegistrationSummary>,
-  volunteerHours: Map<string, number>
+  volunteerHours: Map<string, number>,
+  registrationDetails: RegistrationWithVolunteer[],
+  volunteerTotals: Map<string, number>
 ) => {
   const summary = registrations.get(event.id) ?? createEmptySummary();
   const confirmed =
@@ -169,6 +229,23 @@ const serializeEvent = (
       volunteerHours: volunteerHours.get(event.id) ?? 0,
     },
     organizer: event.organizer,
+    requirements: event.requirements,
+    skillsNeeded: event.skillsNeeded,
+    volunteers: registrationDetails.map((registration) => ({
+      id: registration.id,
+      status: registration.status,
+      registeredAt: registration.registeredAt.toISOString(),
+      motivationLetter: registration.motivationLetter,
+      hoursCompleted: registration.hoursCompleted,
+      volunteer: {
+        id: registration.volunteer.id,
+        name: registration.volunteer.name,
+        email: registration.volunteer.email,
+        phone: registration.volunteer.phone,
+        avatarUrl: registration.volunteer.avatarUrl,
+      },
+      totalVolunteerHours: volunteerTotals.get(registration.volunteerId) ?? 0,
+    })),
     tags: event.tags,
     timestamps: {
       createdAt: event.createdAt.toISOString(),

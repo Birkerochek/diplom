@@ -1,0 +1,302 @@
+@use "@shared/styles/variables.scss" as *;
+@use "@shared/styles/mixins.scss" as *;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 0 64px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: $color-brand-primary;
+  font-size: $fs-14;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+
+  &__titleBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+  }
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+.section {
+  background: $color-basic-white;
+  border-radius: 16px;
+  padding: 24px;
+  @include shadow;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (max-width: 640px) {
+    padding: 20px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__headerTitle {
+    margin-bottom: -4px;
+  }
+
+  &__description {
+    color: $color-basic-black;
+  }
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.infoItem {
+  display: flex;
+  gap: 12px;
+
+  &__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background: #f9fafb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-brand-primary;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+.requirementsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tabs__list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tabs__tab {
+  background: #f4f4f5;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: $fs-14;
+}
+
+.tabs__panel {
+  margin-top: 12px;
+}
+
+.emptyState {
+  padding: 24px;
+  background: #f9fafb;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.volunteerList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.volunteerCard {
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__header {
+    display: flex;
+    gap: 12px;
+  }
+
+  &__avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    background: #e0f2fe;
+    color: $color-brand-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+
+    span {
+      font-weight: $fw-600;
+      font-size: $fs-16;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__infoRow,
+  &__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__note {
+    font-style: italic;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+.infoBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  background: #f4f4f5;
+  padding: 6px 12px;
+  font-size: $fs-12;
+  color: $color-basic-black;
+}
+
+.infoBadgeLink {
+  text-decoration: none;
+}
+
+.progressBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.statsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.organizer {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  &__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    background: #f4f4f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+.contactList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: #f4f4f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-brand-primary;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}

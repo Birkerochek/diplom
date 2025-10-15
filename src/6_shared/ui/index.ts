@@ -7,3 +7,5 @@ export * from "./Select";
 export * from "./Calendar";
 export * from "./DatePicker";
 export * from "./Tabs";
+export * from "./EventStatusBadge";
+export * from "./ProgressBar";

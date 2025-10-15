@@ -1,3 +1,4 @@
 export const QUERY_KEYS = {
-    EVENTS: 'events'
+    EVENTS: "events",
+    EVENT: "event",
 };

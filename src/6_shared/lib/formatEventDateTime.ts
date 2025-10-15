@@ -9,7 +9,7 @@ const formatValue = (value: string, pattern: string) => {
     }
 
     return format(date, pattern);
-  } catch (error) {
+  } catch {
     return value;
   }
 };

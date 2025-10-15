@@ -1,4 +1,5 @@
 import { FC } from "react";
+import Link from "next/link";
 import { EventStatus } from "../../../../app/generated/prisma";
 import s from "./EventCard.module.scss";
 import { Typography } from "../Typography";
@@ -8,6 +9,7 @@ import { formatEventDate, formatEventTime } from "@shared/lib";
 import { EventStatusBadge } from "../EventStatusBadge";
 
 export interface EventCardProps {
+  id: string;
   title: string;
   status: EventStatus;
   schedule: {
@@ -17,8 +19,8 @@ export interface EventCardProps {
     requiredHours: string;
   };
   capacity: {
-    maxParticipants: number;
-    currentParticipants: number;
+    maxParticipants: number | null;
+    currentParticipants: number | null;
   };
   location: {
     name: string;
@@ -27,6 +29,7 @@ export interface EventCardProps {
 }
 
 export const EventCard: FC<EventCardProps> = ({
+  id,
   title,
   status,
   schedule,
@@ -34,7 +37,8 @@ export const EventCard: FC<EventCardProps> = ({
   location,
 }) => {
   const { eventDate, startTime, endTime, requiredHours } = schedule;
-  const { maxParticipants, currentParticipants } = capacity;
+  const maxParticipants = capacity.maxParticipants ?? 0;
+  const currentParticipants = capacity.currentParticipants ?? 0;
 
   const filled = maxParticipants > 0
     ? `${Math.round((currentParticipants / maxParticipants) * 100)}%`
@@ -64,7 +68,7 @@ export const EventCard: FC<EventCardProps> = ({
           {location.name}
         </Typography>
         <Typography variant="body" color="gray">
-          {currentParticipants} / {maxParticipants}
+          {currentParticipants} / {maxParticipants || "—"}
         </Typography>
       </div>
       <div className={s.card__bottom}>
@@ -77,7 +81,9 @@ export const EventCard: FC<EventCardProps> = ({
           </Typography>
 
         </div>
-        <Button color="white">Подробнее</Button>
+        <Button color="white" asChild>
+          <Link href={`/organizer/events/${id}`}>Подробнее</Link>
+        </Button>
       </div>
     </div>
   );
