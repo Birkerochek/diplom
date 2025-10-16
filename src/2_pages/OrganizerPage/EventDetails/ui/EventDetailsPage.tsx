@@ -1,12 +1,13 @@
 'use client';
 
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { toast } from "react-toastify";
 
-import { useFetchEvent } from "@shared/api";
-import { api } from "@shared/api/axios";
-import { Button, Container, EventStatusBadge, Typography } from "@shared/ui";
+import { useDeleteEvent, useFetchEvent } from "@shared/api";
+import { Button, Container, EventStatusBadge, Modal, Typography } from "@shared/ui";
 import { EventInfoWidget } from "@widgets/Organizer/EventPage/EventInfoWidget";
 import { EventStatsWidget } from "@widgets/Organizer/EventPage/EventStatsWidget";
 import { OrganizerCardWidget } from "@widgets/Organizer/EventPage/OrganizerCardWidget";
@@ -19,9 +20,9 @@ type EventDetailsPageProps = {
   eventId: string;
 };
 
-
 export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
   const router = useRouter();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const {
     data: event,
     isLoading,
@@ -30,24 +31,43 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
     isFetching,
   } = useFetchEvent(eventId);
   const { approveVolunteer, rejectVolunteer, isProcessing } = useVolunteerActions({ eventId });
+  const { mutateAsync: deleteEvent, isPending: isDeleting } = useDeleteEvent();
 
-  
+  const handleOpenDeleteModal = useCallback(() => {
+    setIsDeleteModalOpen(true);
+  }, []);
 
-  const handleDelete = async () => {
-    const confirmed = window.confirm("Удалить мероприятие? Действие необратимо.");
-
-    if (!confirmed) {
+  const handleCloseDeleteModal = useCallback(() => {
+    if (isDeleting) {
       return;
     }
 
+    setIsDeleteModalOpen(false);
+  }, [isDeleting]);
+
+  const handleDeleteModalOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) {
+        handleCloseDeleteModal();
+        return;
+      }
+
+      setIsDeleteModalOpen(true);
+    },
+    [handleCloseDeleteModal]
+  );
+
+  const handleConfirmDelete = useCallback(async () => {
     try {
-      await api.delete(`/api/events/${eventId}`);
+      await deleteEvent(eventId);
+      setIsDeleteModalOpen(false);
+      toast.success("Мероприятие удалено");
       router.push(PAGES.ORGANIZER_EVENTS);
     } catch (error) {
       console.error("Delete event error", error);
-      window.alert("Не удалось удалить мероприятие. Попробуйте снова.");
+      toast.error("Не удалось удалить мероприятие");
     }
-  };
+  }, [deleteEvent, eventId, router]);
 
   if (isLoading && !event) {
     return (
@@ -72,9 +92,9 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
 
   const maxParticipants = event.capacity.maxParticipants ?? 0;
   const currentParticipants = event.capacity.currentParticipants ?? 0;
-  const fillRate = event.capacity.fillRate ?? (maxParticipants
-    ? Math.round((currentParticipants / maxParticipants) * 100)
-    : 0);
+  const fillRate =
+    event.capacity.fillRate ??
+    (maxParticipants ? Math.round((currentParticipants / maxParticipants) * 100) : 0);
   const availableSeats = maxParticipants
     ? Math.max(maxParticipants - currentParticipants, 0)
     : null;
@@ -96,11 +116,11 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
 
         <div className={styles.header__actions}>
           <Link href={PAGES.EDIT_EVENT(eventId)}>
-          <Button color="white"  icon="edit">
-            Редактировать
-          </Button>
+            <Button color="white" icon="edit">
+              Редактировать
+            </Button>
           </Link>
-          <Button variant="delete" onClick={handleDelete}>
+          <Button variant="delete" onClick={handleOpenDeleteModal}>
             Удалить
           </Button>
         </div>
@@ -143,6 +163,32 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
           <OrganizerCardWidget organizer={event.organizer} />
         </aside>
       </div>
+
+      <Modal
+        open={isDeleteModalOpen}
+        onOpenChange={handleDeleteModalOpenChange}
+        title={<Typography variant="h3">Удалить мероприятие?</Typography>}
+        description={
+          <Typography variant="body" color="gray">
+            Действие нельзя отменить, участники и статистика будут потеряны.
+          </Typography>
+        }
+        footer={
+          <>
+            <Button color="white" onClick={handleCloseDeleteModal} disabled={isDeleting}>
+              Отмена
+            </Button>
+            <Button color="primary" onClick={handleConfirmDelete} disabled={isDeleting}>
+              Удалить
+            </Button>
+          </>
+        }
+      >
+        <Typography variant="body">
+          После удаления мероприятие исчезнет из списка организатора. Убедитесь, что сохранены все
+          важные данные.
+        </Typography>
+      </Modal>
     </Container>
   );
 };

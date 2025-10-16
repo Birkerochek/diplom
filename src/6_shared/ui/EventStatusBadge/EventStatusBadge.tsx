@@ -16,10 +16,10 @@ const statusClassMap: Record<EventStatus, string> = {
   [EventStatus.completed]: s.badgeCompleted,
 };
 
-export const EventStatusBadge: FC<StatusBadgeProps> = memo(({ status }) => (
+const EventStatusBadgeBase: FC<StatusBadgeProps> = ({ status }) => (
   <span className={classNames(s.badge, statusClassMap[status])}>
     {mapEventStatusToLabel(status)}
   </span>
-));
+);
 
-EventStatusBadge.displayName = "EventStatusBadge";
+export const EventStatusBadge = memo(EventStatusBadgeBase)

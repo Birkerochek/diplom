@@ -1,18 +1,12 @@
-'use client';
+import { EventDetailsPageServer } from "@pages/OrganizerPage/EventDetails/ui/EventDetailsPageServer";
 
-import { useMemo } from "react";
-import { useParams } from "next/navigation";
-import { EventDetailsPage } from "@pages/OrganizerPage/EventDetails";
+export default async function EventPage({
+  params,
+}: {
+  params: Promise<{ eventId: string }>;
+}) {
+  const { eventId } = await params;
+  
 
-const OrganizerEventDetailsPage = () => {
-  const params =useParams<{ eventId: string }>();
-  const eventId = useMemo(() => params?.eventId ?? "", [params]);
-
-  if (!eventId) {
-    return null;
-  }
-
-  return <EventDetailsPage eventId={eventId} />;
-};
-
-export default OrganizerEventDetailsPage;
+  return <EventDetailsPageServer eventId={eventId}/>
+}

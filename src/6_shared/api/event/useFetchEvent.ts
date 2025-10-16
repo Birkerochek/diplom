@@ -4,9 +4,9 @@ import { fetchEvent, type FetchEventResponse } from "./fetchEvent";
 
 export const useFetchEvent = (eventId?: string) =>
   useCustomQuery<FetchEventResponse>(
-    [QUERY_KEYS.EVENT, eventId ?? ""] as const,
+    [QUERY_KEYS.EVENT, eventId],
     () => fetchEvent(eventId as string),
     {
-      enabled: Boolean(eventId),
+      enabled: !!eventId,
     }
   );

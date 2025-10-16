@@ -31,7 +31,11 @@ export const Modal: FC<ModalProps> = ({
             {(title || description) && (
               <header className={styles.header}>
                 {title ? <Dialog.Title>{title}</Dialog.Title> : null}
-                {description ? <Dialog.Description>{description}</Dialog.Description> : null}
+                {description
+                  ? typeof description === "string" || typeof description === "number"
+                    ? <Dialog.Description>{description}</Dialog.Description>
+                    : <Dialog.Description asChild>{description}</Dialog.Description>
+                  : null}
               </header>
             )}
             <div className={styles.body}>{children}</div>
