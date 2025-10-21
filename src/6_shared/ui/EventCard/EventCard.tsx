@@ -7,6 +7,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "../Button";
 import { formatEventDate, formatEventTime } from "@shared/lib";
 import { EventStatusBadge } from "../EventStatusBadge";
+import { EventCardSkeleton } from "./EventCardSkeleton";
 
 export interface EventCardProps {
   id: string;
@@ -36,6 +37,7 @@ export const EventCard: FC<EventCardProps> = ({
   capacity,
   location,
 }) => {
+  const data = id || title || status || schedule || capacity || location
   const { eventDate, startTime, endTime, requiredHours } = schedule;
   const maxParticipants = capacity.maxParticipants ?? 0;
   const currentParticipants = capacity.currentParticipants ?? 0;
@@ -47,7 +49,11 @@ export const EventCard: FC<EventCardProps> = ({
   const formattedEventDate = formatEventDate(eventDate);
   const formattedStartTime = formatEventTime(startTime);
   const formattedEndTime = formatEventTime(endTime);
-
+  if(!data){
+    return(
+      <EventCardSkeleton/>
+    )
+  }
   return (
     <div className={s.card}>
       <div className={s.card__top}>

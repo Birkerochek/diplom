@@ -30,3 +30,24 @@
         }
     }
 }
+
+.cardSkeleton{
+    position: relative;
+    border-radius: 10px;
+    &__overlay{
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        z-index: 0;
+        pointer-events: none;
+    }
+    &__content{
+        @extend .card;
+        position: relative;
+        z-index: 1;
+        background: transparent;
+        box-shadow: none;
+    }
+}

@@ -13,7 +13,10 @@ export const EventDetailsSkeleton = () => (
     <header className={s.header}>
       <div className={s.header__titleBlock}>
         <Skeleton width={280} height={40} />
-        <Skeleton width={120} height={24} />
+        <div className={s.header__statusControls}>
+          <Skeleton width={120} height={24} />
+          <Skeleton width={160} height={40} />
+        </div>
       </div>
 
       <div className={s.header__actions}>

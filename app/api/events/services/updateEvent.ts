@@ -29,6 +29,13 @@ const eventUpdateSchema = eventCreateSchema
 // Public API
 // -----------------------------------------------------------------------------
 export const updateEvent = async ({ organizerId, eventId, payload }: UpdateEventInput) => {
+  const isObject = (value: unknown): value is Record<string, unknown> =>
+    typeof value === "object" && value !== null && !Array.isArray(value);
+
+  const rawPayload = isObject(payload) ? payload : {};
+
+  const hasOwn = (key: string) => Object.prototype.hasOwnProperty.call(rawPayload, key);
+
   const target = await prisma.event.findUnique({
     where: { id: eventId },
     select: { id: true, organizerId: true },
@@ -60,11 +67,21 @@ export const updateEvent = async ({ organizerId, eventId, payload }: UpdateEvent
   if (data.startDateTime) updateData.startTime = new Date(data.startDateTime);
   if (data.endDateTime) updateData.endTime = new Date(data.endDateTime);
   if (data.location) updateData.location = data.location.trim();
-  if ("address" in data) updateData.address = data.address ?? null;
+  if (hasOwn("address")) {
+    updateData.address =
+      typeof data.address === "string" && data.address.trim().length > 0
+        ? data.address.trim()
+        : null;
+  }
   if (typeof data.maxParticipants === "number") {
     updateData.maxParticipants = data.maxParticipants;
   }
-  if ("requirements" in data) updateData.requirements = data.requirements ?? null;
+  if (hasOwn("requirements")) {
+    updateData.requirements =
+      typeof data.requirements === "string" && data.requirements.trim().length > 0
+        ? data.requirements.trim()
+        : null;
+  }
   if (Array.isArray(data.skillsNeeded)) updateData.skillsNeeded = data.skillsNeeded;
   if (data.status) updateData.status = data.status;
 

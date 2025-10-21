@@ -5,13 +5,14 @@ import { deleteEvent } from "../services/deleteEvent";
 import { getEvent } from "../services/getEvent";
 import { updateEvent } from "../services/updateEvent";
 
-type RouteParams = { params: { eventId: string } };
+type RouteParams = { params: Promise<{ eventId: string }> };
 
 // -----------------------------------------------------------------------------
 // GET /api/events/[eventId] — детализация мероприятия
 // -----------------------------------------------------------------------------
-export async function GET(_request: Request, { params }: RouteParams) {
+export async function GET(_request: Request, context: RouteParams) {
   try {
+    const params = await context.params;
     const session = await getServerSession(nextAuthOptions);
 
     if (!session?.user?.id) {
@@ -43,8 +44,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
 // -----------------------------------------------------------------------------
 // PATCH /api/events/[eventId] — обновление (только организатор)
 // -----------------------------------------------------------------------------
-export async function PATCH(request: Request, { params }: RouteParams) {
+export async function PATCH(request: Request, context: RouteParams) {
   try {
+    const params = await context.params;
     const session = await getServerSession(nextAuthOptions);
 
     if (!session?.user?.id) {
@@ -77,8 +79,9 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 // -----------------------------------------------------------------------------
 // DELETE /api/events/[eventId] — удаление (только организатор)
 // -----------------------------------------------------------------------------
-export async function DELETE(_request: Request, { params }: RouteParams) {
+export async function DELETE(_request: Request, context: RouteParams) {
   try {
+    const params = await context.params;
     const session = await getServerSession(nextAuthOptions);
 
     if (!session?.user?.id) {

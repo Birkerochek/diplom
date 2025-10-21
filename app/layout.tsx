@@ -8,6 +8,7 @@ import "@shared/styles/variables.scss";
 import "@shared/styles/globals.scss";
 import './globals.css'
 import "react-toastify/dist/ReactToastify.css";
+import "react-loading-skeleton/dist/skeleton.css"
 import { Header } from "@widgets/Header";
 const inter = Inter({
   subsets: ["latin"],

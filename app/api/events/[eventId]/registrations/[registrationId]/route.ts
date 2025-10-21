@@ -3,10 +3,11 @@ import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@shared/config/nextAuth";
 import { updateRegistrationStatus } from "../../../services/updateRegistrationStatus";
 
-type RouteParams = { params: { eventId: string; registrationId: string } };
+type RouteParams = { params: Promise<{ eventId: string; registrationId: string }> };
 
-export async function PATCH(request: Request, { params }: RouteParams) {
+export async function PATCH(request: Request, context: RouteParams) {
   try {
+    const params = await context.params;
     const session = await getServerSession(nextAuthOptions);
 
     if (!session?.user?.id) {

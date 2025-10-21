@@ -3,13 +3,14 @@ import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@shared/config/nextAuth";
 import { registerVolunteer } from "../../services/registerVolunteer";
 
-type RouteParams = { params: { eventId: string } };
+type RouteParams = { params: Promise<{ eventId: string }> };
 
 // -----------------------------------------------------------------------------
 // POST /api/events/[eventId]/register — запись волонтёра
 // -----------------------------------------------------------------------------
-export async function POST(request: Request, { params }: RouteParams) {
+export async function POST(request: Request, context: RouteParams) {
   try {
+    const params = await context.params;
     const session = await getServerSession(nextAuthOptions);
 
     if (!session?.user?.id) {

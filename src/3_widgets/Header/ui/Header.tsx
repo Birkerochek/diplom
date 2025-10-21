@@ -2,7 +2,7 @@
 
 import { Button, Container, Logo } from "@shared/ui";
 import s from "./Header.module.scss";
-import { PAGES } from "@shared/constants";
+import { PAGES, ROLES } from "@shared/constants";
 import Link from "next/link";
 import { useSession, signOut } from "@shared/api";
 import { useMemo } from "react";
@@ -12,8 +12,8 @@ export const Header = () => {
   const isAuthenticated = status === "authenticated" && Boolean(session?.user);
   const dashboardPath = useMemo(() => {
     const role = session?.user?.role;
-    if (role === "organizer") return "/organizer/dashboard";
-    if (role === "volunteer") return "/volunteer/dashboard";
+    if (role === ROLES.ORGANIZER) return PAGES.ORGANIZER_DASHBOARD;
+    if (role === ROLES.VOLUNTEER) return PAGES.VOLUNTEER_DASHBOARD;
     return PAGES.LOGIN;
   }, [session?.user?.role]);
   const handleSignOut = () => {

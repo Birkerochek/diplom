@@ -2,6 +2,7 @@ import { useFetchEvents } from "@shared/api";
 import { Container } from "@shared/ui";
 import { EventCard } from "@shared/ui/EventCard/EventCard";
 import s from './EventsPage.module.scss'
+import { EventsPageSkeleton } from "./EventsPageSkeleton";
 export const EventsPage = () => {
   const {
     data: eventsResponse,
@@ -10,7 +11,7 @@ export const EventsPage = () => {
   } = useFetchEvents();
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <EventsPageSkeleton/>;
   }
 
   if (isError) {

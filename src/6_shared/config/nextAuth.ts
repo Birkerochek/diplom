@@ -2,7 +2,7 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { verify } from "argon2";
 import { loginSchema } from "@shared/zod/auth.schema";
-import { prisma } from "@shared/lib";
+import { prisma } from "@shared/lib/prisma";
 import type { User } from "next-auth";
 import type { AdapterUser } from "next-auth/adapters";
 import { PAGES } from "@shared/constants";
