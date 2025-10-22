@@ -3,30 +3,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  
-  allowedDevOrigins:['127.0.0.1'] ,
+  reactCompiler: true,
   images: {
     formats: ["image/avif", "image/webp"],
-    
   },
-  webpack(config) {
-    config.resolve.alias = {
-      ...(config.resolve.alias || {}),
-
-      "@app": path.resolve(__dirname, "src/1_app"),
-      "@features": path.resolve(__dirname, "src/4_features"),
-      "@entities": path.resolve(__dirname, "src/5_entities"),
-      "@shared": path.resolve(__dirname, "src/6_shared"),
-      "@widgets": path.resolve(__dirname, "src/3_widgets"),
-      
-      "@pages": path.resolve(__dirname, "src/2_pages"),
-
-     
-      "@": path.resolve(__dirname, "src"),
-    };
-
-    return config;
+  sassOptions: {
+    includePaths: [path.resolve(__dirname, 'src')],
   },
+
+
   turbopack: {
     resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
     rules: {
@@ -34,6 +19,11 @@ const nextConfig: NextConfig = {
         loaders: ["@svgr/webpack"],
         as: "*.js",
       },
+    },
+
+    // resolveAlias работает только для JS/TS, не для SCSS
+    resolveAlias: {
+      '@shared': path.resolve(__dirname, 'src/6_shared'),
     },
   },
 };

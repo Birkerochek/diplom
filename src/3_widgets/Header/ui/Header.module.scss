@@ -1,12 +1,35 @@
-.header{
+@use '@shared/styles/variables.scss' as *;
+
+.header {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    &__right{
+    &__right {
         display: flex;
         align-items: center;
         gap: 10px;
     }
-}
 
+    &__center {
+        display: flex;
+        gap: 32px;
+        align-items: center;
+
+        &_item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+          
+                color: $color-basic-gray;
+
+                &:hover {
+                    color: $color-brand-primary;
+                }
+            
+
+            
+        }
+    }
+}

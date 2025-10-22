@@ -7,7 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { toast } from "react-toastify";
 
 import { useDeleteEvent, useFetchEvent, useUpdateEvent } from "@shared/api";
-import { Button, Container, EventStatusBadge, Modal, Select, Typography } from "@shared/ui";
+import { Button, Container, EventDeleteDialog, EventStatusBadge, Select, Typography } from "@shared/ui";
 import { EventInfoWidget } from "@widgets/Organizer/EventPage/EventInfoWidget";
 import { EventStatsWidget } from "@widgets/Organizer/EventPage/EventStatsWidget";
 import { OrganizerCardWidget } from "@widgets/Organizer/EventPage/OrganizerCardWidget";
@@ -65,18 +65,6 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
 
     setIsDeleteModalOpen(false);
   }, [isDeleting]);
-
-  const handleDeleteModalOpenChange = useCallback(
-    (open: boolean) => {
-      if (!open) {
-        handleCloseDeleteModal();
-        return;
-      }
-
-      setIsDeleteModalOpen(true);
-    },
-    [handleCloseDeleteModal]
-  );
 
   const handleConfirmDelete = useCallback(async () => {
     try {
@@ -221,31 +209,13 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
         </aside>
       </div>
 
-      <Modal
+            <EventDeleteDialog
         open={isDeleteModalOpen}
-        onOpenChange={handleDeleteModalOpenChange}
-        title={<Typography variant="h3">Удалить мероприятие?</Typography>}
-        description={
-          <Typography variant="body" color="gray">
-            Действие нельзя отменить, участники и статистика будут потеряны.
-          </Typography>
-        }
-        footer={
-          <>
-            <Button color="white" onClick={handleCloseDeleteModal} disabled={isDeleting}>
-              Отмена
-            </Button>
-            <Button color="primary" onClick={handleConfirmDelete} disabled={isDeleting}>
-              Удалить
-            </Button>
-          </>
-        }
-      >
-        <Typography variant="body">
-          После удаления мероприятие исчезнет из списка организатора. Убедитесь, что сохранены все
-          важные данные.
-        </Typography>
-      </Modal>
+        onCancel={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
+        eventTitle={event.title}
+      />
     </Container>
   );
 };

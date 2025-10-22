@@ -199,6 +199,9 @@
   &--color-secondary{
   color: $color-brand-secondary;
  }
+ &--color-secondary{
+  color: inherit;
+ }
   &--color-gray{
   color: $color-basic-gray;
  }

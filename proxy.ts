@@ -6,7 +6,7 @@ const VOLUNTEER_ROOT = "/volunteer";
 const ORGANIZER_ROOT = "/organizer";
 const LOGIN_PATH = "/auth/login";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const secret = process.env.NEXTAUTH_SECRET;
 
   if (!secret) {

@@ -5,10 +5,14 @@
     background: $color-basic-white;
     @include shadow;
     border-radius: 10px;
+    position: relative;
     &__top{
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+    &__actions{
+        position: relative;
     }
     &__status{
         margin: 10px 0 40px 0;
@@ -29,6 +33,82 @@
             gap: 5px;
         }
     }
+}
+
+.moreButton {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+
+  &:focus-visible {
+    outline: none;
+    background: rgba($color-brand-primary, 0.12);
+  }
+
+  &:hover {
+    background: rgba($color-brand-primary, 0.08);
+  }
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 200px;
+  padding: 12px;
+  border-radius: $br-10;
+  background: $color-basic-white;
+  box-shadow: 0 12px 24px rgba($color-basic-black, 0.06);
+  border: 1px solid rgba($color-brand-primary, 0.08);
+  display: grid;
+  gap: 6px;
+  z-index: 3;
+}
+
+.menuItem {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: $br-8;
+  border: none;
+  background: transparent;
+  color: rgba($color-basic-black, 0.9);
+  font-size: $fs-14;
+  font-weight: $fw-500;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: rgba($color-brand-primary, 0.06);
+    color: $color-brand-primary;
+  }
+
+  &:focus-visible {
+    outline: none;
+    background: rgba($color-brand-primary, 0.1);
+  }
+}
+
+.menuItem__icon {
+  flex-shrink: 0;
+}
+
+.menuItemDanger {
+  color: $color-basic-red;
+
+  &:hover {
+    background: rgba($color-basic-red, 0.08);
+    color: $color-basic-red;
+  }
 }
 
 .cardSkeleton{
