@@ -70,7 +70,7 @@ export const EventsPage = () => {
             }}
             location={event.location}
           />
-        ))}
+        ))}Ы
       </div>
     );
   };

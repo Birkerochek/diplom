@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { EventStatus } from "../../../../app/generated/prisma";
-import { formatEventDate, formatEventTime } from "@shared/lib";
+import { formatEventDate, formatEventTime, useModalState } from "@shared/lib";
 import { useDeleteEvent } from "@shared/api";
 import { Typography } from "../Typography";
 import { Button } from "../Button";
@@ -37,7 +37,7 @@ export interface EventCardProps {
   };
   location: {
     name: string;
-    address: string;
+    address: string | null;
   };
   onDelete?: (eventId: string) => void;
 }
@@ -53,7 +53,7 @@ export const EventCard: FC<EventCardProps> = ({
 }) => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const { state: deleteDialogState, open: openDeleteDialog, close: closeDeleteDialog } = useModalState<void>();
   const menuRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const { mutateAsync: deleteEvent, isPending: isDeleting } = useDeleteEvent();
@@ -121,7 +121,7 @@ export const EventCard: FC<EventCardProps> = ({
 
   const handleOpenDeleteDialog = () => {
     closeMenu();
-    setIsDeleteDialogOpen(true);
+    openDeleteDialog();
   };
 
   const handleCancelDelete = () => {
@@ -129,7 +129,7 @@ export const EventCard: FC<EventCardProps> = ({
       return;
     }
 
-    setIsDeleteDialogOpen(false);
+    closeDeleteDialog();
   };
 
   const handleConfirmDelete = async () => {
@@ -140,7 +140,7 @@ export const EventCard: FC<EventCardProps> = ({
     try {
       await deleteEvent(id);
       toast.success("Мероприятие удалено");
-      setIsDeleteDialogOpen(false);
+      closeDeleteDialog();
       onDelete?.(id);
     } catch (error) {
       console.error("Delete event error", error);
@@ -216,6 +216,11 @@ export const EventCard: FC<EventCardProps> = ({
         <Typography variant="body" color="gray">
           {location.name}
         </Typography>
+        {location.address ? (
+          <Typography variant="body" color="gray">
+            {location.address}
+          </Typography>
+        ) : null}
         <Typography variant="body" color="gray">
           {currentParticipants} / {maxParticipants || "—"}
         </Typography>
@@ -237,7 +242,7 @@ export const EventCard: FC<EventCardProps> = ({
       </div>
 
       <EventDeleteDialog
-        open={isDeleteDialogOpen}
+        open={deleteDialogState.open}
         onCancel={handleCancelDelete}
         onConfirm={handleConfirmDelete}
         isLoading={isDeleting}

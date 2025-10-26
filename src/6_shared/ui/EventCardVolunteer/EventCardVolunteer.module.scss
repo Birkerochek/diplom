@@ -1,0 +1,80 @@
+@use "@shared/styles/mixins.scss" as *;
+.card{
+    padding: 25px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    @include shadow();
+    &_status{
+        margin-top: 5px;
+    }
+    &__top{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        &_left{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        &_right{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-end;
+            text-align: right;
+        }
+    }
+    &__info{
+        display: flex;
+        flex-direction: column;
+        margin: 24px 0;
+        gap: 15px;
+        &_top{
+
+        }
+        &_bottom{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+    }
+
+    &__bottom{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        &_left{
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        &_right{
+
+        }
+    }
+}
+
+.card__info_item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    svg {
+        color: #b8b8b8;
+    }
+}
+
+.confirmFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.motivation {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}

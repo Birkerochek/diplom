@@ -39,6 +39,7 @@ type TextareaProps = BaseInputProps &
   React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
     isTextarea: true;
     maskOptions?: never;
+    maxLength?: number;
   };
 
 export type InputProps = TextInputProps | TextareaProps;
@@ -91,6 +92,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
           name={name}
           onChange={onChange}
           onBlur={onBlur}
+          maxLength={textareaRest.maxLength}
           {...textareaRest}
           rows={5}
         />

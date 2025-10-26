@@ -17,7 +17,7 @@ import styles from "./EventDetailsPage.module.scss";
 import { PAGES } from "@shared/constants";
 import { EventDetailsSkeleton } from "./EventDetailsSkeleton";
 import { EventStatus } from "../../../../../app/generated/prisma";
-import { mapEventStatusToLabel } from "@shared/lib";
+import { mapEventStatusToLabel, useModalState } from "@shared/lib";
 
 type EventDetailsPageProps = {
   eventId: string;
@@ -25,7 +25,7 @@ type EventDetailsPageProps = {
 
 export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
   const router = useRouter();
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { state: deleteModalState, open: openDeleteModal, close: closeDeleteModal } = useModalState<void>();
   const {
     data: event,
     isLoading,
@@ -33,7 +33,7 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
     refetch,
     isFetching,
   } = useFetchEvent(eventId);
-  const { approveVolunteer, rejectVolunteer, isProcessing } = useVolunteerActions({ eventId });
+  const { approveVolunteer, rejectVolunteer, completeVolunteer, isProcessing } = useVolunteerActions({ eventId });
   const { mutateAsync: deleteEvent, isPending: isDeleting } = useDeleteEvent();
   const { mutateAsync: updateEventStatus, isPending: isUpdatingStatus } = useUpdateEvent(eventId);
 
@@ -55,28 +55,28 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
   }, [event?.status]);
 
   const handleOpenDeleteModal = useCallback(() => {
-    setIsDeleteModalOpen(true);
-  }, []);
+    openDeleteModal();
+  }, [openDeleteModal]);
 
   const handleCloseDeleteModal = useCallback(() => {
     if (isDeleting) {
       return;
     }
 
-    setIsDeleteModalOpen(false);
-  }, [isDeleting]);
+    closeDeleteModal();
+  }, [closeDeleteModal, isDeleting]);
 
   const handleConfirmDelete = useCallback(async () => {
     try {
       await deleteEvent(eventId);
-      setIsDeleteModalOpen(false);
+      closeDeleteModal();
       toast.success("Мероприятие удалено");
       router.push(PAGES.ORGANIZER_EVENTS);
     } catch (error) {
       console.error("Delete event error", error);
       toast.error("Не удалось удалить мероприятие");
     }
-  }, [deleteEvent, eventId, router]);
+  }, [closeDeleteModal, deleteEvent, eventId, router]);
 
   const handleStatusChange = useCallback(
     async (nextValue: string) => {
@@ -193,6 +193,7 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
             registrations={event.stats.registrations}
             onApprove={approveVolunteer}
             onReject={rejectVolunteer}
+            onComplete={completeVolunteer}
             isProcessing={isProcessing}
           />
         </div>
@@ -210,7 +211,7 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
       </div>
 
             <EventDeleteDialog
-        open={isDeleteModalOpen}
+        open={deleteModalState.open}
         onCancel={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
         isLoading={isDeleting}

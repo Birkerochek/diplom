@@ -1,14 +1,16 @@
 import { api } from "@shared/api/axios";
 import type { EventStatus } from "../../../../app/generated/prisma";
+import type {
+  EventCollectionMeta,
+  EventCollectionSortDirection,
+  EventCollectionSortField,
+  EventListItem,
+  EventListResponse,
+  EventSummary,
+} from "@shared/types/event";
 
-export type FetchEventsSortField =
-  | "eventDate"
-  | "createdAt"
-  | "updatedAt"
-  | "title"
-  | "status";
-
-export type FetchEventsSortDirection = "asc" | "desc";
+export type FetchEventsSortField = EventCollectionSortField;
+export type FetchEventsSortDirection = EventCollectionSortDirection;
 
 export type FetchEventsParams = {
   page?: number;
@@ -22,94 +24,16 @@ export type FetchEventsParams = {
   organizerId?: string;
 };
 
-export type EventSchedule = {
-  eventDate: string;
-  startTime: string;
-  endTime: string;
-  requiredHours: number;
-};
-
-export type EventLocation = {
-  name: string;
-  address: string;
-};
-
-export type EventCapacity = {
-  maxParticipants: number;
-  currentParticipants: number;
-  confirmedParticipants: number;
-  fillRate: number;
-};
-
-export type EventRegistrationStats = {
-  pending: number;
-  approved: number;
-  rejected: number;
-  cancelled: number;
-  completed: number;
-  total: number;
-};
-
-export type EventStats = {
-  registrations: EventRegistrationStats;
-  volunteerHours: number;
-};
-
-export type EventOrganizer = {
-  id: string;
-  name: string;
-  email: string;
-};
-
-export type EventTimestamps = {
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string | null;
-};
-
-export type EventListItem = {
-  id: string;
-  title: string;
-  description: string;
-  status: EventStatus;
-  activityType: string;
-  schedule: EventSchedule;
-  location: EventLocation;
-  capacity: EventCapacity;
-  stats: EventStats;
-  organizer: EventOrganizer;
-  tags: string[];
-  timestamps: EventTimestamps;
-};
-
-export type FetchEventsMeta = {
-  page: number;
-  perPage: number;
-  total: number;
-  totalPages: number;
-  sort: {
-    field: FetchEventsSortField;
-    direction: FetchEventsSortDirection;
-  };
-  filters: {
-    status: string | null;
-    search: string | null;
-    dateFrom: string | null;
-    dateTo: string | null;
-    organizerId: string | null;
-  };
-};
-
-export type FetchEventsSummary = {
-  byStatus: Array<{ status: EventStatus; count: number }>;
-  byActivityType: Array<{ activityType: string; count: number }>;
-};
-
-export type FetchEventsResponse = {
-  data: EventListItem[];
-  meta: FetchEventsMeta;
-  summary: FetchEventsSummary;
-};
+export type FetchEventsMeta = EventCollectionMeta;
+export type FetchEventsSummary = EventSummary;
+export type FetchEventsResponse = EventListResponse;
+export type EventSchedule = EventListItem["schedule"];
+export type EventLocation = EventListItem["location"];
+export type EventCapacity = EventListItem["capacity"];
+export type EventRegistrationStats = EventListItem["stats"]["registrations"];
+export type EventStats = EventListItem["stats"];
+export type EventOrganizer = EventListItem["organizer"];
+export type EventTimestamps = EventListItem["timestamps"];
 
 export const fetchEvents = async (
   params: FetchEventsParams = {}

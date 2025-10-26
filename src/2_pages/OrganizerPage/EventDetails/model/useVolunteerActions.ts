@@ -19,10 +19,10 @@ export const useVolunteerActions = ({ eventId }: UseVolunteerActionsParams) => {
           registrationId,
           status: RegistrationStatus.approved,
         });
-        toast.success("Заявка одобрена");
+        toast.success("Волонтёр одобрен");
       } catch (error) {
         console.error("Approve volunteer error", error);
-        toast.error("Не удалось одобрить заявку");
+        toast.error("Не удалось одобрить волонтёра");
       }
     },
     [mutation]
@@ -36,10 +36,26 @@ export const useVolunteerActions = ({ eventId }: UseVolunteerActionsParams) => {
           status: RegistrationStatus.rejected,
           rejectionReason,
         });
-        toast.success("Заявка отклонена");
+        toast.success("Волонтёр отклонён");
       } catch (error) {
         console.error("Reject volunteer error", error);
-        toast.error("Не удалось отклонить заявку");
+        toast.error("Не удалось отклонить волонтёра");
+      }
+    },
+    [mutation]
+  );
+
+  const completeVolunteer = useCallback(
+    async (registrationId: string) => {
+      try {
+        await mutation.mutateAsync({
+          registrationId,
+          status: RegistrationStatus.completed,
+        });
+        toast.success("Волонтёр отмечен как присутствовавший");
+      } catch (error) {
+        console.error("Complete volunteer error", error);
+        toast.error("Не удалось отметить волонтёра");
       }
     },
     [mutation]
@@ -48,6 +64,7 @@ export const useVolunteerActions = ({ eventId }: UseVolunteerActionsParams) => {
   return {
     approveVolunteer,
     rejectVolunteer,
+    completeVolunteer,
     isProcessing: mutation.isPending,
   } as const;
 };

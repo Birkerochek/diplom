@@ -10,3 +10,5 @@ export * from "./updateRegistrationStatus";
 export * from "./useUpdateRegistrationStatus";
 export * from "./updateEvent";
 export * from "./useUpdateEvent";
+export * from "./registerVolunteer";
+export * from "./useRegisterVolunteer";

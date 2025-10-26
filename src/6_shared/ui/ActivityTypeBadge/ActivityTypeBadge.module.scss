@@ -1,0 +1,55 @@
+@use "@shared/styles/variables.scss" as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.badgeSocialAssistance {
+  color: #5b21b6;
+  background: #ede9fe;
+  border: 1px solid #c4b5fd;
+}
+
+.badgeEcology {
+  color: #047857;
+  background: #dcfce7;
+  border: 1px solid #4ade80;
+}
+
+.badgeEducation {
+  color: #1d4ed8;
+  background: #e0f2fe;
+  border: 1px solid #60a5fa;
+}
+
+.badgeHealthcare {
+  color: #b45309;
+  background: #ffedd5;
+  border: 1px solid #fb923c;
+}
+
+.badgeCultureArt {
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #facc15;
+}
+
+.badgeSport {
+  color: #0369a1;
+  background: #dbeafe;
+  border: 1px solid #60a5fa;
+}
+
+.badgeDefault {
+  color: #374151;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+}

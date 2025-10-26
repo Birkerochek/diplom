@@ -1,6 +1,4 @@
-import {
-  RegistrationStatus,
-} from "../../../generated/prisma";
+import { RegistrationStatus, SourceType } from "../../../generated/prisma";
 import { prisma } from "@shared/lib/prisma";
 import { z } from "zod";
 
@@ -15,15 +13,16 @@ type UpdateRegistrationStatusResult =
   | { status: 200; body: { success: true } }
   | { status: 400 | 403 | 404; body: { message: string } };
 
-const allowedStatuses = [
+const allowedStatusSet = new Set<RegistrationStatus>([
   RegistrationStatus.approved,
   RegistrationStatus.rejected,
-] satisfies RegistrationStatus[];
+  RegistrationStatus.completed,
+]);
 
 const updateSchema = z.object({
   status: z.nativeEnum(RegistrationStatus).refine(
-    (value) => allowedStatuses.includes(value),
-    "Статус можно изменить только на 'approved' или 'rejected'"
+    (value) => allowedStatusSet.has(value),
+    "Статус можно изменить только на 'approved', 'rejected' или 'completed'"
   ),
   rejectionReason: z
     .string()
@@ -40,7 +39,15 @@ export const updateRegistrationStatus = async ({
 }: UpdateRegistrationStatusInput): Promise<UpdateRegistrationStatusResult> => {
   const event = await prisma.event.findUnique({
     where: { id: eventId },
-    select: { id: true, organizerId: true },
+    select: {
+      id: true,
+      organizerId: true,
+      requiredHours: true,
+      activityType: true,
+      endTime: true,
+      title: true,
+      description: true,
+    },
   });
 
   if (!event) {
@@ -57,6 +64,7 @@ export const updateRegistrationStatus = async ({
       id: true,
       eventId: true,
       status: true,
+      volunteerId: true,
     },
   });
 
@@ -77,6 +85,21 @@ export const updateRegistrationStatus = async ({
     return { status: 200, body: { success: true } };
   }
 
+  if (status === RegistrationStatus.completed && registration.status !== RegistrationStatus.approved) {
+    return {
+      status: 400,
+      body: { message: "Заявку можно завершить только после одобрения" },
+    };
+  }
+
+  const now = new Date();
+  const hoursToCredit = Math.max(event.requiredHours, 0);
+  const completedPayload = {
+    attended: status === RegistrationStatus.completed,
+    hoursCompleted: status === RegistrationStatus.completed ? hoursToCredit : null,
+    completedAt: status === RegistrationStatus.completed ? event.endTime : null,
+  };
+
   await prisma.$transaction(async (tx) => {
     await tx.eventRegistration.update({
       where: { id: registrationId },
@@ -84,9 +107,33 @@ export const updateRegistrationStatus = async ({
         status,
         rejectionReason: status === RegistrationStatus.rejected ? rejectionReason ?? null : null,
         reviewedById: organizerId,
-        reviewedAt: new Date(),
+        reviewedAt: now,
+        ...completedPayload,
       },
     });
+
+    if (status === RegistrationStatus.completed) {
+      const existingHour = await tx.volunteerHour.findFirst({
+        where: { registrationId },
+        select: { id: true },
+      });
+
+      if (!existingHour) {
+        await tx.volunteerHour.create({
+          data: {
+            volunteerId: registration.volunteerId,
+            eventId,
+            registrationId,
+            hours: hoursToCredit,
+            activityType: event.activityType,
+            date: event.endTime,
+            title: event.title,
+            description: event.description ?? null,
+            source: SourceType.manual,
+          },
+        });
+      }
+    }
 
     const approvedCount = await tx.eventRegistration.count({
       where: {

@@ -3,6 +3,9 @@
 .card{
     padding: 25px;
     background: $color-basic-white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     @include shadow;
     border-radius: 10px;
     position: relative;

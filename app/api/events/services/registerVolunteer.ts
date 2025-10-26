@@ -20,7 +20,7 @@ const registerSchema = z
     motivationLetter: z
       .string()
       .trim()
-      .max(2_000, "Сопроводительное письмо слишком длинное")
+      .max(1000, "Сопроводительное письмо слишком длинное")
       .optional(),
   })
   .optional()

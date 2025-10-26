@@ -50,7 +50,7 @@ export const Header = () => {
                 <Calendar size={18} />
                 <Typography color="inherit">Мероприятия</Typography>
               </Link>
-              <Link className={s.header__center_item} href={PAGES.ORGANIZER_REPORTS}>
+              <Link className={s.header__center_item} href={PAGES.VOLUNTEER_REPORTS}>
                 <ClipboardList size={18} />
                 <Typography color="inherit">Отчёты</Typography>
               </Link>

@@ -8,12 +8,14 @@ import { VolunteerCard } from "./components/VolunteerCard";
 import { RejectModal } from "./components/RejectModal";
 import styles from "../../EventPageWidgets.module.scss";
 import { RegistrationStatus } from "../../../../../../app/generated/prisma";
+import { useModalState } from "@shared/lib";
 
 type RegisteredVolunteersWidgetProps = {
   volunteers: EventVolunteer[];
   registrations: Record<RegistrationStatus, number> & { total: number };
   onApprove: (registrationId: string) => Promise<void> | void;
   onReject: (registrationId: string, reason?: string) => Promise<void> | void;
+  onComplete: (registrationId: string) => Promise<void> | void;
   isProcessing: boolean;
 };
 
@@ -22,71 +24,86 @@ export const RegisteredVolunteersWidgetBase = ({
   registrations,
   onApprove,
   onReject,
+  onComplete,
   isProcessing,
 }: RegisteredVolunteersWidgetProps) => {
-  const [modalState, setModalState] = useState<{ open: boolean; registrationId: string | null }>({ open: false, registrationId: null });
+  const { state: rejectState, open: openRejectModal, close: closeRejectModal, setOpen: setRejectOpen } =
+    useModalState<string>();
   const [rejectionReason, setRejectionReason] = useState("");
   const { tabs, groupedVolunteers } = useVolunteerTabs({ volunteers, registrations });
 
-  const handleOpenReject = useCallback((registrationId: string) => {
-    setModalState({ open: true, registrationId });
-    setRejectionReason("");
-  }, []);
+  const handleOpenReject = useCallback(
+    (registrationId: string) => {
+      openRejectModal(registrationId);
+      setRejectionReason("");
+    },
+    [openRejectModal]
+  );
 
   const handleCancelReject = useCallback(() => {
-    setModalState({ open: false, registrationId: null });
+    closeRejectModal();
     setRejectionReason("");
-  }, []);
+  }, [closeRejectModal]);
 
   const handleConfirmReject = useCallback(async () => {
-    if (!modalState.registrationId) {
+    if (!rejectState.data) {
       return;
     }
 
-    await onReject(modalState.registrationId, rejectionReason.trim() || undefined);
+    await onReject(rejectState.data, rejectionReason.trim() || undefined);
     handleCancelReject();
-  }, [modalState.registrationId, onReject, rejectionReason, handleCancelReject]);
+  }, [rejectState.data, onReject, rejectionReason, handleCancelReject]);
 
-  const handleModalOpenChange = useCallback((open: boolean) => {
-    if (!open) {
-      handleCancelReject();
-      return;
-    }
+  const handleModalOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) {
+        handleCancelReject();
+        return;
+      }
 
-    setModalState((state) => ({ ...state, open }));
-  }, [handleCancelReject]);
+      setRejectOpen(true);
+    },
+    [handleCancelReject, setRejectOpen]
+  );
 
-  const renderTabContent = useCallback((list: EventVolunteer[], status: RegistrationStatus) => {
-    if (list.length === 0) {
+  const renderTabContent = useCallback(
+    (list: EventVolunteer[], status: RegistrationStatus) => {
+      if (list.length === 0) {
+        return (
+          <div className={styles.emptyState}>
+            <Typography variant="body" color="gray">
+              Здесь пока нет волонтёров с таким статусом.
+            </Typography>
+          </div>
+        );
+      }
+
       return (
-        <div className={styles.emptyState}>
-          <Typography variant="body" color="gray">
-            Пока нет волонтёров в этой категории.
-          </Typography>
+        <div className={styles.volunteerList}>
+          {list.map((registration) => (
+            <VolunteerCard
+              key={registration.id}
+              registration={registration}
+              onApprove={onApprove}
+              onComplete={onComplete}
+              onReject={handleOpenReject}
+              isProcessing={isProcessing}
+              isRejectedTab={status === RegistrationStatus.rejected}
+            />
+          ))}
         </div>
       );
-    }
-
-    return (
-      <div className={styles.volunteerList}>
-        {list.map((registration) => (
-          <VolunteerCard
-            key={registration.id}
-            registration={registration}
-            onApprove={onApprove}
-            onReject={handleOpenReject}
-            isProcessing={isProcessing}
-            isRejectedTab={status === RegistrationStatus.rejected}
-          />
-        ))}
-      </div>
-    );
-  }, [handleOpenReject, isProcessing, onApprove]);
+    },
+    [handleOpenReject, isProcessing, onApprove, onComplete]
+  );
 
   return (
     <section className={styles.section}>
       <header className={styles.sectionHeader}>
         <Typography variant="h3">Зарегистрированные волонтёры</Typography>
+        <Typography variant="settings" color="gray">
+          Отметьте волонтёра вручную или дождитесь конца дня: статус «Завершили» обновится автоматически.
+        </Typography>
       </header>
 
       <Tabs
@@ -107,7 +124,7 @@ export const RegisteredVolunteersWidgetBase = ({
       </Tabs>
 
       <RejectModal
-        open={modalState.open}
+        open={rejectState.open}
         onOpenChange={handleModalOpenChange}
         onConfirm={handleConfirmReject}
         onCancel={handleCancelReject}
@@ -119,4 +136,4 @@ export const RegisteredVolunteersWidgetBase = ({
   );
 };
 
-export const RegisteredVolunteersWidget = memo(RegisteredVolunteersWidgetBase)
+export const RegisteredVolunteersWidget = memo(RegisteredVolunteersWidgetBase);

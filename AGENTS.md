@@ -7,6 +7,7 @@
 Весь дизайн должен быть адаптивным
 
 Модель бд у меня записана в prisma/schema.prisma
+Не используй useMemo так как я уже использую React Compiler который автоматически мемоизирует
 
 ## Project Structure & Module Organization
 The Next.js entrypoints live under `app/`, using the App Router for pages and API routes. Shared feature layers follow a numbered convention inside `src/`: `1_app` for global providers and layouts, `2_pages` for feature pages, `3_widgets` for composite UI, and `6_shared` for reusable UI kits, utilities, schemas, and assets. Prisma models sit in `prisma/schema.prisma`, with the generated client cached under `app/generated/prisma/`. Static assets, fonts, and icons belong in `public/`. Keep new code aligned with this layering so imports continue to use aliases such as `@shared` and `@pages`.

@@ -13,17 +13,29 @@ const TEL_PREFIX = "tel:";
 type VolunteerCardProps = {
   registration: EventVolunteer;
   onApprove: (registrationId: string) => Promise<void> | void;
+  onComplete: (registrationId: string) => Promise<void> | void;
   onReject: (registrationId: string) => void;
   isProcessing: boolean;
   isRejectedTab: boolean;
 };
 
-const VolunteerCardBase =({ registration, onApprove, onReject, isProcessing, isRejectedTab }: VolunteerCardProps) => {
+const VolunteerCardBase = ({
+  registration,
+  onApprove,
+  onComplete,
+  onReject,
+  isProcessing,
+  isRejectedTab,
+}: VolunteerCardProps) => {
   const { volunteer, motivationLetter, totalVolunteerHours } = registration;
 
   const handleApprove = useCallback(() => {
     onApprove(registration.id);
   }, [onApprove, registration.id]);
+
+  const handleComplete = useCallback(() => {
+    onComplete(registration.id);
+  }, [onComplete, registration.id]);
 
   const handleReject = useCallback(() => {
     onReject(registration.id);
@@ -34,6 +46,7 @@ const VolunteerCardBase =({ registration, onApprove, onReject, isProcessing, isR
   const showRejectButton =
     (registration.status === RegistrationStatus.pending || registration.status === RegistrationStatus.approved) &&
     !isRejectedTab;
+  const showCompleteButton = registration.status === RegistrationStatus.approved;
 
   return (
     <article className={styles.volunteerCard}>
@@ -71,11 +84,16 @@ const VolunteerCardBase =({ registration, onApprove, onReject, isProcessing, isR
         </Typography>
       ) : null}
 
-      {showApproveButton || showRejectButton ? (
+      {showApproveButton || showRejectButton || showCompleteButton ? (
         <div className={styles.volunteerCardActions}>
           {showApproveButton ? (
             <Button color="primary" disabled={isProcessing} onClick={handleApprove}>
               Одобрить
+            </Button>
+          ) : null}
+          {showCompleteButton ? (
+            <Button color="primary" disabled={isProcessing} onClick={handleComplete}>
+              Был на мероприятии
             </Button>
           ) : null}
           {showRejectButton ? (
@@ -89,4 +107,4 @@ const VolunteerCardBase =({ registration, onApprove, onReject, isProcessing, isR
   );
 };
 
-export const VolunteerCard = memo(VolunteerCardBase)
+export const VolunteerCard = memo(VolunteerCardBase);
