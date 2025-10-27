@@ -10,7 +10,10 @@ const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
   return (
     <SessionProvider>
+    
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+
+      
     </SessionProvider>
   );
 };

@@ -14,3 +14,5 @@ export * from "./Avatar";
 export * from "./EventDeleteDialog";
 export * from "./ActivityTypeBadge/ActivityTypeBadge";
 export * from "./EventCardVolunteer/EventCardVolunteer";
+export * from "./EventCardVolunteer/EventCardVolunteerSkeleton";
+export * from "./Pagination/Pagination";

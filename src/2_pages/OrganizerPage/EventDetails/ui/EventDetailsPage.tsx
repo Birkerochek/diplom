@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "react-toastify";
+import { isAxiosError } from "axios";
 
 import { useDeleteEvent, useFetchEvent, useUpdateEvent } from "@shared/api";
 import { Button, Container, EventDeleteDialog, EventStatusBadge, Select, Typography } from "@shared/ui";
@@ -36,6 +37,7 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
   const { approveVolunteer, rejectVolunteer, completeVolunteer, isProcessing } = useVolunteerActions({ eventId });
   const { mutateAsync: deleteEvent, isPending: isDeleting } = useDeleteEvent();
   const { mutateAsync: updateEventStatus, isPending: isUpdatingStatus } = useUpdateEvent(eventId);
+  const isDeleteDisabled = event?.status === EventStatus.completed;
 
   const statusOptions = useMemo(
     () =>
@@ -55,8 +57,12 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
   }, [event?.status]);
 
   const handleOpenDeleteModal = useCallback(() => {
+    if (isDeleteDisabled) {
+      return;
+    }
+
     openDeleteModal();
-  }, [openDeleteModal]);
+  }, [isDeleteDisabled, openDeleteModal]);
 
   const handleCloseDeleteModal = useCallback(() => {
     if (isDeleting) {
@@ -67,6 +73,10 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
   }, [closeDeleteModal, isDeleting]);
 
   const handleConfirmDelete = useCallback(async () => {
+    if (isDeleteDisabled) {
+      return;
+    }
+
     try {
       await deleteEvent(eventId);
       closeDeleteModal();
@@ -74,9 +84,13 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
       router.push(PAGES.ORGANIZER_EVENTS);
     } catch (error) {
       console.error("Delete event error", error);
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data?.message ?? "Не удалось удалить мероприятие");
+        return;
+      }
       toast.error("Не удалось удалить мероприятие");
     }
-  }, [closeDeleteModal, deleteEvent, eventId, router]);
+  }, [closeDeleteModal, deleteEvent, eventId, isDeleteDisabled, router]);
 
   const handleStatusChange = useCallback(
     async (nextValue: string) => {
@@ -165,7 +179,7 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
               Редактировать
             </Button>
           </Link>
-          <Button variant="delete" onClick={handleOpenDeleteModal}>
+          <Button variant="delete" onClick={handleOpenDeleteModal} disabled={isDeleteDisabled}>
             Удалить
           </Button>
         </div>
@@ -209,9 +223,8 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
           <OrganizerCardWidget organizer={event.organizer} />
         </aside>
       </div>
-
-            <EventDeleteDialog
-        open={deleteModalState.open}
+      <EventDeleteDialog
+        open={!isDeleteDisabled && deleteModalState.open}
         onCancel={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
         isLoading={isDeleting}

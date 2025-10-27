@@ -4,6 +4,7 @@ import {
   RegistrationStatus,
 } from "../../../generated/prisma";
 import { prisma } from "@shared/lib/prisma";
+import { expandActivityTypeAliases, resolveActivityTypeKey } from "@shared/constants";
 
 // -----------------------------------------------------------------------------
 // Types
@@ -168,6 +169,24 @@ const buildWhere = (
     where.eventDate = dateFilter;
   }
 
+  const activityTypeParam = params.get("activityType")?.trim();
+  if (activityTypeParam) {
+    const aliases = Array.from(new Set(expandActivityTypeAliases(activityTypeParam)));
+
+    if (aliases.length > 1) {
+      andFilters.push({
+        OR: aliases.map((alias) => ({
+          activityType: { equals: alias, mode: "insensitive" },
+        })),
+      });
+    } else {
+      const target = aliases[0] ?? activityTypeParam;
+      andFilters.push({
+        activityType: { equals: target, mode: "insensitive" },
+      });
+    }
+  }
+
   if (context.role === "volunteer") {
     const organizerIdParam = params.get("organizerId");
     if (organizerIdParam) {
@@ -304,12 +323,15 @@ const serializeEvent = (
     ? Math.min(100, Math.round((confirmed / event.maxParticipants) * 100))
     : null;
 
+  const normalizedActivityType =
+    resolveActivityTypeKey(event.activityType) ?? event.activityType;
+
   return {
     id: event.id,
     title: event.title,
     description: event.description,
     status: event.status,
-    activityType: event.activityType,
+    activityType: normalizedActivityType,
     schedule: {
       eventDate: event.eventDate.toISOString(),
       startTime: event.startTime.toISOString(),
@@ -357,6 +379,7 @@ const buildMeta = (
     dateFrom: params.get("dateFrom"),
     dateTo: params.get("dateTo"),
     organizerId: params.get("organizerId"),
+    activityType: params.get("activityType"),
   },
 });
 
@@ -369,7 +392,7 @@ const buildSummary = (
     count: item._count._all,
   })),
   byActivityType: activities.map((item) => ({
-    activityType: item.activityType,
+    activityType: resolveActivityTypeKey(item.activityType) ?? item.activityType,
     count: item._count._all,
   })),
 });

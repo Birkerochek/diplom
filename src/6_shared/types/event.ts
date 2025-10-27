@@ -163,6 +163,7 @@ export interface EventCollectionFilters {
   dateFrom: string | null;
   dateTo: string | null;
   organizerId: string | null;
+  activityType: string | null;
 }
 
 /**

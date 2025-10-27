@@ -22,6 +22,7 @@ export type FetchEventsParams = {
   dateFrom?: string;
   dateTo?: string;
   organizerId?: string;
+  activityType?: string;
 };
 
 export type FetchEventsMeta = EventCollectionMeta;
@@ -31,7 +32,7 @@ export type EventSchedule = EventListItem["schedule"];
 export type EventLocation = EventListItem["location"];
 export type EventCapacity = EventListItem["capacity"];
 export type EventRegistrationStats = EventListItem["stats"]["registrations"];
-export type EventStats = EventListItem["stats"];
+export type EventListStats = EventListItem["stats"];
 export type EventOrganizer = EventListItem["organizer"];
 export type EventTimestamps = EventListItem["timestamps"];
 

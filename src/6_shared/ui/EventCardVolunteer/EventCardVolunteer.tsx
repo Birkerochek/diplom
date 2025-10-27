@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import { FC, useCallback, useState } from "react";
 import { Calendar, Clock4, MapPin, Users } from "lucide-react";
 
@@ -47,7 +48,11 @@ export const EventCardVolunteer: FC<EventCardVolunteerProps> = ({
   const formattedStartTime = formatEventTime(schedule.startTime);
   const formattedEndTime = formatEventTime(schedule.endTime);
 
-  const { state: confirmState, open: openConfirmModal, close: closeConfirmModal } = useModalState<void>();
+  const {
+    state: confirmState,
+    open: openConfirmModal,
+    close: closeConfirmModal,
+  } = useModalState<void>();
   const [motivationLetter, setMotivationLetter] = useState("");
 
   const registrationDisabled =
@@ -82,7 +87,7 @@ export const EventCardVolunteer: FC<EventCardVolunteerProps> = ({
       closeConfirmModal();
       setMotivationLetter("");
     } catch (error) {
-      // Ошибка уже обработана в хуке, просто оставляем модалку открытой
+      // TODO: surface this error to the user once notifications are available
       console.error("Volunteer confirmation error", error);
     }
   }, [closeConfirmModal, id, motivationLetter, onRegister]);
@@ -123,19 +128,19 @@ export const EventCardVolunteer: FC<EventCardVolunteerProps> = ({
           <div className={s.card__info_item}>
             <Clock4 size={18} />
             <Typography color="gray">
-              {formattedStartTime} — {formattedEndTime} ({schedule.requiredHours} ч.)
+              {formattedStartTime} - {formattedEndTime} ({schedule.requiredHours} ч.)
             </Typography>
           </div>
           <div className={s.card__info_item}>
             <MapPin size={18} />
             <Typography color="gray">
-              {location.name ?? "Локация уточняется"}
+              {location.name ?? "Место уточняется"}
             </Typography>
           </div>
           <div className={s.card__info_item}>
             <Users size={18} />
             <Typography color="gray">
-              {currentParticipants} из {hasParticipantLimit ? maxParticipants : "∞"}
+              {currentParticipants} из {hasParticipantLimit ? maxParticipants : "не ограничено"}
             </Typography>
           </div>
         </div>
@@ -145,7 +150,7 @@ export const EventCardVolunteer: FC<EventCardVolunteerProps> = ({
         <div className={s.card__bottom_left}>
           <Typography color="gray">Свободных мест:</Typography>
           <Typography color="green" variant="bodyBold">
-            {hasParticipantLimit ? freeSeats : "Не ограничено"}
+            {hasParticipantLimit ? freeSeats : "Без ограничений"}
           </Typography>
         </div>
 
@@ -163,8 +168,13 @@ export const EventCardVolunteer: FC<EventCardVolunteerProps> = ({
             openConfirmModal();
           }
         }}
-        title={<Typography variant="h3">Подтвердить участие?</Typography>}
-        description={<Typography color="gray">После подтверждения заявка будет передана организатору мероприятия.</Typography>}
+        title={<Typography variant="h3">Подтвердите участие</Typography>}
+        description={
+          <Typography color="gray">
+            Укажите пару слов о себе и подтвердите участие, чтобы организатор мог с вами
+            связаться.
+          </Typography>
+        }
         footer={
           <div className={s.confirmFooter}>
             <Button color="white" onClick={handleCloseModal} disabled={isRegistering}>
@@ -184,7 +194,7 @@ export const EventCardVolunteer: FC<EventCardVolunteerProps> = ({
           <Input
             isTextarea
             label="Мотивационное письмо (необязательно)"
-            placeholder="Напишите, почему хотите помочь или чем будете полезны."
+            placeholder="Расскажите, почему хотите присоединиться и чем готовы помочь."
             value={motivationLetter}
             onChange={(event) => setMotivationLetter(event.target.value)}
             maxLength={MOTIVATION_MAX_LENGTH}
@@ -194,7 +204,7 @@ export const EventCardVolunteer: FC<EventCardVolunteerProps> = ({
           </Typography>
           {isMotivationTooLong ? (
             <Typography variant="body" color="secondary">
-              Превышено допустимое количество символов.
+              Сократите сообщение, оно превышает допустимую длину.
             </Typography>
           ) : null}
         </div>

@@ -3,6 +3,7 @@ import { EventStatus } from "../../../../app/generated/prisma";
 import classNames from "classnames";
 import { mapEventStatusToLabel } from "@shared/lib";
 import s from "./EventStatusBadge.module.scss";
+import { Typography } from "../Typography";
 
 type StatusBadgeProps = {
   status: EventStatus;
@@ -17,9 +18,9 @@ const statusClassMap: Record<EventStatus, string> = {
 };
 
 const EventStatusBadgeBase: FC<StatusBadgeProps> = ({ status }) => (
-  <span className={classNames(s.badge, statusClassMap[status])}>
+  <Typography className={classNames(s.badge, statusClassMap[status])}>
     {mapEventStatusToLabel(status)}
-  </span>
+  </Typography>
 );
 
 export const EventStatusBadge = memo(EventStatusBadgeBase)

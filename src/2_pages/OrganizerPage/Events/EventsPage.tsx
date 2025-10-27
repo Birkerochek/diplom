@@ -1,77 +1,110 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { EventStatus } from "../../../../app/generated/prisma";
 import { useFetchEvents } from "@shared/api";
 import { Container, Tabs } from "@shared/ui";
 import { EventCard } from "@shared/ui/EventCard/EventCard";
 import { EventsPageSkeleton } from "./EventsPageSkeleton";
 import s from "./EventsPage.module.scss";
+import { Pagination } from "@shared/ui/Pagination/Pagination";
 
 type StatusTabValue = "all" | EventStatus;
 
 const STATUS_TABS: Array<{ value: StatusTabValue; label: string }> = [
   { value: "all", label: "Все" },
   { value: EventStatus.active, label: "Активные" },
-  { value: EventStatus.published, label: "Запланированные" },
-  { value: EventStatus.completed, label: "Завершённые" },
-  { value: EventStatus.cancelled, label: "Отменённые" },
+  { value: EventStatus.published, label: "Опубликованные" },
+  { value: EventStatus.completed, label: "Завершенные" },
+  { value: EventStatus.cancelled, label: "Отмененные" },
 ];
+
+const EVENTS_PER_PAGE = 6;
 
 export const EventsPage = () => {
   const [statusFilter, setStatusFilter] = useState<StatusTabValue>("all");
+  const [page, setPage] = useState(1);
+
+  const statusParam =
+    statusFilter === "all" ? undefined : (statusFilter as EventStatus);
 
   const {
     data: eventsResponse,
     isLoading,
     isError,
-  } = useFetchEvents();
+  } = useFetchEvents({
+    sortBy: "eventDate",
+    sortDir: "asc",
+    status: statusParam ? [statusParam] : undefined,
+    page,
+    perPage: EVENTS_PER_PAGE,
+  });
 
-  const events = useMemo(() => eventsResponse?.data ?? [], [eventsResponse]);
+  useEffect(() => {
+    setPage(1);
+  }, [statusFilter]);
 
-  const filteredEvents = useMemo(() => {
-    if (statusFilter === "all") {
-      return events;
+  const events = eventsResponse?.data ?? [];
+  const hasEvents = events.length > 0;
+  const meta = eventsResponse?.meta;
+  const totalPages = meta?.totalPages ?? 1;
+  const currentPage = meta?.page ?? page;
+
+  useEffect(() => {
+    if (!isLoading && totalPages > 0 && page > totalPages) {
+      setPage(totalPages);
     }
-
-    return events.filter((event) => event.status === statusFilter);
-  }, [events, statusFilter]);
+  }, [isLoading, page, totalPages]);
 
   if (isLoading) {
     return <EventsPageSkeleton />;
   }
 
   if (isError) {
-    return <div>Не удалось загрузить данные</div>;
+    return (
+      <Container>
+        <div className={s.empty}>Не удалось загрузить мероприятия организатора.</div>
+      </Container>
+    );
   }
 
-  const renderEvents = () => {
-    if (filteredEvents.length === 0) {
-      return <div className={s.empty}>Нет мероприятий для выбранного статуса</div>;
+  const renderContent = () => {
+    if (!hasEvents) {
+      return <div className={s.empty}>Мероприятия не найдены.</div>;
     }
 
     return (
-      <div className={s.events}>
-        {filteredEvents.map((event) => (
-          <EventCard
-            key={event.id}
-            id={event.id}
-            title={event.title}
-            status={event.status}
-            schedule={{
-              startTime: event.schedule.startTime,
-              endTime: event.schedule.endTime,
-              eventDate: event.schedule.eventDate,
-              requiredHours: `${event.schedule.requiredHours} ч`,
-            }}
-            capacity={{
-              maxParticipants: event.capacity.maxParticipants,
-              currentParticipants: event.capacity.currentParticipants,
-            }}
-            location={event.location}
+      <>
+        <div className={s.events}>
+          {events.map((event) => (
+            <EventCard
+              key={event.id}
+              id={event.id}
+              title={event.title}
+              status={event.status}
+              schedule={{
+                startTime: event.schedule.startTime,
+                endTime: event.schedule.endTime,
+                eventDate: event.schedule.eventDate,
+                requiredHours: `${event.schedule.requiredHours} ч.`,
+              }}
+              capacity={{
+                maxParticipants: event.capacity.maxParticipants,
+                currentParticipants: event.capacity.currentParticipants,
+              }}
+              location={event.location}
+            />
+          ))}
+        </div>
+        {totalPages > 1 ? (
+          <Pagination
+            className={s.pagination}
+            page={currentPage}
+            totalPages={totalPages}
+            onChange={setPage}
           />
-        ))}Ы
-      </div>
+        ) : null}
+      </>
     );
   };
 
@@ -87,7 +120,7 @@ export const EventsPage = () => {
       >
         {STATUS_TABS.map((tab) => (
           <Tabs.Item key={tab.value} value={tab.value} label={tab.label}>
-            {renderEvents()}
+            {renderContent()}
           </Tabs.Item>
         ))}
       </Tabs>

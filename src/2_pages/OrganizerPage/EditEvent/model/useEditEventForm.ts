@@ -31,7 +31,9 @@ const buildFormValues = (event: FetchEventResponse): EventFormInput => {
   const endTimeIso = new Date(schedule.endTime).toISOString();
 
   const knownCategory = CATEGORY_OPTIONS.find(
-    (option) => option.value !== "other" && option.label === event.activityType
+    (option) =>
+      option.value !== "other" &&
+      (option.value === event.activityType || option.label === event.activityType)
   );
 
   const activityType = knownCategory ? knownCategory.value : "other";

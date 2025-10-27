@@ -18,7 +18,7 @@ type DeleteEventResult =
 export const deleteEvent = async ({ organizerId, eventId }: DeleteEventInput) => {
   const event = await prisma.event.findUnique({
     where: { id: eventId },
-    select: { organizerId: true },
+    select: { organizerId: true, status: true },
   });
 
   if (!event) {
@@ -27,6 +27,10 @@ export const deleteEvent = async ({ organizerId, eventId }: DeleteEventInput) =>
 
   if (event.organizerId !== organizerId) {
     return { status: 403, body: { message: "Недостаточно прав" } } satisfies DeleteEventResult;
+  }
+
+  if (event.status === "completed") {
+    return { status: 403, body: { message: "Нельзя удалить завершенное мероприятие" } } satisfies DeleteEventResult;
   }
 
   await prisma.event.delete({ where: { id: eventId } });

@@ -1,5 +1,48 @@
-.events{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 24px;
+}
+
+.search {
+  flex: 1;
+}
+
+.filter {
+  min-width: 220px;
+}
+
+.events {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.empty {
+  padding: 48px 0;
+  text-align: center;
+  color: #7f7f7f;
+}
+
+@media (min-width: 768px) {
+  .controls {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .pagination {
+    justify-content: center;
+  }
+
+  .filter {
+    display: flex;
+    justify-content: flex-end;
+  }
 }

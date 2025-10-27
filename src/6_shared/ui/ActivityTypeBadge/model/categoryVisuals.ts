@@ -1,61 +1,38 @@
-﻿export type CategoryVisual = {
+import {
+  ACTIVITY_TYPE_DEFINITIONS,
+  getActivityTypeDefinition,
+} from "@shared/constants/activityTypes";
+
+export type CategoryVisual = {
   key: string;
   label: string;
   className: string;
   matches: string[];
 };
 
-export const CATEGORY_VISUALS: CategoryVisual[] = [
-  {
-    key: "social-assistance",
-    label: "Социальная помощь",
-    className: "badgeSocialAssistance",
-    matches: ["social-assistance", "социальная помощь"],
-  },
-  {
-    key: "ecology",
-    label: "Экология",
-    className: "badgeEcology",
-    matches: ["ecology", "экология"],
-  },
-  {
-    key: "education",
-    label: "Образование",
-    className: "badgeEducation",
-    matches: ["education", "образование"],
-  },
-  {
-    key: "healthcare",
-    label: "Здравоохранение",
-    className: "badgeHealthcare",
-    matches: ["healthcare", "здравоохранение"],
-  },
-  {
-    key: "culture-art",
-    label: "Культура и искусство",
-    className: "badgeCultureArt",
-    matches: ["culture-art", "культура", "искусство", "культура и искусство"],
-  },
-  {
-    key: "sport",
-    label: "Спорт",
-    className: "badgeSport",
-    matches: ["sport", "спорт"],
-  },
-  {
-    key: "other",
-    label: "Другое",
-    className: "badgeDefault",
-    matches: ["other", "другое"],
-  },
-] as const;
+const toMatches = (definition: { key: string; label: string; aliases: string[] }) =>
+  Array.from(new Set([definition.key, definition.label, ...definition.aliases]));
+
+export const CATEGORY_VISUALS: CategoryVisual[] = ACTIVITY_TYPE_DEFINITIONS.map(
+  (definition) => ({
+    key: definition.key,
+    label: definition.label,
+    className: definition.className,
+    matches: toMatches(definition),
+  })
+);
 
 export const getActivityTypeVisual = (value: string) => {
-  const normalized = value.trim().toLowerCase();
+  const definition = getActivityTypeDefinition(value);
 
-  return (
-    CATEGORY_VISUALS.find((item) =>
-      item.matches.some((match) => match.toLowerCase() === normalized)
-    ) ?? null
-  );
+  if (!definition) {
+    return null;
+  }
+
+  return {
+    key: definition.key,
+    label: definition.label,
+    className: definition.className,
+    matches: toMatches(definition),
+  } as CategoryVisual;
 };

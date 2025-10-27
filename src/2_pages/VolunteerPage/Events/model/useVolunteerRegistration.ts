@@ -1,4 +1,4 @@
-﻿import { useCallback } from "react";
+import { useCallback } from "react";
 import { toast } from "react-toastify";
 
 import { useRegisterVolunteer } from "@shared/api";
@@ -15,7 +15,7 @@ export const useVolunteerRegistration = (): UseVolunteerRegistrationResult => {
     async (eventId: string, motivationLetter?: string) => {
       try {
         await mutation.mutateAsync({ eventId, motivationLetter });
-        toast.success("Заявка отправлена организатору.");
+        toast.success('Заявка отправлена организатору и отобразится в разделе "Мои заявки".');
       } catch (error) {
         console.error("Volunteer registration error", error);
         const fallback = "Не удалось отправить заявку. Попробуйте позже.";

@@ -1,5 +1,5 @@
-import { z } from "zod";
-
+﻿import { z } from "zod";
+import { resolveActivityTypeKey } from "@shared/constants";
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
 const isValidDateString = (value: string) => !Number.isNaN(Date.parse(value));
@@ -17,8 +17,7 @@ const combineDateAndTime = (date: Date, time: string) => {
       0
     )
   );
-};
-
+}
 export const eventFormSchema = z
   .object({
     title: z
@@ -123,22 +122,12 @@ export type EventFormValues = z.infer<typeof eventFormSchema>;
 export type EventFormInput = z.input<typeof eventFormSchema>;
 export type EventFormOutput = z.output<typeof eventFormSchema>;
 
-const CATEGORY_MAP: Record<string, string> = {
-  "social-assistance": "Социальная помощь",
-  ecology: "Экология",
-  education: "Образование",
-  healthcare: "Здравоохранение",
-  "culture-art": "Культура и искусство",
-  sport: "Спорт",
-  other: "Другое",
-};
 
 export const mapEventFormToRequest = (values: EventFormOutput) => {
   const activityType =
     values.activityType === "other" && values.customActivityType
       ? values.customActivityType.trim()
-      : CATEGORY_MAP[values.activityType] ??
-        values.activityType;
+      : (resolveActivityTypeKey(values.activityType) ?? values.activityType.trim());
 
   const eventDateLocal = values.eventDate;
   if (!(eventDateLocal instanceof Date)) {
@@ -179,8 +168,7 @@ export const mapEventFormToRequest = (values: EventFormOutput) => {
           .filter(Boolean)
       : [],
   } as const;
-};
-
+}
 export const eventCreateSchema = z
   .object({
     title: z

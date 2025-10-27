@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { isAxiosError } from "axios";
 import { Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { EventStatus } from "../../../../app/generated/prisma";
 import { formatEventDate, formatEventTime, useModalState } from "@shared/lib";
@@ -59,6 +60,7 @@ export const EventCard: FC<EventCardProps> = ({
   const { mutateAsync: deleteEvent, isPending: isDeleting } = useDeleteEvent();
 
   const hasData = Boolean(id && title && schedule && capacity && location);
+  const canDelete = status !== EventStatus.completed;
 
   if (!hasData) {
     return <EventCardSkeleton />;
@@ -120,6 +122,10 @@ export const EventCard: FC<EventCardProps> = ({
   };
 
   const handleOpenDeleteDialog = () => {
+    if (!canDelete) {
+      return;
+    }
+
     closeMenu();
     openDeleteDialog();
   };
@@ -144,6 +150,10 @@ export const EventCard: FC<EventCardProps> = ({
       onDelete?.(id);
     } catch (error) {
       console.error("Delete event error", error);
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data?.message ?? "Не удалось удалить мероприятие");
+        return;
+      }
       toast.error("Не удалось удалить мероприятие");
     }
   };
@@ -188,15 +198,17 @@ export const EventCard: FC<EventCardProps> = ({
                 <Pencil className={s.menuItem__icon} size={16} />
                 Редактировать
               </button>
-              <button
-                type="button"
-                className={`${s.menuItem} ${s.menuItemDanger}`}
-                role="menuitem"
-                onClick={handleOpenDeleteDialog}
-              >
-                <Trash2 className={s.menuItem__icon} size={16} />
-                Удалить
-              </button>
+              {canDelete ? (
+                <button
+                  type="button"
+                  className={`${s.menuItem} ${s.menuItemDanger}`}
+                  role="menuitem"
+                  onClick={handleOpenDeleteDialog}
+                >
+                  <Trash2 className={s.menuItem__icon} size={16} />
+                  Удалить
+                </button>
+              ) : null}
             </div>
           ) : null}
         </div>
@@ -242,7 +254,7 @@ export const EventCard: FC<EventCardProps> = ({
       </div>
 
       <EventDeleteDialog
-        open={deleteDialogState.open}
+        open={canDelete && deleteDialogState.open}
         onCancel={handleCancelDelete}
         onConfirm={handleConfirmDelete}
         isLoading={isDeleting}
