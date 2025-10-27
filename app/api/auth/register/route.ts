@@ -10,14 +10,24 @@ export async function POST(request: Request) {
 
     if (!parsed.success) {
       const message = parsed.error.issues[0]?.message ?? "Некорректные данные";
+      console.warn("[Register API] validation failed", {
+        issues: parsed.error.issues,
+      });
       return NextResponse.json({ message }, { status: 400 });
     }
 
     const { firstName, lastName, email, password, role, organizationName, phone } = parsed.data;
 
+    console.info("[Register API] incoming request", {
+      email,
+      role,
+      hasOrganizationName: Boolean(organizationName),
+    });
+
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (existingUser) {
+      console.warn("[Register API] duplicate email attempt", { email });
       return NextResponse.json(
         { message: "Пользователь с таким email уже существует" },
         { status: 409 }
@@ -39,9 +49,11 @@ export async function POST(request: Request) {
       },
     });
 
+    console.info("[Register API] user created", { email, role });
+
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {
-    console.error("Register API error", error);
+    console.error("[Register API] unexpected error", error);
     return NextResponse.json(
       { message: "Не удалось завершить регистрацию" },
       { status: 500 }
