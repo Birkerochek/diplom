@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 type ModalState<T> = {
   open: boolean;
@@ -19,35 +19,34 @@ type UseModalStateReturn<T> = {
   reset: () => void;
 };
 
-export const useModalState = <T>(options: UseModalStateOptions<T> = {}): UseModalStateReturn<T> => {
+export const useModalState = <T>(
+  options: UseModalStateOptions<T> = {}
+): UseModalStateReturn<T> => {
   const { initialData = null } = options;
-  const [state, setState] = useState<ModalState<T>>({ open: false, data: initialData });
+  const [state, setState] = useState<ModalState<T>>({
+    open: false,
+    data: initialData,
+  });
 
-  const open = useCallback(
-    (data?: T | null) => {
-      setState({ open: true, data: data ?? initialData });
-    },
-    [initialData]
-  );
+  const open = (data?: T | null) => {
+    setState({ open: true, data: data ?? initialData });
+  };
 
-  const close = useCallback(() => {
+  const close = () => {
     setState({ open: false, data: initialData });
-  }, [initialData]);
+  };
 
-  const setOpen = useCallback(
-    (openValue: boolean) => {
-      setState((prev) => ({ open: openValue, data: prev.data }));
-    },
-    []
-  );
+  const setOpen = (openValue: boolean) => {
+    setState((prev) => ({ open: openValue, data: prev.data }));
+  };
 
-  const setData = useCallback((data: T | null) => {
+  const setData = (data: T | null) => {
     setState((prev) => ({ open: prev.open, data }));
-  }, []);
+  };
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setState({ open: false, data: initialData });
-  }, [initialData]);
+  };
 
   return {
     state,

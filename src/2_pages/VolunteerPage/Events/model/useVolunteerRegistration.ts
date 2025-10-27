@@ -15,10 +15,10 @@ export const useVolunteerRegistration = (): UseVolunteerRegistrationResult => {
     async (eventId: string, motivationLetter?: string) => {
       try {
         await mutation.mutateAsync({ eventId, motivationLetter });
-        toast.success('Заявка отправлена организатору и отобразится в разделе "Мои заявки".');
+        toast.success('Заявка отправлена. Отслеживать статус можно в разделе «Мои заявки».');
       } catch (error) {
         console.error("Volunteer registration error", error);
-        const fallback = "Не удалось отправить заявку. Попробуйте позже.";
+        const fallback = "Не удалось отправить заявку. Попробуйте ещё раз.";
         const message =
           (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
           fallback;

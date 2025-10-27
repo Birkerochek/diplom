@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { EventStatus } from "../../../../app/generated/prisma";
@@ -15,8 +15,8 @@ const STATUS_TABS: Array<{ value: StatusTabValue; label: string }> = [
   { value: "all", label: "Все" },
   { value: EventStatus.active, label: "Активные" },
   { value: EventStatus.published, label: "Опубликованные" },
-  { value: EventStatus.completed, label: "Завершенные" },
-  { value: EventStatus.cancelled, label: "Отмененные" },
+  { value: EventStatus.completed, label: "Завершённые" },
+  { value: EventStatus.cancelled, label: "Отменённые" },
 ];
 
 const EVENTS_PER_PAGE = 6;
@@ -25,8 +25,7 @@ export const EventsPage = () => {
   const [statusFilter, setStatusFilter] = useState<StatusTabValue>("all");
   const [page, setPage] = useState(1);
 
-  const statusParam =
-    statusFilter === "all" ? undefined : (statusFilter as EventStatus);
+  const statusParam = statusFilter === "all" ? undefined : (statusFilter as EventStatus);
 
   const {
     data: eventsResponse,
@@ -51,10 +50,10 @@ export const EventsPage = () => {
   const currentPage = meta?.page ?? page;
 
   useEffect(() => {
-    if (!isLoading && totalPages > 0 && page > totalPages) {
-      setPage(totalPages);
+    if (!isLoading && totalPages > 0) {
+      setPage((prev) => (prev > totalPages ? totalPages : prev));
     }
-  }, [isLoading, page, totalPages]);
+  }, [isLoading, totalPages]);
 
   if (isLoading) {
     return <EventsPageSkeleton />;
@@ -68,45 +67,41 @@ export const EventsPage = () => {
     );
   }
 
-  const renderContent = () => {
-    if (!hasEvents) {
-      return <div className={s.empty}>Мероприятия не найдены.</div>;
-    }
-
-    return (
-      <>
-        <div className={s.events}>
-          {events.map((event) => (
-            <EventCard
-              key={event.id}
-              id={event.id}
-              title={event.title}
-              status={event.status}
-              schedule={{
-                startTime: event.schedule.startTime,
-                endTime: event.schedule.endTime,
-                eventDate: event.schedule.eventDate,
-                requiredHours: `${event.schedule.requiredHours} ч.`,
-              }}
-              capacity={{
-                maxParticipants: event.capacity.maxParticipants,
-                currentParticipants: event.capacity.currentParticipants,
-              }}
-              location={event.location}
-            />
-          ))}
-        </div>
-        {totalPages > 1 ? (
-          <Pagination
-            className={s.pagination}
-            page={currentPage}
-            totalPages={totalPages}
-            onChange={setPage}
+  const content = hasEvents ? (
+    <>
+      <div className={s.events}>
+        {events.map((event) => (
+          <EventCard
+            key={event.id}
+            id={event.id}
+            title={event.title}
+            status={event.status}
+            schedule={{
+              startTime: event.schedule.startTime,
+              endTime: event.schedule.endTime,
+              eventDate: event.schedule.eventDate,
+              requiredHours: `${event.schedule.requiredHours} ч.`,
+            }}
+            capacity={{
+              maxParticipants: event.capacity.maxParticipants,
+              currentParticipants: event.capacity.currentParticipants,
+            }}
+            location={event.location}
           />
-        ) : null}
-      </>
-    );
-  };
+        ))}
+      </div>
+      {totalPages > 1 ? (
+        <Pagination
+          className={s.pagination}
+          page={currentPage}
+          totalPages={totalPages}
+          onChange={setPage}
+        />
+      ) : null}
+    </>
+  ) : (
+    <div className={s.empty}>Мероприятий пока нет.</div>
+  );
 
   return (
     <Container>
@@ -120,7 +115,7 @@ export const EventsPage = () => {
       >
         {STATUS_TABS.map((tab) => (
           <Tabs.Item key={tab.value} value={tab.value} label={tab.label}>
-            {renderContent()}
+            {content}
           </Tabs.Item>
         ))}
       </Tabs>

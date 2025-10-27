@@ -75,55 +75,50 @@ export const EventsPageVolunteer = () => {
   const currentPage = meta?.page ?? page;
 
   useEffect(() => {
-    if (!isLoading && totalPages > 0 && page > totalPages) {
-      setPage(totalPages);
+    if (!isLoading && totalPages > 0) {
+      setPage((prev) => (prev > totalPages ? totalPages : prev));
     }
-  }, [isLoading, page, totalPages]);
+  }, [isLoading, totalPages]);
 
-  const content = (() => {
-    if (isLoading) {
-      return <Skeleton />;
-    }
-
-    if (isError) {
-      return (
-        <Typography variant="body">
-          Не удалось загрузить мероприятия. Попробуйте повторить попытку позже.
-        </Typography>
-      );
-    }
-
-    if (hasEvents) {
-      return (
-        <>
-          <div className={s.events}>
-            {events.map((event) => (
-              <EventCardVolunteer
-                key={event.id}
-                {...event}
-                onRegister={register}
-                isRegistering={isEventProcessing(event.id)}
-              />
-            ))}
-          </div>
-          {totalPages > 1 ? (
-            <Pagination
-              className={s.pagination}
-              page={currentPage}
-              totalPages={totalPages}
-              onChange={setPage}
-            />
-          ) : null}
-        </>
-      );
-    }
-
-    return (
-      <Typography variant="body" className={s.empty}>
-        События не найдены. Измените параметры поиска.
+  let content;
+  if (isLoading) {
+    content = <Skeleton />;
+  } else if (isError) {
+    content = (
+      <Typography variant="body">
+        Не удалось загрузить мероприятия. Попробуйте позже.
       </Typography>
     );
-  })();
+  } else if (hasEvents) {
+    content = (
+      <>
+        <div className={s.events}>
+          {events.map((event) => (
+            <EventCardVolunteer
+              key={event.id}
+              {...event}
+              onRegister={register}
+              isRegistering={isEventProcessing(event.id)}
+            />
+          ))}
+        </div>
+        {totalPages > 1 ? (
+          <Pagination
+            className={s.pagination}
+            page={currentPage}
+            totalPages={totalPages}
+            onChange={setPage}
+          />
+        ) : null}
+      </>
+    );
+  } else {
+    content = (
+      <Typography variant="body" className={s.empty}>
+        Подходящих мероприятий не найдено. Измените параметры поиска.
+      </Typography>
+    );
+  }
 
   return (
     <Container>

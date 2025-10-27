@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useState } from "react";
+import { memo, useState } from "react";
 import { Tabs, Typography } from "@shared/ui";
 import type { EventVolunteer } from "@shared/api/event/fetchEvent";
 import { useVolunteerTabs } from "../model/useVolunteerTabs";
@@ -27,82 +27,41 @@ export const RegisteredVolunteersWidgetBase = ({
   onComplete,
   isProcessing,
 }: RegisteredVolunteersWidgetProps) => {
-  const { state: rejectState, open: openRejectModal, close: closeRejectModal, setOpen: setRejectOpen } =
-    useModalState<string>();
+  const { state: rejectState, open: openRejectModal, close: closeRejectModal } = useModalState<string>();
   const [rejectionReason, setRejectionReason] = useState("");
   const { tabs, groupedVolunteers } = useVolunteerTabs({ volunteers, registrations });
 
-  const handleOpenReject = useCallback(
-    (registrationId: string) => {
-      openRejectModal(registrationId);
-      setRejectionReason("");
-    },
-    [openRejectModal]
-  );
+  const handleOpenReject = (registrationId: string) => {
+    openRejectModal(registrationId);
+    setRejectionReason("");
+  };
 
-  const handleCancelReject = useCallback(() => {
+  const handleCancelReject = () => {
     closeRejectModal();
     setRejectionReason("");
-  }, [closeRejectModal]);
+  };
 
-  const handleConfirmReject = useCallback(async () => {
+  const handleConfirmReject = async () => {
     if (!rejectState.data) {
       return;
     }
 
     await onReject(rejectState.data, rejectionReason.trim() || undefined);
     handleCancelReject();
-  }, [rejectState.data, onReject, rejectionReason, handleCancelReject]);
+  };
 
-  const handleModalOpenChange = useCallback(
-    (open: boolean) => {
-      if (!open) {
-        handleCancelReject();
-        return;
-      }
-
-      setRejectOpen(true);
-    },
-    [handleCancelReject, setRejectOpen]
-  );
-
-  const renderTabContent = useCallback(
-    (list: EventVolunteer[], status: RegistrationStatus) => {
-      if (list.length === 0) {
-        return (
-          <div className={styles.emptyState}>
-            <Typography variant="body" color="gray">
-              Здесь пока нет волонтёров с таким статусом.
-            </Typography>
-          </div>
-        );
-      }
-
-      return (
-        <div className={styles.volunteerList}>
-          {list.map((registration) => (
-            <VolunteerCard
-              key={registration.id}
-              registration={registration}
-              onApprove={onApprove}
-              onComplete={onComplete}
-              onReject={handleOpenReject}
-              isProcessing={isProcessing}
-              isRejectedTab={status === RegistrationStatus.rejected}
-            />
-          ))}
-        </div>
-      );
-    },
-    [handleOpenReject, isProcessing, onApprove, onComplete]
-  );
+  const handleModalOpenChange = (open: boolean) => {
+    if (!open) {
+      handleCancelReject();
+    }
+  };
 
   return (
     <section className={styles.section}>
       <header className={styles.sectionHeader}>
         <Typography variant="h3">Зарегистрированные волонтёры</Typography>
         <Typography variant="settings" color="gray">
-          Отметьте волонтёра вручную или дождитесь конца дня: статус «Завершили» обновится автоматически.
+          Управляйте заявками и отслеживайте статус участия на каждом этапе регистрации.
         </Typography>
       </header>
 
@@ -115,9 +74,32 @@ export const RegisteredVolunteersWidgetBase = ({
         {tabs.map(({ status, label }) => {
           const list = groupedVolunteers.get(status) ?? [];
 
+          const tabContent =
+            list.length === 0 ? (
+              <div className={styles.emptyState}>
+                <Typography variant="body" color="gray">
+                  В этой категории пока нет волонтёров.
+                </Typography>
+              </div>
+            ) : (
+              <div className={styles.volunteerList}>
+                {list.map((registration) => (
+                  <VolunteerCard
+                    key={registration.id}
+                    registration={registration}
+                    onApprove={onApprove}
+                    onComplete={onComplete}
+                    onReject={handleOpenReject}
+                    isProcessing={isProcessing}
+                    isRejectedTab={status === RegistrationStatus.rejected}
+                  />
+                ))}
+              </div>
+            );
+
           return (
             <Tabs.Item key={status} value={status} label={label}>
-              {renderTabContent(list, status)}
+              {tabContent}
             </Tabs.Item>
           );
         })}

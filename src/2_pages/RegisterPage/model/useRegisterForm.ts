@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,10 +24,7 @@ export const useRegisterForm = () => {
   const selectedRole = watch("role");
   const passwordValue = watch("password");
 
-  const requirementList = useMemo(
-    () => getPasswordRequirementList(passwordValue ?? ""),
-    [passwordValue]
-  );
+  const requirementList = getPasswordRequirementList(passwordValue ?? "");
 
   const submitRegister = useCallback(
     async (values: RegisterFormValues) => {
@@ -42,14 +39,11 @@ export const useRegisterForm = () => {
             ? PAGES.VOLUNTEER_DASHBOARD
             : PAGES.ORGANIZER_DASHBOARD;
 
-        const signInResult = await signInAfterRegister(
-          values.email,
-          values.password
-        );
+        const signInResult = await signInAfterRegister(values.email, values.password);
 
         if (signInResult?.error) {
           setServerError(
-            "Не удалось войти автоматически. Попробуйте авторизоваться вручную."
+            "Аккаунт создан, но выполнить автоматический вход не удалось. Пожалуйста, войдите вручную."
           );
           router.push(PAGES.LOGIN);
           return;
@@ -64,9 +58,9 @@ export const useRegisterForm = () => {
           const message = (
             error.response?.data as { message?: string } | undefined
           )?.message;
-          setServerError(message ?? "Не удалось завершить регистрацию");
+          setServerError(message ?? "Не удалось завершить регистрацию.");
         } else {
-          setServerError("Что-то пошло не так. Попробуйте снова.");
+          setServerError("Что‑то пошло не так. Попробуйте ещё раз.");
         }
       } finally {
         setIsSubmitting(false);

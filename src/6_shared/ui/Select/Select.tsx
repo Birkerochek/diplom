@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import clsx from "clsx";
 import s from "./Select.module.scss";
@@ -38,22 +38,15 @@ export const Select = ({
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-  const selectedOption = useMemo(
-    () => options.find((option) => option.value === value),
-    [options, value]
-  );
+  const selectedOption = options.find((option) => option.value === value);
 
-  const toggleOpen = useCallback(() => {
-    if (disabled) {
+  const close = () => setIsOpen(false);
+
+  useEffect(() => {
+    if (!isOpen) {
       return;
     }
 
-    setIsOpen((prev) => !prev);
-  }, [disabled]);
-
-  const close = useCallback(() => setIsOpen(false), []);
-
-  useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (!wrapperRef.current) {
         return;
@@ -64,32 +57,35 @@ export const Select = ({
       }
     };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleOutsideClick);
-    }
+    document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [close, isOpen]);
+  }, [isOpen]);
 
-  const handleOptionSelect = useCallback(
-    (optionValue: string) => {
-      onChange?.(optionValue);
-      close();
-    },
-    [close, onChange]
-  );
+  const handleToggle = () => {
+    if (!disabled) {
+      setIsOpen((prev) => !prev);
+    }
+  };
+
+  const handleOptionSelect = (optionValue: string) => {
+    onChange?.(optionValue);
+    close();
+  };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       setIsOpen(true);
+      return;
     }
 
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      toggleOpen();
+      handleToggle();
+      return;
     }
 
     if (event.key === "Escape") {
@@ -119,15 +115,13 @@ export const Select = ({
         <button
           type="button"
           className={triggerClassName}
-          onClick={toggleOpen}
+          onClick={handleToggle}
           onKeyDown={handleKeyDown}
           aria-haspopup="listbox"
           aria-expanded={isOpen}
           disabled={disabled}
         >
-          <span
-            className={clsx(s.value, !selectedOption && s.placeholder)}
-          >
+          <span className={clsx(s.value, !selectedOption && s.placeholder)}>
             {selectedOption ? selectedOption.label : placeholder}
           </span>
           <span className={s.arrow} aria-hidden>
@@ -143,9 +137,7 @@ export const Select = ({
           </span>
         </button>
 
-        {name ? (
-          <input type="hidden" name={name} value={value ?? ""} />
-        ) : null}
+        {name ? <input type="hidden" name={name} value={value ?? ""} /> : null}
 
         {isOpen ? (
           <ul className={s.dropdown} role="listbox">
@@ -153,18 +145,17 @@ export const Select = ({
               const isSelected = option.value === value;
 
               return (
-                <button
+                <li key={option.value}>
+                  <button
                     type="button"
                     className={clsx(s.option, isSelected && s.optionSelected)}
                     onClick={() => handleOptionSelect(option.value)}
                     role="option"
-                    key={option.value}
                     aria-selected={isSelected}
                   >
-                <li >
                     {option.label}
-                </li>
                   </button>
+                </li>
               );
             })}
           </ul>
@@ -175,3 +166,4 @@ export const Select = ({
     </div>
   );
 };
+

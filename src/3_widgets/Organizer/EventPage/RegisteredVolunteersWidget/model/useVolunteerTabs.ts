@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import type { EventVolunteer } from "@shared/api/event/fetchEvent";
 import {
   PRIMARY_REGISTRATION_STATUSES,
@@ -13,35 +12,33 @@ type UseVolunteerTabsParams = {
 };
 
 export const useVolunteerTabs = ({ volunteers, registrations }: UseVolunteerTabsParams) => {
-  const { tabs, groupedVolunteers } = useMemo(() => {
-    const grouped = new Map<RegistrationStatus, EventVolunteer[]>();
+  const groupedVolunteers = new Map<RegistrationStatus, EventVolunteer[]>();
 
-    for (const registration of volunteers) {
-      const list = grouped.get(registration.status) ?? [];
+  for (const registration of volunteers) {
+    const list = groupedVolunteers.get(registration.status);
+    if (list) {
       list.push(registration);
-      grouped.set(registration.status, list);
+      continue;
+    }
+    groupedVolunteers.set(registration.status, [registration]);
+  }
+
+  const tabOrder = REGISTRATION_STATUS_PRIORITY.filter((status) => {
+    if (PRIMARY_REGISTRATION_STATUSES.has(status)) {
+      return true;
     }
 
-    const tabOrder = REGISTRATION_STATUS_PRIORITY.filter((status) => {
-      if (PRIMARY_REGISTRATION_STATUSES.has(status)) {
-        return true;
-      }
+    return (registrations[status] ?? 0) > 0;
+  });
 
-      return (registrations[status] ?? 0) > 0;
-    });
+  const resolvedTabs = tabOrder.length
+    ? tabOrder
+    : [RegistrationStatus.approved, RegistrationStatus.pending];
 
-    const resolvedTabs = tabOrder.length
-      ? tabOrder
-      : [RegistrationStatus.approved, RegistrationStatus.pending];
-
-    return {
-      groupedVolunteers: grouped,
-      tabs: resolvedTabs.map((status) => ({
-        status,
-        label: `${REGISTRATION_STATUS_LABELS[status]} (${registrations[status] ?? 0})`,
-      })),
-    };
-  }, [volunteers, registrations]);
+  const tabs = resolvedTabs.map((status) => ({
+    status,
+    label: `${REGISTRATION_STATUS_LABELS[status]} (${registrations[status] ?? 0})`,
+  }));
 
   return { tabs, groupedVolunteers } as const;
 };

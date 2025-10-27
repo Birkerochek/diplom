@@ -1,4 +1,4 @@
-﻿import { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 
 import type { EventSummaryByActivityType } from "@shared/types/event";
 import type { SelectOption } from "@shared/ui/Select/Select";
@@ -10,7 +10,7 @@ type UseVolunteerEventsFilterParams = {
   initialSummary?: EventSummaryByActivityType[];
 };
 
-const DEFAULT_OPTION: SelectOption = { value: "", label: "Все направления" };
+const DEFAULT_OPTION: SelectOption = { value: "", label: "Все категории" };
 
 const CATEGORY_LABELS = new Map<string, string>(
   CATEGORY_OPTIONS.map((option) => [option.value, option.label])
@@ -44,14 +44,11 @@ export const useVolunteerEventsFilter = ({
   };
 };
 
-const buildOptions = (
-  summary: EventSummaryByActivityType[],
-  currentValue: string
-): SelectOption[] => {
+const buildOptions = (summary: EventSummaryByActivityType[], currentValue: string): SelectOption[] => {
   const result: SelectOption[] = [DEFAULT_OPTION];
   const seen = new Set<string>();
 
-  const addOption = (key: string | null) => {
+  const addKey = (key: string | null) => {
     if (!key || seen.has(key) || !CATEGORY_LABELS.has(key)) {
       return;
     }
@@ -63,18 +60,15 @@ const buildOptions = (
     });
   };
 
-  const normalizedCurrent = normalizeActivityType(currentValue);
+  summary.forEach((item) => {
+    addKey(normalizeActivityType(item.activityType ?? ""));
+  });
 
-  for (const item of summary) {
-    const normalized = normalizeActivityType(item.activityType ?? "");
-    addOption(normalized);
-  }
+  CATEGORY_OPTIONS.forEach((option) => {
+    addKey(option.value);
+  });
 
-  for (const option of CATEGORY_OPTIONS) {
-    addOption(option.value);
-  }
-
-  addOption(normalizedCurrent);
+  addKey(normalizeActivityType(currentValue));
 
   return result;
 };
@@ -91,5 +85,3 @@ const normalizeActivityType = (value: string): string | null => {
 
   return CATEGORY_LABELS.has(key) ? key : null;
 };
-
-
