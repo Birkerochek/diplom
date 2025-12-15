@@ -7,7 +7,13 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg"
+}
+
 
 // ------------------------------------------------------------
 // ENUMS
@@ -58,7 +64,6 @@ model User {
   organizationDescription String?
 
   isActive  Boolean   @default(true)
-  lastLogin DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -67,8 +72,7 @@ model User {
   registrations         EventRegistration[] @relation("VolunteerRegistrations")
   volunteerHours        VolunteerHour[]
   certificates          Certificate[]
-  notifications         Notification[]
-  auditLogs             AuditLog[]
+  
   verifiedHours         VolunteerHour[]     @relation("VerifiedByRelation")
   reviewedRegistrations EventRegistration[] @relation("ReviewedByRelation")
   issuedCertificates    Certificate[]       @relation("IssuedByRelation")
@@ -224,52 +228,3 @@ model ActivityType {
   createdAt   DateTime @default(now())
 }
 
-// ------------------------------------------------------------
-// NOTIFICATIONS
-// ------------------------------------------------------------
-
-model Notification {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @db.Uuid
-  type      String
-  title     String
-  message   String
-  link      String?
-  icon      String?
-  priority  Int      @default(1)
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([isRead])
-  @@index([createdAt])
-}
-
-// ------------------------------------------------------------
-// AUDIT LOG
-// ------------------------------------------------------------
-
-model AuditLog {
-  id         String   @id @default(uuid()) @db.Uuid
-  userId     String?  @db.Uuid
-  action     String
-  entityType String
-  entityId   String?  @db.Uuid
-  oldValues  Json?
-  newValues  Json?
-  ipAddress  String?
-  userAgent  String?
-  method     String?
-  sessionId  String?
-  createdAt  DateTime @default(now())
-
-  // Relations
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  @@index([userId])
-  @@index([entityType, entityId])
-  @@index([createdAt])
-}

@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PAGES, ROLES } from "@shared/constants";
-import { LoginFormValues } from "@shared/zod/auth.schema";
 import { loginUser, fetchUserSession } from "../api/login";
+import { LoginFormValues } from "@shared/zod";
 
 export const useLoginForm = () => {
   const router = useRouter();

@@ -14,8 +14,7 @@ import {
   type EventFormInput,
   type EventFormOutput,
 } from "@shared/zod";
-import { useFetchEvent, useUpdateEvent } from "@shared/api";
-import type { FetchEventResponse } from "@shared/api/event/fetchEvent";
+import { FetchEventResponse, useFetchEvent, useUpdateEvent } from "@shared/api";
 
 import { CATEGORY_OPTIONS } from "../../CreateEvent/model/categories";
 

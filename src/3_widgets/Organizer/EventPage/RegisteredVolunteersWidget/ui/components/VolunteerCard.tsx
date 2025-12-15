@@ -1,11 +1,11 @@
 import { memo, useCallback } from "react";
 import { Button, Typography, Avatar } from "@shared/ui";
 import { Mail, Phone, Clock } from "lucide-react";
-import type { EventVolunteer } from "@shared/api/event/fetchEvent";
-import { REGISTRATION_STATUS_LABELS } from "@pages/OrganizerPage/EventDetails/model/constants";
 import { InfoBadge } from "./InfoBadge";
 import styles from "../../../EventPageWidgets.module.scss";
 import { RegistrationStatus } from "../../../../../../../app/generated/prisma";
+import { REGISTRATION_STATUS_LABELS } from "@pages/OrganizerPage/EventDetails";
+import { EventVolunteer } from "@shared/api";
 
 const MAILTO_PREFIX = "mailto:";
 const TEL_PREFIX = "tel:";

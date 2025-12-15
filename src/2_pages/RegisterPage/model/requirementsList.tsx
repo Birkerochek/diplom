@@ -1,4 +1,4 @@
-import { passwordRequirements } from "@shared/zod/auth.schema";
+import { passwordRequirements } from "@shared/zod";
 
 export type PasswordRequirementItem = {
   id: "length" | "uppercase" | "number" | "special";

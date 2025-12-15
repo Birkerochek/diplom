@@ -1,0 +1,91 @@
+.certificate {
+  width: 794px;
+  min-height: 1123px;
+  padding: 32px;
+  background: #ffffff;
+  border: 2px solid #2eb872;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.header {
+  border-bottom: 2px solid #2eb872;
+  padding-bottom: 16px;
+  text-align: center;
+}
+
+.caption {
+  font-weight: 600;
+  color: #168656;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+
+.name {
+  color: #009a58;
+}
+
+.description {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.stats {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.statCard {
+  min-width: 180px;
+  border: 1px solid #e2f4ea;
+  border-radius: 12px;
+  padding: 16px;
+  background: #f7fff9;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.period {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.footer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.qrPlaceholder {
+  border: 1px dashed #b1b5c3;
+  border-radius: 12px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signature {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.signatureLine {
+  border-bottom: 1px solid #b1b5c3;
+  height: 24px;
+}

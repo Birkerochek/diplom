@@ -3,7 +3,7 @@
 import { Typography, ProgressBar } from "@shared/ui";
 import styles from "./EventPageWidgets.module.scss";
 import { RegistrationStatus } from "../../../../app/generated/prisma";
-import { REGISTRATION_STATUS_COLORS } from "@pages/OrganizerPage/EventDetails/model/constants";
+import { REGISTRATION_STATUS_COLORS } from "@pages/OrganizerPage/EventDetails";
 
 type EventStatsWidgetProps = {
   fillRate: number;

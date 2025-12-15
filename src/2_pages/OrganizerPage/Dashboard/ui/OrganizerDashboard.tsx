@@ -1,11 +1,8 @@
 ﻿"use client";
 
 import { Container } from "@shared/ui";
-import {
-  OrganizerActivityChartWidget,
-  OrganizerStatsSummaryWidget,
-} from "@widgets/Organizer/Dashboard";
 import s from "./OrganizerDashboard.module.scss";
+import { OrganizerActivityChartWidget, OrganizerStatsSummaryWidget } from "@widgets/Organizer/Dashboard";
 
 export const OrganizerDashboard = () => (
   <Container>

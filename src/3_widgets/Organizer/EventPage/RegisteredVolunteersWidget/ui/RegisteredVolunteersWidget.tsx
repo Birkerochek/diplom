@@ -2,13 +2,13 @@
 
 import { memo, useState } from "react";
 import { Tabs, Typography } from "@shared/ui";
-import type { EventVolunteer } from "@shared/api/event/fetchEvent";
 import { useVolunteerTabs } from "../model/useVolunteerTabs";
 import { VolunteerCard } from "./components/VolunteerCard";
 import { RejectModal } from "./components/RejectModal";
 import styles from "../../EventPageWidgets.module.scss";
 import { RegistrationStatus } from "../../../../../../app/generated/prisma";
 import { useModalState } from "@shared/lib";
+import { EventVolunteer } from "@shared/api";
 
 type RegisteredVolunteersWidgetProps = {
   volunteers: EventVolunteer[];

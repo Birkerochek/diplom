@@ -1,10 +1,6 @@
 import type { EventVolunteer } from "@shared/api/event/fetchEvent";
-import {
-  PRIMARY_REGISTRATION_STATUSES,
-  REGISTRATION_STATUS_LABELS,
-  REGISTRATION_STATUS_PRIORITY,
-} from "@pages/OrganizerPage/EventDetails/model/constants";
 import { RegistrationStatus } from "../../../../../../app/generated/prisma";
+import { PRIMARY_REGISTRATION_STATUSES, REGISTRATION_STATUS_LABELS, REGISTRATION_STATUS_PRIORITY } from "@pages/OrganizerPage/EventDetails";
 
 type UseVolunteerTabsParams = {
   volunteers: EventVolunteer[];

@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 
 import { EventStatus } from "../../../../app/generated/prisma";
 import { useFetchEvents } from "@shared/api";
-import { Container, Typography } from "@shared/ui";
-import { EventCardVolunteer } from "@shared/ui/EventCardVolunteer/EventCardVolunteer";
+import { Container, EventCardVolunteer, Pagination, Typography } from "@shared/ui";
 import {
   useVolunteerEventsSearch,
   VolunteerEventsSearch,
@@ -18,7 +17,6 @@ import {
 import { useVolunteerRegistration } from "./model";
 import s from "./EventsPage.module.scss";
 import { Skeleton } from "./Skeleton";
-import { Pagination } from "@shared/ui/Pagination/Pagination";
 
 const VOLUNTEER_EVENT_STATUSES: EventStatus[] = [
   EventStatus.published,

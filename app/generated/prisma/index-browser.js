@@ -133,7 +133,6 @@ exports.Prisma.UserScalarFieldEnum = {
   organizationName: 'organizationName',
   organizationDescription: 'organizationDescription',
   isActive: 'isActive',
-  lastLogin: 'lastLogin',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -223,42 +222,9 @@ exports.Prisma.ActivityTypeScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.NotificationScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  type: 'type',
-  title: 'title',
-  message: 'message',
-  link: 'link',
-  icon: 'icon',
-  priority: 'priority',
-  isRead: 'isRead',
-  createdAt: 'createdAt'
-};
-
-exports.Prisma.AuditLogScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  action: 'action',
-  entityType: 'entityType',
-  entityId: 'entityId',
-  oldValues: 'oldValues',
-  newValues: 'newValues',
-  ipAddress: 'ipAddress',
-  userAgent: 'userAgent',
-  method: 'method',
-  sessionId: 'sessionId',
-  createdAt: 'createdAt'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
-};
-
-exports.Prisma.NullableJsonNullValueInput = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -269,12 +235,6 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
-};
-
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
 };
 exports.Role = exports.$Enums.Role = {
   volunteer: 'volunteer',
@@ -308,9 +268,7 @@ exports.Prisma.ModelName = {
   EventRegistration: 'EventRegistration',
   VolunteerHour: 'VolunteerHour',
   Certificate: 'Certificate',
-  ActivityType: 'ActivityType',
-  Notification: 'Notification',
-  AuditLog: 'AuditLog'
+  ActivityType: 'ActivityType'
 };
 
 /**

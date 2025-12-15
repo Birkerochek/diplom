@@ -1,8 +1,7 @@
 ﻿import clsx from "clsx";
 import { Filter } from "lucide-react";
 
-import type { SelectOption } from "@shared/ui/Select/Select";
-import { Select } from "@shared/ui";
+import { Select, SelectOption } from "@shared/ui";
 
 import s from "./VolunteerEventsFilter.module.scss";
 

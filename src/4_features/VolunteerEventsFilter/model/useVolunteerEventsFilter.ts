@@ -2,8 +2,8 @@ import { useCallback, useState } from "react";
 
 import type { EventSummaryByActivityType } from "@shared/types/event";
 import type { SelectOption } from "@shared/ui/Select/Select";
-import { getActivityTypeVisual } from "@shared/ui/ActivityTypeBadge/model/categoryVisuals";
-import { CATEGORY_OPTIONS } from "@pages/OrganizerPage/CreateEvent/model/categories";
+import { getActivityTypeVisual } from "@shared/ui";
+import { CATEGORY_OPTIONS } from "@pages/OrganizerPage";
 
 type UseVolunteerEventsFilterParams = {
   initialValue?: string;

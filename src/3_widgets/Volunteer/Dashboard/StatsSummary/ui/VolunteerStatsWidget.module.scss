@@ -1,0 +1,56 @@
+@use "@shared/styles/variables.scss" as *;
+
+.widget {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  border-radius: 16px;
+  background: $color-basic-white;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-basic-gray;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.value {
+  font-size: 32px;
+  font-weight: $fw-600;
+  line-height: 1.2;
+}
+
+.description {
+  font-size: $fs-14;
+}
+
+.accentPrimary {
+  color: $color-brand-primary;
+}
+
+.accentWarning {
+  color: $color-basic-red;
+}

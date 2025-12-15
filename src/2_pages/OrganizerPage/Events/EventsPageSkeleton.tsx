@@ -1,5 +1,4 @@
-import { Container } from "@shared/ui";
-import { EventCardSkeleton } from "@shared/ui/EventCard/EventCardSkeleton";
+import { Container, EventCardSkeleton } from "@shared/ui";
 import s from "./EventsPage.module.scss";
 
 export const EventsPageSkeleton = () => {
