@@ -26,6 +26,7 @@ export const VolunteerDashboard = () => {
   const { generate, isGenerating } = useCertificateGenerator({
     filename: `certificate-${volunteerName || "volunteer"}.pdf`,
   });
+  const companyName = process.env.NEXT_PUBLIC_COMPANY_NAME || "ВолонтёрТайм";
 
   const certificateMeta = useMemo(() => {
     const now = new Date();
@@ -75,6 +76,7 @@ export const VolunteerDashboard = () => {
             periodLabel={certificateMeta.periodLabel}
             primaryActivity="Не указана"
             issueDate={certificateMeta.issueDate}
+            companyName={companyName}
           />
         </div>
       </div>

@@ -4,4 +4,5 @@ export const QUERY_KEYS = {
   ORGANIZER_DASHBOARD: "organizer-dashboard",
   ORGANIZER_ACTIVITY: "organizer-activity",
   VOLUNTEER_DASHBOARD: "volunteer-dashboard",
+  VOLUNTEER_APPLICATIONS: "volunteer-applications",
 };

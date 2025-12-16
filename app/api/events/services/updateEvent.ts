@@ -1,4 +1,4 @@
-import { EventStatus } from "../../../generated/prisma";
+import { EventStatus, RegistrationStatus } from "../../../generated/prisma";
 import { prisma } from "@shared/lib/prisma";
 import { eventCreateSchema } from "@shared/zod";
 import { z } from "zod";
@@ -38,7 +38,7 @@ export const updateEvent = async ({ organizerId, eventId, payload }: UpdateEvent
 
   const target = await prisma.event.findUnique({
     where: { id: eventId },
-    select: { id: true, organizerId: true },
+    select: { id: true, organizerId: true, status: true },
   });
 
   if (!target) {
@@ -92,10 +92,47 @@ export const updateEvent = async ({ organizerId, eventId, payload }: UpdateEvent
     updateData.requiredHours = durationHours;
   }
 
-  await prisma.event.update({
-    where: { id: eventId },
-    data: updateData,
-  });
+  const cancellingEvent =
+    data.status === EventStatus.cancelled && target.status !== EventStatus.cancelled;
+
+  if (cancellingEvent) {
+    const now = new Date();
+
+    await prisma.$transaction(async (tx) => {
+      await tx.event.update({
+        where: { id: eventId },
+        data: updateData,
+      });
+
+      await tx.eventRegistration.updateMany({
+        where: {
+          eventId,
+          status: {
+            in: [RegistrationStatus.pending, RegistrationStatus.approved],
+          },
+        },
+        data: {
+          status: RegistrationStatus.cancelled,
+          rejectionReason: null,
+          reviewedById: null,
+          reviewedAt: now,
+          attended: false,
+          hoursCompleted: null,
+          completedAt: null,
+        },
+      });
+
+      await tx.event.update({
+        where: { id: eventId },
+        data: { currentParticipants: 0 },
+      });
+    });
+  } else {
+    await prisma.event.update({
+      where: { id: eventId },
+      data: updateData,
+    });
+  }
 
   return {
     status: 200,

@@ -1,25 +1,30 @@
 "use client";
 
-import { Button, Container, Logo, Typography } from "@shared/ui";
-import s from "./Header.module.scss";
-import { PAGES, ROLES } from "@shared/constants";
 import Link from "next/link";
+import { Calendar, ClipboardList, Heart, ListChecks, Users } from "lucide-react";
+
 import { useSession, signOut } from "@shared/api";
-import { useMemo } from "react";
-import { Calendar, ClipboardList, Heart, Users } from "lucide-react";
+import { PAGES, ROLES } from "@shared/constants";
+import { Button, Container, Logo, Typography } from "@shared/ui";
+
+import s from "./Header.module.scss";
 
 export const Header = () => {
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated" && Boolean(session?.user);
   const role = session?.user?.role;
-  const dashboardPath = useMemo(() => {
-    if (role === ROLES.ORGANIZER) return PAGES.ORGANIZER_DASHBOARD;
-    if (role === ROLES.VOLUNTEER) return PAGES.VOLUNTEER_DASHBOARD;
-    return PAGES.LOGIN;
-  }, [session?.user?.role]);
+
+  const dashboardPath =
+    role === ROLES.ORGANIZER
+      ? PAGES.ORGANIZER_DASHBOARD
+      : role === ROLES.VOLUNTEER
+        ? PAGES.VOLUNTEER_DASHBOARD
+        : PAGES.LOGIN;
+
   const handleSignOut = () => {
     void signOut();
   };
+
   return (
     <Container>
       <div className={s.header}>
@@ -29,7 +34,7 @@ export const Header = () => {
             <>
               <Link className={s.header__center_item} href={PAGES.ORGANIZER_DASHBOARD}>
                 <Users size={18} />
-                <Typography color="inherit">Управление</Typography>
+                <Typography color="inherit">Организатор</Typography>
               </Link>
               <Link className={s.header__center_item} href={PAGES.ORGANIZER_EVENTS}>
                 <Calendar size={18} />
@@ -37,7 +42,7 @@ export const Header = () => {
               </Link>
               <Link className={s.header__center_item} href={PAGES.ORGANIZER_REPORTS}>
                 <ClipboardList size={18} />
-                <Typography color="inherit">Отчёты</Typography>
+                <Typography color="inherit">Отчеты</Typography>
               </Link>
             </>
           ) : role === ROLES.VOLUNTEER ? (
@@ -50,22 +55,22 @@ export const Header = () => {
                 <Calendar size={18} />
                 <Typography color="inherit">Мероприятия</Typography>
               </Link>
+              <Link className={s.header__center_item} href={PAGES.VOLUNTEER_APPLICATIONS}>
+                <ListChecks size={18} />
+                <Typography color="inherit">Мои заявки</Typography>
+              </Link>
               <Link className={s.header__center_item} href={PAGES.VOLUNTEER_REPORTS}>
                 <ClipboardList size={18} />
-                <Typography color="inherit">Отчёты</Typography>
+                <Typography color="inherit">Отчеты</Typography>
               </Link>
             </>
-          ) : (
-            null
-          )}
-
+          ) : null}
         </div>
         <div className={s.header__right}>
           {status === "loading" ? null : isAuthenticated ? (
             <>
               <Link href={dashboardPath}>
-
-                <Button color="white">Личный кабинет</Button>
+                <Button color="white">Перейти в профиль</Button>
               </Link>
               <Button color="primary" onClick={handleSignOut}>
                 Выйти
@@ -77,7 +82,7 @@ export const Header = () => {
                 <Button color="white">Войти</Button>
               </Link>
               <Link href={PAGES.REGISTER}>
-                <Button color="primary">Регистрация</Button>
+                <Button color="primary">Зарегистрироваться</Button>
               </Link>
             </>
           )}

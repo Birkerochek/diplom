@@ -1,0 +1,163 @@
+@use "@shared/styles/variables.scss" as *;
+
+.card {
+  background: $color-basic-white;
+  border: 1px solid $color-basic-border;
+  border-radius: $br-12;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.card__title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: $color-basic-white-v2;
+  border: 1px solid $color-basic-border;
+  font-size: $fs-12;
+  color: $color-basic-black;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: $fs-12;
+  font-weight: $fw-600;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 1;
+
+}
+
+.status_success {
+  color: $color-brand-primary;
+  background: $color-success-light;
+  border-color: rgba($color-brand-primary, 0.25);
+}
+
+.status_warning {
+  color: $color-warning;
+  background: $color-warning-light;
+  border-color: rgba($color-warning, 0.35);
+}
+
+.status_danger {
+  color: $color-basic-red;
+  background: $color-danger-light;
+  border-color: rgba($color-basic-red, 0.3);
+}
+
+.status_muted {
+  color: $color-basic-gray;
+  background: $color-muted-light;
+  border-color: rgba($color-basic-gray, 0.25);
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: $color-basic-gray;
+}
+
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: $color-basic-black;
+}
+
+.highlight {
+  color: $color-brand-primary;
+  font-weight: $fw-600;
+}
+
+.note {
+  border: 1px solid $color-basic-border;
+  border-radius: $br-10;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.note_success {
+  background: $color-success-light;
+  border-color: rgba($color-brand-primary, 0.3);
+}
+
+.note_warning {
+  background: $color-warning-light;
+  border-color: rgba($color-warning, 0.35);
+}
+
+.note_danger {
+  background: $color-danger-light;
+  border-color: rgba($color-basic-red, 0.35);
+}
+
+.note_muted {
+  background: $color-muted-light;
+  border-color: rgba($color-basic-gray, 0.3);
+}
+
+.noteTitle {
+  margin: 0 0 2px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .card {
+    padding: 16px;
+  }
+
+  .card__header {
+    flex-direction: column;
+  }
+
+  .status {
+    align-self: flex-start;
+  }
+
+  .meta {
+    grid-template-columns: 1fr;
+  }
+}

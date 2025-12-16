@@ -14,7 +14,7 @@ type VolunteerCertificateProps = {
   periodLabel: string;
   primaryActivity?: string;
   issueDate: string;
-  qrLabel?: string;
+  companyName?: string;
   className?: string;
 };
 
@@ -27,7 +27,7 @@ export const VolunteerCertificate = forwardRef<HTMLDivElement, VolunteerCertific
       periodLabel,
       primaryActivity = "Не указана",
       issueDate,
-      qrLabel = "QR-код",
+      companyName = "Название компании",
       className,
     },
     ref
@@ -39,6 +39,9 @@ export const VolunteerCertificate = forwardRef<HTMLDivElement, VolunteerCertific
       </Typography>
       <Typography variant="body" color="gray">
         Официальное подтверждение волонтёрской деятельности
+      </Typography>
+      <Typography variant="body" className={s.company}>
+        {companyName}
       </Typography>
     </header>
 
@@ -85,11 +88,6 @@ export const VolunteerCertificate = forwardRef<HTMLDivElement, VolunteerCertific
           Дата выдачи
         </Typography>
         <Typography variant="body">{issueDate}</Typography>
-      </div>
-      <div className={s.qrPlaceholder}>
-        <Typography variant="body" color="gray">
-          {qrLabel}
-        </Typography>
       </div>
       <div className={s.signature}>
         <Typography variant="body" color="gray">

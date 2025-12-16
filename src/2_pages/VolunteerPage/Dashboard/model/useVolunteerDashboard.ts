@@ -34,13 +34,7 @@ const formatPeriodFromRange = (startISO?: string | null, endISO?: string | null)
   return `${startLabel} – ${endLabel}`;
 };
 
-const fallbackPeriodLabel = () => {
-  const now = new Date();
-  const current = monthYearFormatter.format(now);
-  const previous = monthYearFormatter.format(new Date(now.getFullYear(), now.getMonth() - 1, 1));
-
-  return `${previous} – ${current}`;
-};
+const fallbackPeriodLabel = () => "не установлен";
 
 const formatStats = (data: VolunteerDashboardResponse): VolunteerStats => {
   const {
