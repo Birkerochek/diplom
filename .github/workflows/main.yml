@@ -33,7 +33,6 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
           SHADOW_DATABASE_URL: ${{ secrets.SHADOW_DATABASE_URL }}
 
       - name: Log in to GHCR
@@ -48,7 +47,8 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{ github.repository_owner }}/$(echo "${{ github.repository }}" | cut -d'/' -f2):${{ github.sha }}
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.sha }}
           # При необходимости передайте секреты/аргументы в билд:
           build-args: |
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
