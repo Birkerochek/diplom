@@ -11,7 +11,8 @@ export const signIn = (email: string, password: string) =>
   nextAuthSignIn("credentials", {
     email,
     password,
-    redirect: false,
+    redirect: true,
+    callbackUrl: "/volunteer/",
   });
 
 export const signOut = () =>
