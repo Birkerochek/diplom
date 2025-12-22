@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { EventStatus } from "../../../../app/generated/prisma";
 import { useFetchEvents } from "@shared/api";
@@ -39,6 +39,7 @@ export const EventsPageVolunteer = () => {
     setAvailableActivities,
   } = useVolunteerEventsFilter();
   const [page, setPage] = useState(1);
+  const safePage = page < 1 ? 1 : page;
 
   const {
     data: eventsResponse,
@@ -50,7 +51,7 @@ export const EventsPageVolunteer = () => {
     status: VOLUNTEER_EVENT_STATUSES,
     search: debouncedSearch ? debouncedSearch : undefined,
     activityType: activityType ? activityType : undefined,
-    page,
+    page: safePage,
     perPage: EVENTS_PER_PAGE,
   });
 
@@ -62,21 +63,27 @@ export const EventsPageVolunteer = () => {
     setAvailableActivities(activitySummary);
   }, [activitySummary, setAvailableActivities]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [debouncedSearch, activityType]);
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      onSearchChange(value);
+      setPage(1);
+    },
+    [onSearchChange]
+  );
+
+  const handleActivityChange = useCallback(
+    (value: string | null) => {
+      onActivityChange(value);
+      setPage(1);
+    },
+    [onActivityChange]
+  );
 
   const events = eventsResponse?.data ?? [];
   const hasEvents = events.length > 0;
   const meta = eventsResponse?.meta;
   const totalPages = meta?.totalPages ?? 1;
-  const currentPage = meta?.page ?? page;
-
-  useEffect(() => {
-    if (!isLoading && totalPages > 0) {
-      setPage((prev) => (prev > totalPages ? totalPages : prev));
-    }
-  }, [isLoading, totalPages]);
+  const currentPage = meta?.page ?? safePage;
 
   let content;
   if (isLoading) {
@@ -123,13 +130,13 @@ export const EventsPageVolunteer = () => {
       <div className={s.controls}>
         <VolunteerEventsSearch
           value={searchTerm}
-          onChange={onSearchChange}
+          onChange={handleSearchChange}
           className={s.search}
         />
 
         <VolunteerEventsFilter
           value={activityType}
-          onChange={onActivityChange}
+          onChange={handleActivityChange}
           options={activityOptions}
           className={s.filter}
         />

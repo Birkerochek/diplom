@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { isAxiosError } from "axios";
@@ -37,13 +37,8 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
     label: mapEventStatusToLabel(status),
   }));
 
-  const [statusValue, setStatusValue] = useState<EventStatus | null>(null);
-
-  useEffect(() => {
-    if (event?.status) {
-      setStatusValue(event.status);
-    }
-  }, [event?.status]);
+  const [statusOverride, setStatusOverride] = useState<EventStatus | null>(null);
+  const statusValue = statusOverride ?? event?.status ?? null;
 
   const isDeleteDisabled = event?.status === EventStatus.completed;
 
@@ -71,15 +66,15 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
     try {
       await deleteEventMutation.mutateAsync(eventId);
       deleteModalState.close();
-      toast.success("Мероприятие удалено");
+      toast.success("Р?РчС?Р?РїС?РёС?С'РёРч С?Р?Р°Р>РчР?Р?");
       router.push(PAGES.ORGANIZER_EVENTS);
     } catch (error) {
       console.error("Delete event error", error);
       if (isAxiosError(error)) {
-        toast.error(error.response?.data?.message ?? "Не удалось удалить мероприятие");
+        toast.error(error.response?.data?.message ?? "Р?Рч С?Р?Р°Р>Р?С?С? С?Р?Р°Р>РёС'С? Р?РчС?Р?РїС?РёС?С'РёРч");
         return;
       }
-      toast.error("Не удалось удалить мероприятие");
+      toast.error("Р?Рч С?Р?Р°Р>Р?С?С? С?Р?Р°Р>РёС'С? Р?РчС?Р?РїС?РёС?С'РёРч");
     }
   }, [deleteEventMutation, deleteModalState, eventId, isDeleteDisabled, router]);
 
@@ -92,20 +87,20 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
       const nextStatus = nextValue as EventStatus;
 
       if (nextStatus === event.status) {
-        setStatusValue(nextStatus);
+        setStatusOverride(nextStatus);
         return;
       }
 
-      setStatusValue(nextStatus);
+      setStatusOverride(nextStatus);
 
       try {
         await updateEventStatusMutation.mutateAsync({ status: nextStatus });
-        toast.success("Статус мероприятия обновлён");
+        toast.success("РЎС'Р°С'С?С? Р?РчС?Р?РїС?РёС?С'РёС? Р?Р+Р?Р?Р?Р>С'Р?");
         await refetch();
       } catch (error) {
         console.error("Update event status error", error);
-        toast.error("Не удалось обновить статус мероприятия");
-        setStatusValue(event.status);
+        toast.error("Р?Рч С?Р?Р°Р>Р?С?С? Р?Р+Р?Р?Р?РёС'С? С?С'Р°С'С?С? Р?РчС?Р?РїС?РёС?С'РёС?");
+        setStatusOverride(event.status);
       }
     },
     [event, refetch, updateEventStatusMutation]
@@ -127,7 +122,7 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
     isFetching,
     statusControl: {
       options: statusOptions,
-      value: String(statusValue ?? event?.status ?? ""),
+      value: String(statusValue ?? ""),
       onChange: handleStatusChange,
       isUpdating: updateEventStatusMutation.isPending,
     },

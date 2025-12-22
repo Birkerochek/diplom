@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  FC,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -62,26 +56,6 @@ export const EventCard: FC<EventCardProps> = ({
   const hasData = Boolean(id && title && schedule && capacity && location);
   const canDelete = status !== EventStatus.completed;
 
-  if (!hasData) {
-    return <EventCardSkeleton />;
-  }
-
-  const { eventDate, startTime, endTime, requiredHours } = schedule;
-  const maxParticipants = capacity.maxParticipants ?? 0;
-  const currentParticipants = capacity.currentParticipants ?? 0;
-
-  const filled = useMemo(() => {
-    if (maxParticipants <= 0) {
-      return "0%";
-    }
-
-    return `${Math.round((currentParticipants / maxParticipants) * 100)}%`;
-  }, [currentParticipants, maxParticipants]);
-
-  const formattedEventDate = formatEventDate(eventDate);
-  const formattedStartTime = formatEventTime(startTime);
-  const formattedEndTime = formatEventTime(endTime);
-
   useEffect(() => {
     if (!isMenuOpen) {
       return;
@@ -111,6 +85,20 @@ export const EventCard: FC<EventCardProps> = ({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isMenuOpen]);
+
+  if (!hasData) {
+    return <EventCardSkeleton />;
+  }
+
+  const { eventDate, startTime, endTime, requiredHours } = schedule;
+  const maxParticipants = capacity.maxParticipants ?? 0;
+  const currentParticipants = capacity.currentParticipants ?? 0;
+  const filled =
+    maxParticipants > 0 ? `${Math.round((currentParticipants / maxParticipants) * 100)}%` : "0%";
+
+  const formattedEventDate = formatEventDate(eventDate);
+  const formattedStartTime = formatEventTime(startTime);
+  const formattedEndTime = formatEventTime(endTime);
 
   const closeMenu = () => {
     setIsMenuOpen(false);

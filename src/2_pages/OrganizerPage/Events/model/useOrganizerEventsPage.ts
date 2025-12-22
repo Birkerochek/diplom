@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { EventStatus } from "../../../../../app/generated/prisma";
 import { useFetchEvents } from "@shared/api";
@@ -21,13 +21,8 @@ export const useOrganizerEventsPage = () => {
   const [statusFilter, setStatusFilter] = useState<StatusTabValue>("all");
   const [page, setPage] = useState(1);
 
-  const statusParam = useMemo(() => {
-    if (statusFilter === "all") {
-      return undefined;
-    }
-
-    return [statusFilter as EventStatus];
-  }, [statusFilter]);
+  const statusParam = statusFilter === "all" ? undefined : [statusFilter as EventStatus];
+  const safePage = page < 1 ? 1 : page;
 
   const {
     data: eventsResponse,
@@ -37,7 +32,7 @@ export const useOrganizerEventsPage = () => {
     sortBy: "eventDate",
     sortDir: "asc",
     status: statusParam,
-    page,
+    page: safePage,
     perPage: EVENTS_PER_PAGE,
   });
 
@@ -47,18 +42,9 @@ export const useOrganizerEventsPage = () => {
   const currentPage = meta?.page ?? page;
   const hasEvents = events.length > 0;
 
-  useEffect(() => {
-    setPage(1);
-  }, [statusFilter]);
-
-  useEffect(() => {
-    if (!isLoading && totalPages > 0) {
-      setPage((prev) => (prev > totalPages ? totalPages : prev));
-    }
-  }, [isLoading, totalPages]);
-
   const handleStatusChange = useCallback((nextValue: string) => {
     setStatusFilter(nextValue as StatusTabValue);
+    setPage(1);
   }, []);
 
   const handlePageChange = useCallback((nextPage: number) => {
