@@ -5,6 +5,8 @@ COPY package*.json ./
 RUN npm ci --legacy-peer-deps
 COPY . .
 # если нужны Prisma артефакты в образе:
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
 RUN npx prisma generate
 RUN npm run build
 

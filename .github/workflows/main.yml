@@ -55,4 +55,5 @@ jobs:
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           tags: ${{ steps.vars.outputs.IMAGE_NAME }}:${{ github.sha }}
           build-args: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
