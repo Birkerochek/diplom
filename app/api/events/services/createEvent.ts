@@ -45,7 +45,7 @@ export const createEvent = async ({ organizerId, payload }: CreateEventInput) =>
       maxParticipants: data.maxParticipants,
       requirements: data.requirements ?? undefined,
       skillsNeeded: data.skillsNeeded,
-      status: EventStatus.published,
+      status: EventStatus.active,
     },
     select: { id: true },
   });

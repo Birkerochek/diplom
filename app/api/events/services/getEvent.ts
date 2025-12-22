@@ -17,7 +17,7 @@ type GetEventInput = {
 };
 
 type EventWithOrganizer = Prisma.EventGetPayload<{
-  include: { organizer: { select: { id: true; name: true; email: true } } };
+  include: { organizer: { select: { id: true; name: true; email: true; phone: true } } };
 }>;
 
 type RegistrationSummary = Record<RegistrationStatus, number> & { total: number };
@@ -53,7 +53,7 @@ export const getEvent = async ({ userId, role, eventId }: GetEventInput) => {
   const event = await prisma.event.findUnique({
     where,
     include: {
-      organizer: { select: { id: true, name: true, email: true } },
+      organizer: { select: { id: true, name: true, email: true, phone: true } },
     },
   });
 

@@ -1,10 +1,12 @@
 'use client';
 
 import { FC, useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Calendar, Clock4, MapPin, Users } from "lucide-react";
 
 import { EventBase } from "@shared/types/event";
 import { formatEventDate, formatEventTime, useModalState } from "@shared/lib";
+import { PAGES } from "@shared/constants";
 
 import { ActivityTypeBadge } from "../ActivityTypeBadge/ActivityTypeBadge";
 import { Button } from "../Button";
@@ -36,6 +38,7 @@ export const EventCardVolunteer: FC<EventCardVolunteerProps> = ({
   isRegistering = false,
   disableRegistration = false,
 }) => {
+  const router = useRouter();
   const hasParticipantLimit =
     typeof capacity.maxParticipants === "number" && capacity.maxParticipants > 0;
   const maxParticipants = capacity.maxParticipants ?? 0;
@@ -91,6 +94,10 @@ export const EventCardVolunteer: FC<EventCardVolunteerProps> = ({
       console.error("Volunteer confirmation error", error);
     }
   }, [closeConfirmModal, id, motivationLetter, onRegister]);
+
+  const handleOpenDetails = useCallback(() => {
+    router.push(PAGES.VOLUNTEER_EVENT(id));
+  }, [id, router]);
 
   const motivationLength = motivationLetter.length;
   const isMotivationTooLong = motivationLength > MOTIVATION_MAX_LENGTH;
@@ -154,9 +161,14 @@ export const EventCardVolunteer: FC<EventCardVolunteerProps> = ({
           </Typography>
         </div>
 
-        <Button color="primary" onClick={handleOpenModal} disabled={registrationDisabled}>
-          {isRegistering ? "Отправляем..." : "Записаться"}
-        </Button>
+        <div className={s.card__bottom_right}>
+          <Button color="white" onClick={handleOpenDetails}>
+            Подробнее
+          </Button>
+          <Button color="primary" onClick={handleOpenModal} disabled={registrationDisabled}>
+            {isRegistering ? "Отправляем..." : "Записаться"}
+          </Button>
+        </div>
       </div>
 
       <Modal

@@ -1,0 +1,182 @@
+@use "@shared/styles/variables.scss" as *;
+@use "@shared/styles/mixins.scss" as *;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px 0 64px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: $color-brand-primary;
+  font-size: $fs-14;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: $color-basic-white-v2;
+  border: 1px solid $color-basic-border;
+  font-size: $fs-12;
+  color: $color-basic-black;
+}
+
+.statusRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.registrationBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid $color-basic-border;
+  background: $color-muted-light;
+  color: $color-basic-gray;
+  font-weight: $fw-600;
+  font-size: $fs-12;
+  line-height: 1;
+}
+
+.registrationBadge_approved {
+  background: $color-success-light;
+  color: $color-brand-primary;
+  border-color: rgba($color-brand-primary, 0.35);
+}
+
+.registrationBadge_pending {
+  background: $color-warning-light;
+  color: $color-warning;
+  border-color: rgba($color-warning, 0.35);
+}
+
+.registrationBadge_rejected {
+  background: $color-danger-light;
+  color: $color-basic-red;
+  border-color: rgba($color-basic-red, 0.35);
+}
+
+.registrationBadge_cancelled,
+.registrationBadge_completed {
+  background: $color-muted-light;
+  color: $color-basic-gray;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: $br-12;
+  border: 1px solid $color-basic-border;
+  background: $color-basic-white-v2;
+}
+
+.actions__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actions__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.actions__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actions__note {
+  color: $color-basic-gray;
+}
+
+.banner {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  width: fit-content;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.layout__left,
+.layout__right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modalCounter {
+  align-self: flex-end;
+}

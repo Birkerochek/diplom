@@ -18,7 +18,7 @@ type ListEventsInput = {
 };
 
 type EventWithOrganizer = Prisma.EventGetPayload<{
-  include: { organizer: { select: { id: true; name: true; email: true } } };
+  include: { organizer: { select: { id: true; name: true; email: true; phone: true } } };
 }>;
 
 type RegistrationSummary = Record<RegistrationStatus, number> & { total: number };
@@ -77,8 +77,8 @@ export const listEvents = async ({ userId, role, url }: ListEventsInput) => {
       orderBy: sort.orderBy,
       skip: pagination.skip,
       take: pagination.perPage,
-      include: {
-        organizer: { select: { id: true, name: true, email: true } },
+    include: {
+        organizer: { select: { id: true, name: true, email: true, phone: true } },
       },
     }),
     prisma.event.groupBy({ by: ["status"], where, _count: { _all: true } }),

@@ -1,6 +1,7 @@
 'use client';
 
 import { FC } from "react";
+import { useRouter } from "next/navigation";
 import classNames from "classnames";
 import {
   Calendar,
@@ -14,6 +15,7 @@ import {
 import { RegistrationStatus } from "../../../../../app/generated/prisma";
 
 import { formatEventDate, formatEventTime } from "@shared/lib";
+import { PAGES } from "@shared/constants";
 import { ActivityTypeBadge, Button, Typography } from "@shared/ui";
 import type { VolunteerApplication } from "@shared/types/volunteer";
 
@@ -121,6 +123,7 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({
  
   isCancelling = false,
 }) => {
+  const router = useRouter();
   const statusMeta = STATUS_META[application.status];
   const note = getStatusNote(application);
 
@@ -143,6 +146,9 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({
     application.status === RegistrationStatus.approved;
 
  
+  const handleOpenEvent = () => {
+    router.push(PAGES.VOLUNTEER_EVENT(application.event.id));
+  };
 
   const handleCancel = () => {
     if (onCancel) {
@@ -221,7 +227,9 @@ export const ApplicationCard: FC<ApplicationCardProps> = ({
       </div>
 
       <div className={s.actions}>
-       
+        <Button color="white" onClick={handleOpenEvent}>
+          Перейти к мероприятию
+        </Button>
 
         {showCancelButton ? (
           <Button

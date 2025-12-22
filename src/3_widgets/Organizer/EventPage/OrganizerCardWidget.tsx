@@ -1,20 +1,26 @@
 "use client";
 
-import { Mail } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import Link from "next/link";
 import { Typography, Avatar } from "@shared/ui";
 import styles from "./EventPageWidgets.module.scss";
 
 const MAILTO_PREFIX = "mailto:";
+const TEL_PREFIX = "tel:";
 
 type OrganizerCardWidgetProps = {
   organizer: {
     name: string;
     email: string;
+    phone: string | null;
   };
 };
 
 export const OrganizerCardWidget = ({ organizer }: OrganizerCardWidgetProps) => {
+  const phone = organizer.phone ?? "";
+  const phoneValue = phone.length > 0 ? phone : "Не указан";
+  const phoneHref = phone.length > 0 ? `${TEL_PREFIX}${phone}` : undefined;
+
   return (
     <section className={styles.section}>
       <Typography variant="h3" className={styles.sectionHeaderTitle}>
@@ -38,6 +44,12 @@ export const OrganizerCardWidget = ({ organizer }: OrganizerCardWidgetProps) => 
           value={organizer.email}
           href={`${MAILTO_PREFIX}${organizer.email}`}
         />
+        <ContactLink
+          icon={<Phone size={16} />}
+          label="Телефон"
+          value={phoneValue}
+          href={phoneHref}
+        />
       </div>
     </section>
   );
@@ -47,17 +59,29 @@ type ContactLinkProps = {
   icon: React.ReactNode;
   label: string;
   value: string;
-  href: string;
+  href?: string;
 };
 
-const ContactLink = ({ icon, label, value, href }: ContactLinkProps) => (
-  <Link href={href} className={styles.contactItem}>
-    <span className={styles.contactItemIcon}>{icon}</span>
-    <div className={styles.contactItemContent}>
-      <Typography variant="bodyBold">{label}</Typography>
-      <Typography variant="body" color="gray">
-        {value}
-      </Typography>
-    </div>
-  </Link>
-);
+const ContactLink = ({ icon, label, value, href }: ContactLinkProps) => {
+  const content = (
+    <>
+      <span className={styles.contactItemIcon}>{icon}</span>
+      <div className={styles.contactItemContent}>
+        <Typography variant="bodyBold">{label}</Typography>
+        <Typography variant="body" color="gray">
+          {value}
+        </Typography>
+      </div>
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={styles.contactItem}>
+        {content}
+      </Link>
+    );
+  }
+
+  return <div className={styles.contactItem}>{content}</div>;
+};
