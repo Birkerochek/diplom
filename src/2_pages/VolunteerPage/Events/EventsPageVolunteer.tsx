@@ -72,7 +72,7 @@ export const EventsPageVolunteer = () => {
   );
 
   const handleActivityChange = useCallback(
-    (value: string | null) => {
+    (value: string) => {
       onActivityChange(value);
       setPage(1);
     },
