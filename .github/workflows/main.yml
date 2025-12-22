@@ -52,6 +52,5 @@ jobs:
           # При необходимости передайте секреты/аргументы в билд:
           build-args: |
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
-          # пример для кеша:
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+         
+
