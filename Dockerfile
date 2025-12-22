@@ -2,7 +2,7 @@
 FROM node:22.20.0-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY . .
 # если нужны Prisma артефакты в образе:
 RUN npx prisma generate
