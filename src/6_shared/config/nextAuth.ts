@@ -11,6 +11,7 @@ const MAX_AGE = 30 * 24 * 60 * 60;
 
 export const nextAuthOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
+  useSecureCookies: true,
   session: {
     strategy: "jwt",
     maxAge: MAX_AGE,

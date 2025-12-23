@@ -1,5 +1,7 @@
-import NextAuth from "next-auth";
-import { nextAuthOptions } from "@shared/config/nextAuth";
+export const runtime = 'nodejs';
+
+import NextAuth from 'next-auth';
+import { nextAuthOptions } from '@shared/config/nextAuth';
 
 const handler = NextAuth(nextAuthOptions);
 
