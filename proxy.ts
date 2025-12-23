@@ -13,7 +13,7 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = await getToken({ req, secret });
+  const token = await getToken({ req, secret, secureCookie: true });
 
   const { pathname } = req.nextUrl;
 
