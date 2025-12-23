@@ -8,7 +8,9 @@ const LOGIN_PATH = "/auth/login";
 
 export async function proxy(req: NextRequest) {
   const secret = process.env.NEXTAUTH_SECRET;
-
+  const url = req.nextUrl.pathname;
+  const cookie = req.headers.get('cookie');
+  
   if (!secret) {
     return NextResponse.next();
   }
@@ -47,9 +49,13 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  console.log('[MIDDLEWARE]', {
+    url,
+    cookie,
+  });
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/volunteer/:path*", "/organizer/:path*"],
+  matcher: ["/volunteer/:path*", "/organizer/:path*", "'/((?!api/auth|_next|auth).*)'"],
 };
