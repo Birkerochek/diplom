@@ -1,9 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import cn from "classnames";
-import { Container, Input, Button, Typography } from "@shared/ui";
-import { PAGES, ROLES } from "@shared/constants";
 import {
   Mail,
   UserRound,
@@ -12,6 +12,8 @@ import {
   ShieldCheck,
   Phone,
 } from "lucide-react";
+import { Container, Input, Button, Typography } from "@shared/ui";
+import { PAGES, ROLES } from "@shared/constants";
 import s from "./RegisterPage.module.scss";
 import { roles } from "../model/RolesCards";
 import { useRegisterForm } from "../model/useRegisterForm";
@@ -32,6 +34,14 @@ export const RegisterPage = () => {
     formState: { errors },
   } = form;
 
+  const searchParams = useSearchParams();
+  const variant = searchParams.get("variant");
+
+  useEffect(() => {
+    if (variant === ROLES.ORGANIZER) {
+      setRole(ROLES.ORGANIZER);
+    }
+  }, [setRole, variant]);
   return (
     <section className={s.page}>
       <Container>

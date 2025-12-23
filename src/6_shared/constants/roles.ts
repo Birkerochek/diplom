@@ -3,4 +3,4 @@ export const ROLES = {
     VOLUNTEER: "volunteer",
     ORGANIZER: "organizer",
     ADMIN: "admin",
-}
+} as const;

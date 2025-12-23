@@ -28,7 +28,7 @@ export const Header = () => {
   return (
     <Container>
       <div className={s.header}>
-        <Logo /> фикс 4
+        <Logo /> 
         <div className={s.header__center}>
           {role === ROLES.ORGANIZER ? (
             <>

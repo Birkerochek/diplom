@@ -10,6 +10,7 @@ import './globals.css'
 import "react-toastify/dist/ReactToastify.css";
 import "react-loading-skeleton/dist/skeleton.css"
 import { Header } from "@widgets/Header";
+import { Footer } from "@widgets/Footer/Footer";
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -28,6 +29,7 @@ export default function RootLayout({
           <Header/>
           
           {children}
+          <Footer/>
           <ReactQueryDevtools initialIsOpen={false} />
           <ToastContainer position="top-right" closeOnClick newestOnTop={false} />
         </AppProviders>

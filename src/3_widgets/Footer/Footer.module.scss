@@ -1,0 +1,13 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 75px;
+  &__text {
+    font-weight: 300;
+    font-size: 12px;
+    text-align: right;
+    color: #b8b8b8;
+    max-width: 267px;
+  }
+}
