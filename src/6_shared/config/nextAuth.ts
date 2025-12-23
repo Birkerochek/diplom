@@ -1,19 +1,18 @@
-import type { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { verify } from 'argon2';
-import { loginSchema } from '@shared/zod/auth.schema';
-import { prisma } from '@shared/lib/prisma';
-import type { User } from 'next-auth';
-import type { AdapterUser } from 'next-auth/adapters';
-import { PAGES } from '@shared/constants';
+import type { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { verify } from "argon2";
+import { loginSchema } from "@shared/zod/auth.schema";
+import { prisma } from "@shared/lib/prisma";
+import type { User } from "next-auth";
+import type { AdapterUser } from "next-auth/adapters";
+import { PAGES } from "@shared/constants";
 
-const MAX_AGE = 30 * 24 * 60 * 60;
+const MAX_AGE = 30 * 24 * 60 * 60; 
 
 export const nextAuthOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
-  useSecureCookies: true,
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
     maxAge: MAX_AGE,
   },
   jwt: {
@@ -22,32 +21,18 @@ export const nextAuthOptions: NextAuthOptions = {
   pages: {
     signIn: PAGES.LOGIN,
   },
-  debug: true,
-  logger: {
-    error(code, metadata) {
-      console.error('[NextAuth][ERROR]', code, metadata);
-    },
-    warn(code) {
-      console.warn('[NextAuth][WARN]', code);
-    },
-    debug(code, metadata) {
-      console.log('[NextAuth][DEBUG]', code, metadata);
-    },
-  },
   providers: [
     CredentialsProvider({
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
-        email: { label: 'Email', type: 'text' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         const parsed = loginSchema.safeParse(credentials);
 
         if (!parsed.success) {
-          throw new Error(
-            parsed.error.issues[0]?.message ?? 'Некорректные данные'
-          );
+          throw new Error(parsed.error.issues[0]?.message ?? "Некорректные данные");
         }
 
         const { email, password } = parsed.data;
@@ -55,13 +40,13 @@ export const nextAuthOptions: NextAuthOptions = {
         const user = await prisma.user.findUnique({ where: { email } });
 
         if (!user) {
-          throw new Error('Неверный email или пароль');
+          throw new Error("Неверный email или пароль");
         }
 
         const isValid = await verify(user.passwordHash, password);
 
         if (!isValid) {
-          throw new Error('Неверный email или пароль');
+          throw new Error("Неверный email или пароль");
         }
 
         const authUser: User = {
@@ -76,27 +61,21 @@ export const nextAuthOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-      async signIn({ user, account }) {
-    console.log('[NextAuth] signIn', { user, account });
-    return true;
-  },
     async jwt({ token, user }) {
-      console.log('[NextAuth] jwt', { token, user });
       if (user) {
         const userWithRole = user as User | (AdapterUser & { role?: string });
 
         token.id = userWithRole.id;
         token.email = userWithRole.email;
         token.name = userWithRole.name;
-        if ('role' in userWithRole && userWithRole.role) {
+        if ("role" in userWithRole && userWithRole.role) {
           token.role = userWithRole.role;
         }
       }
       return token;
     },
     async session({ session, token }) {
-       console.log('[NextAuth] session', { session, token });
-      const role = token.role ?? 'volunteer';
+      const role = token.role ?? "volunteer";
 
       if (session.user) {
         if (token.id) {
@@ -111,24 +90,13 @@ export const nextAuthOptions: NextAuthOptions = {
         session.user.role = role;
       } else {
         session.user = {
-          id: token.id ?? '',
-          email: token.email ?? '',
+          id: token.id ?? "",
+          email: token.email ?? "",
           name: token.name ?? undefined,
           role,
         };
       }
       return session;
-    },
-  },
-  cookies: {
-    sessionToken: {
-      name: `next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
-      },
     },
   },
 };

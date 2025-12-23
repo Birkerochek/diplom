@@ -1,5 +1,3 @@
-export const runtime = 'nodejs';
-
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
@@ -10,14 +8,12 @@ const LOGIN_PATH = "/auth/login";
 
 export async function proxy(req: NextRequest) {
   const secret = process.env.NEXTAUTH_SECRET;
-  const url = req.nextUrl.pathname;
-  const cookie = req.headers.get('cookie');
-  
+
   if (!secret) {
     return NextResponse.next();
   }
 
-  const token = await getToken({ req, secret, secureCookie: true });
+  const token = await getToken({ req, secret });
 
   const { pathname } = req.nextUrl;
 
@@ -51,13 +47,9 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  console.log('[MIDDLEWARE]', {
-    url,
-    cookie,
-  });
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/volunteer/:path*", "/organizer/:path*",],
+  matcher: ["/volunteer/:path*", "/organizer/:path*"],
 };
