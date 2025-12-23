@@ -1,10 +1,13 @@
-@use "@shared/styles/variables.scss" as *;
+@use '@shared/styles/variables.scss' as *;
 
 *,
 *::before,
 *::after {
   transition: all 0.3s ease-in-out;
 }
+html {
+}
+
 body {
   transition: 0.3s;
   font-family: var(--font-family);
@@ -13,6 +16,23 @@ body {
   letter-spacing: var(--letter-spacing);
   font-weight: var(--fw-500);
   background: $color-basic-white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.app-main {
+  flex-grow: 1;
+}
+.header{
+  flex-shrink: 0;
+}
+.footer {
+  flex-shrink: 0;
 }
 
 :root {

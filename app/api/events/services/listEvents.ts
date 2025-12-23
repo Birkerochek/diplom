@@ -4,7 +4,11 @@ import {
   RegistrationStatus,
 } from "../../../generated/prisma";
 import { prisma } from "@shared/lib/prisma";
-import { expandActivityTypeAliases, resolveActivityTypeKey } from "@shared/constants";
+import {
+  ACTIVITY_TYPE_DEFINITIONS,
+  expandActivityTypeAliases,
+  resolveActivityTypeKey,
+} from "@shared/constants";
 
 // -----------------------------------------------------------------------------
 // Types
@@ -59,6 +63,14 @@ const SORTABLE_FIELDS: Array<keyof Prisma.EventOrderByWithRelationInput> = [
   "title",
   "status",
 ];
+const NON_OTHER_ACTIVITY_ALIASES = Array.from(
+  new Set(
+    ACTIVITY_TYPE_DEFINITIONS.filter((definition) => definition.key !== "other")
+      .flatMap((definition) => [definition.key, definition.label, ...definition.aliases])
+      .map((value) => value.trim())
+      .filter(Boolean)
+  )
+);
 
 // -----------------------------------------------------------------------------
 // Public API
@@ -171,19 +183,30 @@ const buildWhere = (
 
   const activityTypeParam = params.get("activityType")?.trim();
   if (activityTypeParam) {
-    const aliases = Array.from(new Set(expandActivityTypeAliases(activityTypeParam)));
-
-    if (aliases.length > 1) {
+    const resolvedActivityKey = resolveActivityTypeKey(activityTypeParam);
+    if (resolvedActivityKey === "other") {
       andFilters.push({
-        OR: aliases.map((alias) => ({
-          activityType: { equals: alias, mode: "insensitive" },
-        })),
+        NOT: {
+          OR: NON_OTHER_ACTIVITY_ALIASES.map((value) => ({
+            activityType: { equals: value, mode: "insensitive" },
+          })),
+        },
       });
     } else {
-      const target = aliases[0] ?? activityTypeParam;
-      andFilters.push({
-        activityType: { equals: target, mode: "insensitive" },
-      });
+      const aliases = Array.from(new Set(expandActivityTypeAliases(activityTypeParam)));
+
+      if (aliases.length > 1) {
+        andFilters.push({
+          OR: aliases.map((alias) => ({
+            activityType: { equals: alias, mode: "insensitive" },
+          })),
+        });
+      } else {
+        const target = aliases[0] ?? activityTypeParam;
+        andFilters.push({
+          activityType: { equals: target, mode: "insensitive" },
+        });
+      }
     }
   }
 

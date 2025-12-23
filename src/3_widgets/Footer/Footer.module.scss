@@ -2,7 +2,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 75px;
+   margin-top: auto;
+  padding-top: 75px;
+  
   &__text {
     font-weight: 300;
     font-size: 12px;
