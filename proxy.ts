@@ -57,5 +57,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/volunteer/:path*", "/organizer/:path*", "'/((?!api/auth|_next|auth).*)'"],
+  matcher: ["/volunteer/:path*", "/organizer/:path*",],
 };
