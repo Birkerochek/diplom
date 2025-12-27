@@ -16,7 +16,7 @@ export const useRegisterVolunteer = () => {
     mutationFn: registerVolunteer,
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.EVENTS] });
-
+      queryClient.invalidateQueries({queryKey: [QUERY_KEYS.VOLUNTEER_APPLICATIONS]});
       if (variables.eventId) {
         queryClient.invalidateQueries({
           queryKey: [QUERY_KEYS.EVENT, variables.eventId],

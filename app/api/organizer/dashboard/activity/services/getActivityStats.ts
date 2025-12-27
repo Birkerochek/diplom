@@ -7,12 +7,6 @@ type ActivityStat = {
   hours: number;
 };
 
-type RawHour = {
-  date: Date;
-  hours: number;
-  volunteerId: string;
-};
-
 const MONTHS_COUNT = 6;
 
 const buildMonthKey = (date: Date) =>
@@ -23,45 +17,47 @@ export const getActivityStats = async (
 ): Promise<ActivityStat[]> => {
   const now = startOfMonth(new Date());
   const startDate = subMonths(now, MONTHS_COUNT - 1);
+  const endDate = addMonths(now, 1);
 
-  const volunteerHours = await prisma.volunteerHour.findMany({
-    where: {
-      event: { organizerId },
-      date: { gte: startDate, lt: addMonths(now, 1) },
-    },
-    select: {
-      date: true,
-      hours: true,
-      volunteerId: true,
-    },
-  });
+  const rows = await prisma.$queryRaw<
+    Array<{
+      month: string;
+      volunteers: bigint | number;
+      hours: number | null;
+    }>
+  >`
+    SELECT
+      to_char(date_trunc('month', vh.date), 'YYYY-MM') AS month,
+      COUNT(DISTINCT vh."volunteerId") AS volunteers,
+      COALESCE(SUM(vh.hours), 0) AS hours
+    FROM "VolunteerHour" vh
+    INNER JOIN "Event" e ON e.id = vh."eventId"
+    WHERE e."organizerId" = ${organizerId}
+      AND vh.date >= ${startDate}
+      AND vh.date < ${endDate}
+    GROUP BY date_trunc('month', vh.date)
+    ORDER BY month ASC
+  `;
 
-  const grouped = volunteerHours.reduce<Record<string, RawHour[]>>(
-    (acc, record) => {
-      const monthKey = buildMonthKey(startOfMonth(record.date));
-      if (!acc[monthKey]) {
-        acc[monthKey] = [];
-      }
-      acc[monthKey].push(record);
-      return acc;
-    },
-    {}
-  );
+  const grouped = new Map<string, { volunteers: number; hours: number }>();
+  for (const row of rows) {
+    grouped.set(row.month, {
+      volunteers: typeof row.volunteers === "bigint" ? Number(row.volunteers) : row.volunteers,
+      hours: row.hours ?? 0,
+    });
+  }
 
   const stats: ActivityStat[] = [];
 
   for (let i = 0; i < MONTHS_COUNT; i += 1) {
     const currentMonth = subMonths(now, MONTHS_COUNT - 1 - i);
     const key = buildMonthKey(currentMonth);
-    const records = grouped[key] ?? [];
-
-    const volunteers = new Set(records.map((item) => item.volunteerId)).size;
-    const hours = records.reduce((sum, item) => sum + item.hours, 0);
+    const record = grouped.get(key);
 
     stats.push({
       month: key,
-      volunteers,
-      hours,
+      volunteers: record?.volunteers ?? 0,
+      hours: record?.hours ?? 0,
     });
   }
 
