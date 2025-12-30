@@ -6,7 +6,9 @@ RUN npm ci --legacy-peer-deps
 COPY . .
 # если нужны Prisma артефакты в образе:
 ARG DATABASE_URL
+ARG NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
 ENV DATABASE_URL=$DATABASE_URL
+ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
 RUN npx prisma generate
 RUN npm run build
 
