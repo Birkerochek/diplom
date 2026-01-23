@@ -5,9 +5,6 @@ import { registerVolunteer } from "../../services/registerVolunteer";
 
 type RouteParams = { params: Promise<{ eventId: string }> };
 
-// -----------------------------------------------------------------------------
-// POST /api/events/[eventId]/register — запись волонтёра
-// -----------------------------------------------------------------------------
 export async function POST(request: Request, context: RouteParams) {
   try {
     const params = await context.params;
@@ -40,9 +37,6 @@ export async function POST(request: Request, context: RouteParams) {
   }
 }
 
-// -----------------------------------------------------------------------------
-// Helpers
-// -----------------------------------------------------------------------------
 const safeJson = async (request: Request) => {
   try {
     return await request.json();
