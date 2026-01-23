@@ -19,7 +19,6 @@ import s from "./EventsPage.module.scss";
 import { Skeleton } from "./Skeleton";
 
 const VOLUNTEER_EVENT_STATUSES: EventStatus[] = [
-  EventStatus.published,
   EventStatus.active,
 ];
 

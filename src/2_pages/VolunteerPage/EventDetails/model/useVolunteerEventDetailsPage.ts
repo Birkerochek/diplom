@@ -32,7 +32,7 @@ export const useVolunteerEventDetailsPage = ({ eventId }: UseVolunteerEventDetai
 
   const isRegistrationOpen =
     event &&
-    (event.status === EventStatus.active || event.status === EventStatus.published);
+    event.status === EventStatus.active;
 
   const maxParticipants = event?.capacity.maxParticipants ?? null;
   const currentParticipants = event?.capacity.currentParticipants ?? 0;

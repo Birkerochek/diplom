@@ -63,7 +63,7 @@ export const getDashboardStats = async (
       prisma.event.count({
         where: {
           organizerId,
-          status: { in: [EventStatus.published, EventStatus.active] },
+          status: { in: [EventStatus.draft, EventStatus.active] },
           eventDate: { gte: new Date() },
         },
       }),

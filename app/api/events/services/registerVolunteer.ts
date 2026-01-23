@@ -26,7 +26,7 @@ const registerSchema = z
   .optional()
   .transform((value) => value ?? {});
 
-const ALLOWED_STATUSES: EventStatus[] = [EventStatus.published, EventStatus.active];
+const ALLOWED_STATUSES: EventStatus[] = [EventStatus.active];
 
 // -----------------------------------------------------------------------------
 // Public API

@@ -9,8 +9,8 @@ type StatusTabValue = "all" | EventStatus;
 
 const STATUS_TABS: Array<{ value: StatusTabValue; label: string }> = [
   { value: "all", label: "Все" },
+  { value: EventStatus.draft, label: "Черновики" },
   { value: EventStatus.active, label: "Активные" },
-  { value: EventStatus.published, label: "Опубликованные" },
   { value: EventStatus.completed, label: "Завершенные" },
   { value: EventStatus.cancelled, label: "Отменённые" },
 ];

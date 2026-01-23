@@ -52,7 +52,6 @@ const MAX_PAGE_SIZE = 50;
 const EVENT_STATUSES = Object.values(EventStatus) as EventStatus[];
 const REGISTRATION_STATUSES = Object.values(RegistrationStatus) as RegistrationStatus[];
 const VOLUNTEER_VISIBLE_STATUSES: EventStatus[] = [
-  EventStatus.published,
   EventStatus.active,
   EventStatus.completed,
 ];

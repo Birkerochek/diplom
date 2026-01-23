@@ -1,17 +1,19 @@
 'use client';
 
-import { useMemo, useRef } from 'react';
+import { useRef } from 'react';
 
-import { Button, Container, Typography } from '@shared/ui';
-import s from './VolunteerDashboard.module.scss';
-import { Welcome } from './Welcome';
-import { useVolunteerDashboard } from './model/useVolunteerDashboard';
-import { VolunteerStatsWidget } from '@widgets/Volunteer/Dashboard/StatsSummary';
+import { PAGES } from '@shared/constants';
+import { Container, Typography } from '@shared/ui';
+import { AttendedEventsWidget } from '@widgets/Volunteer/Dashboard/AttendedEvents';
 import { MonthlyProgressWidget } from '@widgets/Volunteer/Dashboard/MonthlyProgress';
+import { VolunteerStatsWidget } from '@widgets/Volunteer/Dashboard/StatsSummary';
 import {
   VolunteerCertificate,
   useCertificateGenerator,
 } from '@widgets/Volunteer/Certificate';
+import { useVolunteerDashboard } from './model/useVolunteerDashboard';
+import s from './VolunteerDashboard.module.scss';
+import { Welcome } from './Welcome';
 
 const formatDate = (date: Date) =>
   new Intl.DateTimeFormat('ru-RU', {
@@ -28,6 +30,8 @@ export const VolunteerDashboard = () => {
     isError,
     monthlyProgress,
     activityPeriodLabel,
+    attendedEvents,
+    attendedEventsTotal,
   } = useVolunteerDashboard();
   const certificateRef = useRef<HTMLDivElement | null>(null);
   const { generate, isGenerating } = useCertificateGenerator({
@@ -35,13 +39,10 @@ export const VolunteerDashboard = () => {
   });
   const companyName = process.env.NEXT_PUBLIC_COMPANY_NAME || 'ВолонтёрТайм';
 
-  const certificateMeta = useMemo(() => {
-    const now = new Date();
-    return {
-      issueDate: formatDate(now),
-      periodLabel: activityPeriodLabel,
-    };
-  }, [activityPeriodLabel]);
+  const certificateMeta = {
+    issueDate: formatDate(new Date()),
+    periodLabel: activityPeriodLabel,
+  };
 
   const handleGenerateCertificate = () => {
     generate(certificateRef.current);
@@ -73,6 +74,12 @@ export const VolunteerDashboard = () => {
               className={s.stats}
             />
             <MonthlyProgressWidget data={monthlyProgress} />
+            <AttendedEventsWidget
+              events={attendedEvents}
+              total={attendedEventsTotal}
+              viewAllHref={PAGES.VOLUNTEER_ATTENDED_EVENTS}
+              className={s.attended}
+            />
           </>
         )}
 

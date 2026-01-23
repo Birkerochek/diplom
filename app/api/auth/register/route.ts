@@ -47,7 +47,7 @@ export async function POST(request: Request) {
         console.warn("[Register API] duplicate phone attempt", { phone });
         return NextResponse.json(
           {
-            message: "Данный номер телефона уже зарегистрирован",
+            message: "User with this phone already exists",
             field: "phone",
           },
           { status: 409 }
@@ -55,10 +55,9 @@ export async function POST(request: Request) {
       }
     }
 
-    if (role === "organizer" && organizationName) {
-      const existingOrganizer = await prisma.user.findFirst({
+    if (organizationName) {
+      const existingOrganization = await prisma.user.findFirst({
         where: {
-          role: "organizer",
           organizationName: {
             equals: organizationName,
             mode: "insensitive",
@@ -67,11 +66,11 @@ export async function POST(request: Request) {
         select: { id: true },
       });
 
-      if (existingOrganizer) {
+      if (existingOrganization) {
         console.warn("[Register API] duplicate organization attempt", { organizationName });
         return NextResponse.json(
           {
-            message: "Организация уже зарегистрирована",
+            message: "Organization is already registered",
             field: "organizationName",
           },
           { status: 409 }

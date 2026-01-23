@@ -1,10 +1,14 @@
 import { RegistrationStatus } from "../../../../generated/prisma";
 import { prisma } from "@shared/lib/prisma";
 import { startOfMonth } from "date-fns";
+import type { VolunteerAttendedEvent } from "@shared/types/volunteer";
+import { getVolunteerAttendedEvents } from "../../attended-events/services/getVolunteerAttendedEvents";
 
 export type VolunteerDashboardStats = {
   volunteerName: string;
   monthlyGoalHours: number;
+  attendedEvents: VolunteerAttendedEvent[];
+  attendedEventsTotal: number;
   participationRange: {
     first: Date | null;
     last: Date | null;
@@ -36,12 +40,18 @@ export const getVolunteerDashboardStats = async (
 
   const currentMonthStart = startOfMonth(new Date());
 
-  const [totalHoursAgg, monthlyHoursAgg, completedEventsCount, hoursByVolunteer, participationAgg] =
-    await Promise.all([
-      prisma.volunteerHour.aggregate({
-        where: { volunteerId },
-        _sum: { hours: true },
-      }),
+  const [
+    totalHoursAgg,
+    monthlyHoursAgg,
+    completedEventsCount,
+    hoursByVolunteer,
+    participationAgg,
+    attendedEventsResult,
+  ] = await Promise.all([
+    prisma.volunteerHour.aggregate({
+      where: { volunteerId },
+      _sum: { hours: true },
+    }),
     prisma.volunteerHour.aggregate({
       where: {
         volunteerId,
@@ -55,16 +65,17 @@ export const getVolunteerDashboardStats = async (
         status: RegistrationStatus.completed,
       },
     }),
-      prisma.volunteerHour.groupBy({
-        by: ["volunteerId"],
-        _sum: { hours: true },
-      }),
-      prisma.volunteerHour.aggregate({
-        where: { volunteerId },
-        _min: { date: true },
-        _max: { date: true },
-      }),
-    ]);
+    prisma.volunteerHour.groupBy({
+      by: ["volunteerId"],
+      _sum: { hours: true },
+    }),
+    prisma.volunteerHour.aggregate({
+      where: { volunteerId },
+      _min: { date: true },
+      _max: { date: true },
+    }),
+    getVolunteerAttendedEvents({ volunteerId, limit: 5 }),
+  ]);
 
   const totalHours = totalHoursAgg._sum.hours ?? 0;
   const addedThisMonth = monthlyHoursAgg._sum.hours ?? 0;
@@ -93,6 +104,8 @@ export const getVolunteerDashboardStats = async (
   return {
     volunteerName: volunteer.name,
     monthlyGoalHours: volunteerAim,
+    attendedEvents: attendedEventsResult.data,
+    attendedEventsTotal: attendedEventsResult.total,
     participationRange: {
       first: participationAgg._min.date ?? null,
       last: participationAgg._max.date ?? null,

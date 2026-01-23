@@ -1,8 +1,11 @@
 import { api } from "@shared/api/axios";
+import type { VolunteerAttendedEvent } from "@shared/types/volunteer";
 
 export type VolunteerDashboardResponse = {
   volunteerName: string;
   monthlyGoalHours: number;
+  attendedEvents: VolunteerAttendedEvent[];
+  attendedEventsTotal: number;
   participationRange: {
     first: string | null;
     last: string | null;

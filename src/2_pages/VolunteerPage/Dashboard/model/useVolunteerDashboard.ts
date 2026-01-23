@@ -1,7 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
-
 import { useSession, useVolunteerDashboardStats } from "@shared/api";
 import type { VolunteerDashboardResponse } from "@shared/api/volunteer/fetchDashboard";
 import type { VolunteerStats } from "@widgets/Volunteer/Dashboard/StatsSummary";
@@ -97,42 +95,30 @@ export const useVolunteerDashboard = () => {
     isError,
   } = useVolunteerDashboardStats();
 
-  const stats = useMemo(() => {
-    if (!dashboardData) {
-      return defaultStats;
-    }
-
-    return formatStats(dashboardData);
-  }, [dashboardData]);
+  const stats = dashboardData ? formatStats(dashboardData) : defaultStats;
 
   const volunteerName = dashboardData?.volunteerName ?? session?.user?.name ?? "Волонтёр";
   const monthlyGoalHours = dashboardData?.monthlyGoalHours ?? DEFAULT_MONTHLY_GOAL;
   const monthlyCompletedHours = dashboardData?.stats.totalHours.addedThisMonth ?? 0;
 
-  const monthlyProgress = useMemo(() => {
-    const remaining = Math.max(monthlyGoalHours - monthlyCompletedHours, 0);
-    const percent =
-      monthlyGoalHours > 0 ? Math.round((monthlyCompletedHours / monthlyGoalHours) * 100) : 0;
+  const remaining = Math.max(monthlyGoalHours - monthlyCompletedHours, 0);
+  const percent =
+    monthlyGoalHours > 0 ? Math.round((monthlyCompletedHours / monthlyGoalHours) * 100) : 0;
+  const monthlyProgress = {
+    completed: monthlyCompletedHours,
+    goal: monthlyGoalHours,
+    remaining,
+    percent,
+  };
 
-    return {
-      completed: monthlyCompletedHours,
-      goal: monthlyGoalHours,
-      remaining,
-      percent,
-    };
-  }, [monthlyCompletedHours, monthlyGoalHours]);
+  const rangeLabel = formatPeriodFromRange(
+    dashboardData?.participationRange.first,
+    dashboardData?.participationRange.last
+  );
+  const activityPeriodLabel = rangeLabel ?? fallbackPeriodLabel();
 
-  const activityPeriodLabel = useMemo(() => {
-    const rangeLabel = formatPeriodFromRange(
-      
-      dashboardData?.participationRange.first,
-      
-      dashboardData?.participationRange.last
-      
-    );
-
-    return rangeLabel ?? fallbackPeriodLabel();
-  }, [dashboardData?.participationRange]);
+  const attendedEvents = dashboardData?.attendedEvents ?? [];
+  const attendedEventsTotal = dashboardData?.attendedEventsTotal ?? attendedEvents.length;
 
   return {
     volunteerName,
@@ -142,5 +128,7 @@ export const useVolunteerDashboard = () => {
     monthlyGoalHours,
     monthlyProgress,
     activityPeriodLabel,
+    attendedEvents,
+    attendedEventsTotal,
   };
 };

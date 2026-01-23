@@ -1,0 +1,90 @@
+@use "@shared/styles/variables.scss" as *;
+
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid $color-basic-border;
+  border-radius: $br-12;
+  background: $color-basic-white;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.headerAction {
+  text-decoration: none;
+  display: inline-flex;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: $br-10;
+  border: 1px solid $color-basic-border;
+  background: $color-basic-white-v2;
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cardTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: $color-basic-gray;
+}
+
+.hours {
+  color: $color-brand-primary;
+  white-space: nowrap;
+}
+
+.organizer {
+  color: $color-basic-black;
+  font-weight: $fw-600;
+}
+
+.empty {
+  padding: 8px 0;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .widget {
+    padding: 16px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+}

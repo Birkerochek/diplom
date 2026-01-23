@@ -39,7 +39,6 @@ type RegistrationWithVolunteer = Prisma.EventRegistrationGetPayload<{
 // Constants
 // -----------------------------------------------------------------------------
 const VOLUNTEER_VISIBLE_STATUSES: EventStatus[] = [
-  EventStatus.published,
   EventStatus.active,
   EventStatus.completed,
 ];

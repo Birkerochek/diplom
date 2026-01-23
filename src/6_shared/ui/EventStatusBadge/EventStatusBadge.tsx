@@ -11,7 +11,6 @@ type StatusBadgeProps = {
 
 const statusClassMap: Record<EventStatus, string> = {
   [EventStatus.active]: s.badgeActive,
-  [EventStatus.published]: s.badgePublished,
   [EventStatus.cancelled]: s.badgeCancelled,
   [EventStatus.draft]: s.badgeDraft,
   [EventStatus.completed]: s.badgeCompleted,

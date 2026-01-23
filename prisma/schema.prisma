@@ -24,7 +24,6 @@ enum Role {
 
 enum EventStatus {
   draft
-  published
   active
   completed
   cancelled
@@ -53,12 +52,12 @@ model User {
   passwordHash        String
   name                String
   role                Role
-  phone               String?
+  phone               String?  @unique
   bio                 String?
   avatarUrl           String?
   preferredActivities String[] @default([])
 
-  organizationName        String?
+  organizationName        String? @unique
   organizationDescription String?
 
   isActive  Boolean   @default(true)

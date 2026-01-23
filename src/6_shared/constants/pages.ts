@@ -7,6 +7,7 @@ export const PAGES = {
   ORGANIZER_EVENTS: "/organizer/events",
   VOLUNTEER_EVENTS: "/volunteer/events",
   VOLUNTEER_APPLICATIONS: "/volunteer/applications",
+  VOLUNTEER_ATTENDED_EVENTS: "/volunteer/events/attended",
   ORGANIZER_REPORTS: "/organizer/reports",
   VOLUNTEER_REPORTS: "/volunteer/reports",
   EDIT_EVENT: (eventId: string) => `/organizer/events/${eventId}/edit`,

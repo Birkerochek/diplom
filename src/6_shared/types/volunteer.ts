@@ -31,3 +31,27 @@ export type VolunteerApplication = {
     };
   };
 };
+
+export type VolunteerAttendedEvent = {
+  id: string;
+  completedAt: string | null;
+  hours: number;
+  event: {
+    id: string;
+    title: string;
+    activityType: string;
+    schedule: {
+      eventDate: string;
+      startTime: string;
+      endTime: string;
+    };
+    location: {
+      name: string;
+      address: string | null;
+    };
+    organizer: {
+      id: string;
+      name: string;
+    };
+  };
+};
