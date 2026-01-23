@@ -22,8 +22,6 @@
 }
 
 .tabList {
-  display: flex;
-  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -62,5 +60,11 @@
 
   .tab {
     min-width: 140px;
+  }
+}
+
+@media (min-width: 768px) {
+  .tabList {
+    flex-wrap: wrap;
   }
 }

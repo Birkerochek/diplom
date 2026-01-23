@@ -1,17 +1,24 @@
 'use client';
 
-import { useMemo, useRef } from "react";
+import { useMemo, useRef } from 'react';
 
-import { Button, Container, Typography } from "@shared/ui";
-import s from "./VolunteerDashboard.module.scss";
-import { Welcome } from "./Welcome";
-import { useVolunteerDashboard } from "./model/useVolunteerDashboard";
-import { VolunteerStatsWidget } from "@widgets/Volunteer/Dashboard/StatsSummary";
-import { MonthlyProgressWidget } from "@widgets/Volunteer/Dashboard/MonthlyProgress";
-import { VolunteerCertificate, useCertificateGenerator } from "@widgets/Volunteer/Certificate";
+import { Button, Container, Typography } from '@shared/ui';
+import s from './VolunteerDashboard.module.scss';
+import { Welcome } from './Welcome';
+import { useVolunteerDashboard } from './model/useVolunteerDashboard';
+import { VolunteerStatsWidget } from '@widgets/Volunteer/Dashboard/StatsSummary';
+import { MonthlyProgressWidget } from '@widgets/Volunteer/Dashboard/MonthlyProgress';
+import {
+  VolunteerCertificate,
+  useCertificateGenerator,
+} from '@widgets/Volunteer/Certificate';
 
 const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("ru-RU", { day: "2-digit", month: "long", year: "numeric" }).format(date);
+  new Intl.DateTimeFormat('ru-RU', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
 
 export const VolunteerDashboard = () => {
   const {
@@ -24,9 +31,9 @@ export const VolunteerDashboard = () => {
   } = useVolunteerDashboard();
   const certificateRef = useRef<HTMLDivElement | null>(null);
   const { generate, isGenerating } = useCertificateGenerator({
-    filename: `certificate-${volunteerName || "volunteer"}.pdf`,
+    filename: `certificate-${volunteerName || 'volunteer'}.pdf`,
   });
-  const companyName = process.env.NEXT_PUBLIC_COMPANY_NAME || "ВолонтёрТайм";
+  const companyName = process.env.NEXT_PUBLIC_COMPANY_NAME || 'ВолонтёрТайм';
 
   const certificateMeta = useMemo(() => {
     const now = new Date();
@@ -45,11 +52,7 @@ export const VolunteerDashboard = () => {
   return (
     <Container>
       <div className={s.page}>
-        <div className={s.actions}>
-          <Button onClick={handleGenerateCertificate} disabled={disableCertificateButton}>
-            {isGenerating ? "Формируем PDF..." : "Скачать сертификат"}
-          </Button>
-        </div>
+        <div className={s.actions}></div>
 
         <Welcome name={volunteerName} />
         {isLoading ? (
@@ -62,7 +65,13 @@ export const VolunteerDashboard = () => {
           </Typography>
         ) : (
           <>
-            <VolunteerStatsWidget stats={stats} className={s.stats} />
+            <VolunteerStatsWidget
+              handleGenerateCertificate={handleGenerateCertificate}
+              disableCertificateButton={disableCertificateButton}
+              isGenerating={isGenerating}
+              stats={stats}
+              className={s.stats}
+            />
             <MonthlyProgressWidget data={monthlyProgress} />
           </>
         )}

@@ -23,7 +23,7 @@ export const getActivityStats = async (
     Array<{
       month: string;
       volunteers: bigint | number;
-      hours: number | null;
+      hours: bigint | number | null;
     }>
   >`
     SELECT
@@ -32,7 +32,7 @@ export const getActivityStats = async (
       COALESCE(SUM(vh.hours), 0) AS hours
     FROM "VolunteerHour" vh
     INNER JOIN "Event" e ON e.id = vh."eventId"
-    WHERE e."organizerId" = ${organizerId}
+    WHERE e."organizerId" = ${organizerId}::uuid
       AND vh.date >= ${startDate}
       AND vh.date < ${endDate}
     GROUP BY date_trunc('month', vh.date)
@@ -43,7 +43,8 @@ export const getActivityStats = async (
   for (const row of rows) {
     grouped.set(row.month, {
       volunteers: typeof row.volunteers === "bigint" ? Number(row.volunteers) : row.volunteers,
-      hours: row.hours ?? 0,
+      hours:
+        typeof row.hours === "bigint" ? Number(row.hours) : (row.hours ?? 0),
     });
   }
 

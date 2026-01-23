@@ -5,7 +5,6 @@ import {
   Children,
   isValidElement,
   useId,
-  useMemo,
   useRef,
   useState,
   type FC,
@@ -14,6 +13,7 @@ import {
 } from "react";
 import styles from "./Tabs.module.scss";
 import type { TabItemProps, TabsProps } from "./types";
+import { Select } from "../Select";
 
 const TabItemComponent: FC<TabItemProps> = () => null;
 
@@ -31,19 +31,17 @@ const TabsRoot: FC<TabsProps> = ({
   const isControlled = value !== undefined;
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  const items = useMemo(() => {
-    const rawChildren = Children.toArray(children);
+  const rawChildren = Children.toArray(children);
 
-    return rawChildren
-      .filter((child): child is ReactElement<TabItemProps> => {
-        return isValidElement(child) && child.type === TabItemComponent;
-      })
-      .map((child, index) => ({
-        ...child.props,
-        tabId: `${baseId}-tab-${index}`,
-        panelId: `${baseId}-panel-${index}`,
-      }));
-  }, [children, baseId]);
+  const items = rawChildren
+    .filter((child): child is ReactElement<TabItemProps> => {
+      return isValidElement(child) && child.type === TabItemComponent;
+    })
+    .map((child, index) => ({
+      ...child.props,
+      tabId: `${baseId}-tab-${index}`,
+      panelId: `${baseId}-panel-${index}`,
+    }));
 
   const fallbackValue =
     items.find((item) => !item.disabled)?.value ?? items[0]?.value ?? "";
@@ -145,8 +143,33 @@ const TabsRoot: FC<TabsProps> = ({
     return null;
   }
 
+  const enabledItems = items.filter((item) => !item.disabled);
+  const selectOptions = enabledItems.map((item) => {
+    const label =
+      typeof item.label === "string" || typeof item.label === "number"
+        ? String(item.label)
+        : item.value;
+
+    return {
+      value: item.value,
+      label,
+    };
+  });
+  const isSelectDisabled = selectOptions.length === 0;
+
   return (
     <div className={clsx(styles.tabs, className)}>
+      <div className={styles.tabs__select}>
+        <Select
+          options={selectOptions}
+          value={
+            enabledItems.find((item) => item.value === activeItem.value)?.value
+          }
+          onChange={setValue}
+          disabled={isSelectDisabled}
+          placeholder="Выберите вкладку"
+        />
+      </div>
       <div
         className={clsx(styles.tabs__list, listClassName)}
         role="tablist"

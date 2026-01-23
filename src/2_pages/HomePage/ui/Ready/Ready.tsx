@@ -1,5 +1,7 @@
 import { Button, Typography } from '@shared/ui';
 import s from './Ready.module.scss';
+import Link from 'next/link';
+import { PAGES } from '@shared/constants';
 export const Ready = () => {
   return (
     <div className={s.ready}>
@@ -11,8 +13,12 @@ export const Ready = () => {
         сегодня
       </Typography>
       <div className={s.ready__buttons}>
-        <Button>Зарегистрироваться</Button>
-        <Button color="white">Уже есть аккаунт?</Button>
+        <Link href={PAGES.REGISTER} className={s.ready__buttons_button}>
+          <Button>Зарегистрироваться</Button>
+        </Link>
+        <Link href={PAGES.LOGIN} className={s.ready__buttons_button}>
+          <Button color="white" >Уже есть аккаунт?</Button>
+        </Link>
       </div>
     </div>
   );

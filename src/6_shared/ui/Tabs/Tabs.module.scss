@@ -1,18 +1,24 @@
 @use "@shared/styles/variables.scss" as *;
 
 .tabs {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   gap: 16px;
   align-items: flex-start;
+  width: 100%;
 }
 
 .tabs__list {
-  display: inline-flex;
+  display: none;
   gap: 4px;
   padding: 6px 8px;
   border-radius: $br-10;
   background: rgba($color-brand-primary, 0.06);
+  max-width: 100%;
+}
+
+.tabs__select {
+  width: 100%;
 }
 
 .tabs__tab {
@@ -54,4 +60,15 @@
   padding: 18px;
   color: $color-basic-black;
   box-shadow: none;
+}
+
+@media (min-width: 768px) {
+  .tabs__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .tabs__select {
+    display: none;
+  }
 }

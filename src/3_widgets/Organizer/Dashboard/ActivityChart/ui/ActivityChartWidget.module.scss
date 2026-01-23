@@ -4,6 +4,7 @@
 .card {
   background: $color-basic-white;
   border-radius: $br-15;
+  border: 1px solid $color-brand-primary;
   padding: 24px;
   display: flex;
   flex-direction: column;

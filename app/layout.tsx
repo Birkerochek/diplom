@@ -17,6 +17,10 @@ const inter = Inter({
   variable: '--font-family',
   display: 'swap',
 });
+export const metadata = {
+  title: 'ВолонтёрТайм',
+  description: 'ВолонтёрТайм - волонтёрская платформа для волонтёров и организаторов',
+};
 export default function RootLayout({
   children,
 }: Readonly<{

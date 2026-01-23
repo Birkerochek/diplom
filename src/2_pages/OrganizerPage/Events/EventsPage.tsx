@@ -1,9 +1,10 @@
 "use client";
 
-import { Container, EventCard, Pagination, Tabs } from "@shared/ui";
+import { Button, Container, EventCard, Pagination, Tabs } from "@shared/ui";
 import { EventsPageSkeleton } from "./EventsPageSkeleton";
 import s from "./EventsPage.module.scss";
 import { useOrganizerEventsPage } from "./model/useOrganizerEventsPage";
+import { useStatsSummary } from "@widgets/Organizer/Dashboard";
 
 export const EventsPage = () => {
   const {
@@ -15,6 +16,7 @@ export const EventsPage = () => {
     messages,
   } = useOrganizerEventsPage();
 
+  const {navigateToCreateEvent: onCreateEvent} = useStatsSummary();
   if (eventsState.isLoading) {
     return <EventsPageSkeleton />;
   }
@@ -29,6 +31,9 @@ export const EventsPage = () => {
 
   const content = eventsState.hasEvents ? (
     <>
+      <Button icon="plus" color="primary" onClick={onCreateEvent}>
+              Создать мероприятие
+            </Button>
       <div className={s.events}>
         {eventsState.events.map((event) => (
           <EventCard

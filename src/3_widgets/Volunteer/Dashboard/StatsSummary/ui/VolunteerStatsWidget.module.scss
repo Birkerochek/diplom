@@ -9,10 +9,12 @@
 .card {
   border-radius: 16px;
   background: $color-basic-white;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+
+  border: 1px solid $color-brand-primary;
   padding: 20px;
   display: flex;
   flex-direction: column;
+  
   gap: 16px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }

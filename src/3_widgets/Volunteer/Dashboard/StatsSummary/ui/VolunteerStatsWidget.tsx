@@ -1,7 +1,7 @@
 import { Clock3, CalendarDays, TrendingUp } from "lucide-react";
 import clsx from "clsx";
 
-import { Typography } from "@shared/ui";
+import { Button, Typography } from "@shared/ui";
 
 import s from "./VolunteerStatsWidget.module.scss";
 
@@ -24,6 +24,9 @@ export type VolunteerStats = {
 type VolunteerStatsWidgetProps = {
   stats: VolunteerStats;
   className?: string;
+  handleGenerateCertificate: () => void;
+  disableCertificateButton: boolean;
+  isGenerating: boolean;
 };
 
 const valueAccentClass: Record<"primary" | "warning", string> = {
@@ -31,7 +34,7 @@ const valueAccentClass: Record<"primary" | "warning", string> = {
   warning: s.accentWarning,
 };
 
-export const VolunteerStatsWidget = ({ stats, className }: VolunteerStatsWidgetProps) => {
+export const VolunteerStatsWidget = ({ stats, className, handleGenerateCertificate, disableCertificateButton, isGenerating }: VolunteerStatsWidgetProps) => {
   const cards = [
     {
       id: "hours",
@@ -60,7 +63,15 @@ export const VolunteerStatsWidget = ({ stats, className }: VolunteerStatsWidgetP
   ];
 
   return (
+    <>
+    <div style={{alignSelf:"flex-start"}}>
+
+     <Button  onClick={handleGenerateCertificate} disabled={disableCertificateButton}>
+            {isGenerating ? "Формируем PDF..." : "Скачать сертификат вашей деятельности"}
+          </Button>
+    </div>
     <section className={clsx(s.widget, className)}>
+      
       {cards.map((card) => (
         <article key={card.id} className={s.card}>
           <div className={s.cardHeader}>
@@ -88,5 +99,6 @@ export const VolunteerStatsWidget = ({ stats, className }: VolunteerStatsWidgetP
         </article>
       ))}
     </section>
+    </>
   );
 };

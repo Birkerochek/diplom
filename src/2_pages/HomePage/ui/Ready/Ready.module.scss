@@ -5,8 +5,22 @@
     text-align: center;
     justify-content: center;
     align-items: center;
+     @media (max-width: 440px) {
+    align-items: stretch;
+  }
     &__buttons{
         display: flex;
         gap: 1rem;
+           &_button{
+
+        }
+        @media(max-width: 440px){
+            flex-direction: column;
+         
+            .ready__buttons_button > button{
+                width: 100%;
+            }
+            
+        }
     }
 }

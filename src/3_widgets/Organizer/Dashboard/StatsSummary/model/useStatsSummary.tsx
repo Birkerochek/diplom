@@ -12,6 +12,7 @@ import type {
   OrganizerDashboardCard,
   StatsSummaryData,
 } from "./types";
+import { PAGES } from "@shared/constants";
 
 const ACCENT_MAP: Record<
   "primary" | "secondary" | "warning",

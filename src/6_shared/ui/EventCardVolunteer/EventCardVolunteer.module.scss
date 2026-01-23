@@ -1,11 +1,13 @@
 @use "@shared/styles/mixins.scss" as *;
+@use "@shared/styles/variables.scss" as *;
 .card{
     padding: 25px;
     border-radius: 16px;
+    border: 1px solid $color-brand-primary; 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    max-width: 444px;
+   
     @include shadow();
     &_status{
         margin-top: 5px;
@@ -87,7 +89,7 @@
 .cardSkeleton {
     position: relative;
     border-radius: 16px;
-
+   
     &__overlay {
         position: absolute;
         inset: 0;
@@ -100,6 +102,7 @@
 
     &__content {
         @extend .card;
+         border: none;
         position: relative;
         z-index: 1;
         background: transparent;

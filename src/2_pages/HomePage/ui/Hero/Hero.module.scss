@@ -6,6 +6,9 @@
     text-align: center;
     gap: 27px;
     margin-top: 80px;
+    @media (max-width: 440px) {
+    align-items: stretch;
+  }
     &_subtitle{
         max-width: 691px;
         
@@ -14,5 +17,16 @@
         display: flex;
         gap: 1rem;
         justify-content: center;
+        &_button{
+
+        }
+        @media(max-width: 440px){
+            flex-direction: column;
+         
+            .hero__buttons_button > button{
+                width: 100%;
+            }
+            
+        }
     }
 }

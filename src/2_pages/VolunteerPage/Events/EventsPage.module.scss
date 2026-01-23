@@ -11,12 +11,13 @@
 
 .filter {
   min-width: 220px;
+  width: 100%;
 }
 
 .events {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
 
 .pagination {
@@ -37,6 +38,10 @@
     align-items: center;
   }
 
+  .filter {
+    width: auto;
+  }
+
   .pagination {
     justify-content: center;
   }
@@ -44,5 +49,17 @@
   .filter {
     display: flex;
     justify-content: flex-end;
+  }
+
+  .events {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .events {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
   }
 }

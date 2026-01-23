@@ -1,25 +1,46 @@
+@use '@shared/styles/variables.scss' as *;
 .abilities {
   display: flex;
   flex-direction: column;
   gap: 60px;
+  @media (max-width: $breakpoint-sm) {
+    gap: 40px;
+  }
+  @media (max-width: $breakpoint-xs) {
+    gap: 32px;
+  }
   &__titles {
     display: flex;
     flex-direction: column;
     gap: 27px;
     text-align: center;
+    @media (max-width: $breakpoint-xs) {
+      gap: 18px;
+    }
   }
   &__items {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    @media (max-width: $breakpoint-sm) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: $breakpoint-xs) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
     &__item {
       border-radius: 10px;
       padding: 25px;
       display: flex;
       flex-direction: column;
-      box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.25);
+      border:1px solid $color-brand-primary;
+      box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
       background: #fcfcfc;
       gap: 9px;
+      @media (max-width: $breakpoint-xs) {
+        padding: 20px;
+      }
       &__iconbg {
         display: inline-flex;
         align-items: center;
