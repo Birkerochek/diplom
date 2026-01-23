@@ -18,7 +18,7 @@ export const useRegisterForm = () => {
     defaultValues: authDefaultValues,
   });
 
-  const { setValue, watch } = form;
+  const { setValue, watch, setError, clearErrors } = form;
 
   const selectedRole = watch("role");
   const passwordValue = watch("password");
@@ -31,6 +31,7 @@ export const useRegisterForm = () => {
         setIsSubmitting(true);
         setServerError(null);
 
+        clearErrors();
         await registerUser(values);
 
         const redirectTo =
@@ -54,10 +55,18 @@ export const useRegisterForm = () => {
       } catch (error) {
         console.error("Register error", error);
         if (error instanceof AxiosError) {
-          const message = (
-            error.response?.data as { message?: string } | undefined
-          )?.message;
-          setServerError(message ?? "Не удалось завершить регистрацию.");
+          const data = error.response?.data as
+            | { message?: string; field?: keyof RegisterFormValues }
+            | undefined;
+          const message = data?.message;
+          const field = data?.field;
+
+          if (field && message) {
+            setError(field, { type: "server", message });
+            return;
+          }
+
+          setServerError(message ?? "Registration failed. Please try again.");
         } else {
           setServerError("Что‑то пошло не так. Попробуйте ещё раз.");
         }

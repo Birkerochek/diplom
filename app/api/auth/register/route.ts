@@ -29,9 +29,54 @@ export async function POST(request: Request) {
     if (existingUser) {
       console.warn("[Register API] duplicate email attempt", { email });
       return NextResponse.json(
-        { message: "Пользователь с таким email уже существует" },
+        {
+          message: "User with this email already exists",
+          field: "email",
+        },
         { status: 409 }
       );
+    }
+
+    if (phone) {
+      const existingPhone = await prisma.user.findFirst({
+        where: { phone },
+        select: { id: true },
+      });
+
+      if (existingPhone) {
+        console.warn("[Register API] duplicate phone attempt", { phone });
+        return NextResponse.json(
+          {
+            message: "Данный номер телефона уже зарегистрирован",
+            field: "phone",
+          },
+          { status: 409 }
+        );
+      }
+    }
+
+    if (role === "organizer" && organizationName) {
+      const existingOrganizer = await prisma.user.findFirst({
+        where: {
+          role: "organizer",
+          organizationName: {
+            equals: organizationName,
+            mode: "insensitive",
+          },
+        },
+        select: { id: true },
+      });
+
+      if (existingOrganizer) {
+        console.warn("[Register API] duplicate organization attempt", { organizationName });
+        return NextResponse.json(
+          {
+            message: "Организация уже зарегистрирована",
+            field: "organizationName",
+          },
+          { status: 409 }
+        );
+      }
     }
 
     const passwordHash = await hash(password);
