@@ -125,7 +125,7 @@ export const VolunteerEventDetailsPage = ({ eventId }: VolunteerEventDetailsPage
           <div className={s.actions__info}>
             <Typography variant="bodyBold">
               {registration
-                ? "Вы уже записаны на это мероприятие"
+                ? "Ваша заявка успешно оставлена, можете посмотреть её статус на странице \"Мои заявки\""
                 : "Запишитесь, чтобы принять участие"}
             </Typography>
             <Typography variant="body" color="gray" className={s.actions__note}>
