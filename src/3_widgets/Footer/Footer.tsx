@@ -5,7 +5,7 @@ export const Footer = () => {
     <Container className={s.footer}>
       <Logo />
       <p className={s.footer__text}>
-        © 2024 ВолонтёрТайм. Все права защищены. Делаем мир лучше вместе
+        © 2026 ВолонтёрТайм. Все права защищены. Делаем мир лучше вместе
       </p>
     </Container>
   );
