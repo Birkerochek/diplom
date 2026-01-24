@@ -31,9 +31,7 @@ export const EventsPage = () => {
 
   const content = eventsState.hasEvents ? (
     <>
-      <Button icon="plus" color="primary" onClick={onCreateEvent}>
-              Создать мероприятие
-            </Button>
+     
       <div className={s.events}>
         {eventsState.events.map((event) => (
           <EventCard
@@ -78,10 +76,15 @@ export const EventsPage = () => {
       >
         {statusTabs.map((tab) => (
           <Tabs.Item key={tab.value} value={tab.value} label={tab.label}>
+            <Button icon="plus" color="primary" onClick={onCreateEvent}>
+              Создать мероприятие
+            </Button>
             {content}
           </Tabs.Item>
         ))}
+         
       </Tabs>
+      
     </Container>
   );
 };
