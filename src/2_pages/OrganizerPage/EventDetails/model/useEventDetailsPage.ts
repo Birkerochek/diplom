@@ -66,15 +66,15 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
     try {
       await deleteEventMutation.mutateAsync(eventId);
       deleteModalState.close();
-      toast.success("Р?РчС?Р?РїС?РёС?С'РёРч С?Р?Р°Р>РчР?Р?");
+      toast.success("Мероприятие успешно удалено");
       router.push(PAGES.ORGANIZER_EVENTS);
     } catch (error) {
       console.error("Delete event error", error);
       if (isAxiosError(error)) {
-        toast.error(error.response?.data?.message ?? "Р?Рч С?Р?Р°Р>Р?С?С? С?Р?Р°Р>РёС'С? Р?РчС?Р?РїС?РёС?С'РёРч");
+        toast.error(error.response?.data?.message ?? "Ошибка удаления мероприятия");
         return;
       }
-      toast.error("Р?Рч С?Р?Р°Р>Р?С?С? С?Р?Р°Р>РёС'С? Р?РчС?Р?РїС?РёС?С'РёРч");
+      toast.error("Ошибка удаления мероприятия");
     }
   }, [deleteEventMutation, deleteModalState, eventId, isDeleteDisabled, router]);
 
@@ -95,11 +95,11 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
 
       try {
         await updateEventStatusMutation.mutateAsync({ status: nextStatus });
-        toast.success("РЎС'Р°С'С?С? Р?РчС?Р?РїС?РёС?С'РёС? Р?Р+Р?Р?Р?Р>С'Р?");
+        toast.success("Статус мероприятия успешно изменен");
         await refetch();
       } catch (error) {
         console.error("Update event status error", error);
-        toast.error("Р?Рч С?Р?Р°Р>Р?С?С? Р?Р+Р?Р?Р?РёС'С? С?С'Р°С'С?С? Р?РчС?Р?РїС?РёС?С'РёС?");
+        toast.error("Ошибка изменения статуса мероприятия");
         setStatusOverride(event.status);
       }
     },
