@@ -22,9 +22,10 @@ type EventInfoWidgetProps = {
     currentParticipants: number | null;
   };
   requirements?: string | null;
+  skillsNeeded?: string[];
 };
 
-export const EventInfoWidget = ({ description, schedule, location, capacity, requirements }: EventInfoWidgetProps) => {
+export const EventInfoWidget = ({ description, schedule, location, capacity, requirements, skillsNeeded }: EventInfoWidgetProps) => {
   const formattedDate = formatEventDate(schedule.eventDate);
   const formattedStart = formatEventTime(schedule.startTime);
   const formattedEnd = formatEventTime(schedule.endTime);
@@ -68,6 +69,23 @@ export const EventInfoWidget = ({ description, schedule, location, capacity, req
         <Typography variant="body" color="gray">
           {requirements ?? "Организатор не указал требования."}
         </Typography>
+        
+        <Typography variant="h4">Необходимые навыки</Typography>
+        {skillsNeeded?.length ? (
+          <ul className={styles.skillsList}>
+            {skillsNeeded.map((skill, index) => (
+              <li key={`${skill}-${index}`} className={styles.skillsItem}>
+                <Typography variant="body" color="gray">
+                  {skill}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Typography variant="body" color="gray">
+            Организатор не указал необходимых навыков.
+          </Typography>
+        )}
       </div>
     </section>
   );

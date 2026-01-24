@@ -192,6 +192,7 @@ export const VolunteerEventDetailsPage = ({ eventId }: VolunteerEventDetailsPage
               currentParticipants: event.capacity.currentParticipants,
             }}
             requirements={event.requirements}
+            skillsNeeded={event.skillsNeeded}
           />
         </div>
 

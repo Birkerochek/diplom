@@ -96,6 +96,7 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
             location={event.location}
             capacity={event.capacity}
             requirements={event.requirements}
+            skillsNeeded={event.skillsNeeded}
           />
 
           <RegisteredVolunteersWidget

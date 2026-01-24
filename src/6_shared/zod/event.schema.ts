@@ -69,7 +69,7 @@ export const eventFormSchema = z
       .string()
       .trim()
       .optional(),
-    skills: z
+    skillsNeeded: z
       .string()
       .optional(),
   })
@@ -161,8 +161,8 @@ export const mapEventFormToRequest = (values: EventFormOutput) => {
     requiredHours,
     maxParticipants: values.maxParticipants,
     requirements: values.requirements?.trim() || null,
-    skillsNeeded: values.skills
-      ? values.skills
+    skillsNeeded: values.skillsNeeded
+      ? values.skillsNeeded
           .split(",")
           .map((item) => item.trim())
           .filter(Boolean)

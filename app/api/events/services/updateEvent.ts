@@ -82,7 +82,9 @@ export const updateEvent = async ({ organizerId, eventId, payload }: UpdateEvent
         ? data.requirements.trim()
         : null;
   }
-  if (Array.isArray(data.skillsNeeded)) updateData.skillsNeeded = data.skillsNeeded;
+  if (hasOwn("skillsNeeded") && Array.isArray(data.skillsNeeded)) {
+    updateData.skillsNeeded = data.skillsNeeded;
+  }
   if (data.status) updateData.status = data.status;
 
   if (data.startDateTime && data.endDateTime) {

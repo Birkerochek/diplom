@@ -208,8 +208,8 @@ export const CreateEventPage = () => {
         label="Необходимые навыки"
         placeholder="Например: работа с детьми, знание английского языка"
         subtitle="Укажите навыки через запятую"
-        error={errors.skills?.message}
-        {...register("skills")}
+        error={errors.skillsNeeded?.message}
+        {...register("skillsNeeded")}
         />
         </div>
         <div className={s.actions}>

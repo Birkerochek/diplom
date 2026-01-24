@@ -32,16 +32,7 @@ a{
 ol, ul {
   list-style: none;
 }
-li::before {
- 
-  content: "\2022" !important;      /* Символ маркера */
-  color: #ff6347;    /* Цвет маркера (например, томатный) */
-  font-weight: bold; /* Можно добавить другие стили */
-  display: inline-block; /* Для корректного позиционирования */
-  width: 1em;        /* Ширина для выравнивания */
-  margin-left: -1em; /* Сдвигаем маркер влево */
-  padding-right: 8px;
-}
+
 
 blockquote, q {
   quotes: none;

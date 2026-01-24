@@ -13,5 +13,5 @@ export const eventDefaultValues: DefaultValues<EventFormInput> = {
     address: "",
     maxParticipants: 1,
     requirements: "",
-    skills: "",
+    skillsNeeded: "",
 };

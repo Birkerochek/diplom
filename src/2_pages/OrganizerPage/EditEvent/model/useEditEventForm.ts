@@ -50,7 +50,7 @@ const buildFormValues = (event: FetchEventResponse): EventFormInput => {
     address: location.address ?? "",
     maxParticipants: event.capacity.maxParticipants ?? 1,
     requirements: requirements ?? "",
-    skills: skillsNeeded.join(", "),
+    skillsNeeded: skillsNeeded.join(", "),
   };
 };
 
