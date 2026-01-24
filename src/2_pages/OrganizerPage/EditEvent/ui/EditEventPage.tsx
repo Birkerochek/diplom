@@ -238,8 +238,8 @@ export const EditEventPage = ({ eventId }: EditEventPageProps) => {
             label="Навыки"
             placeholder="Например: работа в команде, коммуникация"
             subtitle="Перечислите навыки через запятую"
-            error={errors.skills?.message}
-            {...register("skills")}
+            error={errors.skillsNeeded?.message}
+            {...register("skillsNeeded")}
           />
         </div>
 
