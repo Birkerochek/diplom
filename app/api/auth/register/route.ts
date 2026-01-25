@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       console.warn("[Register API] duplicate email attempt", { email });
       return NextResponse.json(
         {
-          message: "User with this email already exists",
+          message: "Пользователь с таким email уже зарегистрирован",
           field: "email",
         },
         { status: 409 }
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
         console.warn("[Register API] duplicate phone attempt", { phone });
         return NextResponse.json(
           {
-            message: "User with this phone already exists",
+            message: "Пользователь с таким номером телефона уже зарегистрирован",
             field: "phone",
           },
           { status: 409 }
