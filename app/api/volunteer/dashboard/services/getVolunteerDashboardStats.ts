@@ -7,6 +7,12 @@ import { getVolunteerAttendedEvents } from "../../attended-events/services/getVo
 export type VolunteerDashboardStats = {
   volunteerName: string;
   monthlyGoalHours: number;
+  organizerApplication: {
+    status: "pending" | "approved" | "rejected" | null;
+    rejectionReason: string | null;
+    requestedAt: Date | null;
+    reviewedAt: Date | null;
+  };
   attendedEvents: VolunteerAttendedEvent[];
   attendedEventsTotal: number;
   participationRange: {
@@ -32,6 +38,9 @@ export const getVolunteerDashboardStats = async (
 ): Promise<VolunteerDashboardStats> => {
   const volunteer = await prisma.user.findUnique({
     where: { id: volunteerId },
+    include: {
+      organizerRoleRequest: true,
+    },
   });
 
   if (!volunteer) {
@@ -104,6 +113,12 @@ export const getVolunteerDashboardStats = async (
   return {
     volunteerName: volunteer.name,
     monthlyGoalHours: volunteerAim,
+    organizerApplication: {
+      status: volunteer.organizerRoleRequest?.status ?? null,
+      rejectionReason: volunteer.organizerRoleRequest?.rejectionReason ?? null,
+      requestedAt: volunteer.organizerRoleRequest?.requestedAt ?? null,
+      reviewedAt: volunteer.organizerRoleRequest?.reviewedAt ?? null,
+    },
     attendedEvents: attendedEventsResult.data,
     attendedEventsTotal: attendedEventsResult.total,
     participationRange: {

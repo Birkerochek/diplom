@@ -22,9 +22,11 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
     refetch,
     isFetching,
     statusControl,
+    completeAction,
     deleteDialog,
     volunteerActions,
     capacityStats,
+    moderationInfo,
   } = useEventDetailsPage({ eventId });
 
   if (isLoading && !event) {
@@ -37,7 +39,7 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
         <Typography variant="body" color="secondary">
           Не удалось загрузить информацию о мероприятии.
         </Typography>
-        <Button color="primary" onClick={() => refetch()}>
+        <Button color="primary" onClick={() => refetch()} disabled={isFetching}>
           Попробовать снова
         </Button>
       </Container>
@@ -58,18 +60,25 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
           </Typography>
           <div className={styles.header__statusControls}>
             <EventStatusBadge status={event.status} />
-            <Select
-              options={statusControl.options}
-              value={statusControl.value}
-              onChange={statusControl.onChange}
-              disabled={statusControl.isUpdating}
-              className={styles.header__statusSelect}
-              placeholder="Выберите статус"
-            />
+            {statusControl.isVisible ? (
+              <Select
+                options={statusControl.options}
+                value={statusControl.value}
+                onChange={statusControl.onChange}
+                disabled={statusControl.isUpdating}
+                className={styles.header__statusSelect}
+                placeholder="Выберите статус"
+              />
+            ) : null}
           </div>
         </div>
 
         <div className={styles.header__actions}>
+          {event.status !== "completed" ? (
+            <Button color="primary" onClick={completeAction.complete} disabled={completeAction.isDisabled}>
+              Завершить мероприятие
+            </Button>
+          ) : null}
           <Link href={PAGES.EDIT_EVENT(eventId)}>
             <Button color="white" icon="edit">
               Редактировать
@@ -85,6 +94,40 @@ export const EventDetailsPage = ({ eventId }: EventDetailsPageProps) => {
           <Typography variant="body" color="gray">
             Данные обновляются...
           </Typography>
+        </div>
+      ) : null}
+
+      {event.status === "pending_moderation" ? (
+        <div className={styles.updatingBanner}>
+          <Typography variant="body" color="gray">
+            Мероприятие отправлено на модерацию
+          </Typography>
+        </div>
+      ) : null}
+
+      {event.status === "rejected" && moderationInfo.rejectionReason ? (
+        <div className={styles.updatingBanner}>
+          <Typography variant="body" color="secondary">
+            Причина отклонения: {moderationInfo.rejectionReason}
+          </Typography>
+          {moderationInfo.canResubmit ? (
+            <Button color="primary" onClick={moderationInfo.resubmit} disabled={moderationInfo.isSubmittingToModeration}>
+              Отправить повторно на модерацию
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
+
+      {event.status === "suspended" && moderationInfo.suspensionReason ? (
+        <div className={styles.updatingBanner}>
+          <Typography variant="body" color="secondary">
+            Публикация приостановлена: {moderationInfo.suspensionReason}
+          </Typography>
+          {moderationInfo.canResubmit ? (
+            <Button color="primary" onClick={moderationInfo.resubmit} disabled={moderationInfo.isSubmittingToModeration}>
+              Исправить и отправить на модерацию
+            </Button>
+          ) : null}
         </div>
       ) : null}
 

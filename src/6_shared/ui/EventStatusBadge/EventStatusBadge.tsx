@@ -13,7 +13,11 @@ const statusClassMap: Record<EventStatus, string> = {
   [EventStatus.active]: s.badgeActive,
   [EventStatus.cancelled]: s.badgeCancelled,
   [EventStatus.draft]: s.badgeDraft,
+  [EventStatus.pending_moderation]: s.badgePendingModeration,
+  [EventStatus.rejected]: s.badgeRejected,
+  [EventStatus.suspended]: s.badgeSuspended,
   [EventStatus.completed]: s.badgeCompleted,
+  [EventStatus.archived]: s.badgeArchived,
 };
 
 const EventStatusBadgeBase: FC<StatusBadgeProps> = ({ status }) => (

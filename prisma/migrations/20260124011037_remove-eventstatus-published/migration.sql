@@ -1,4 +1,4 @@
-﻿-- Update existing rows that still use the old enum value.
+-- Update existing rows that still use the old enum value.
 UPDATE "Event"
 SET "status" = 'active'
 WHERE "status" = 'published';

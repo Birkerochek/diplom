@@ -41,10 +41,16 @@ export const eventFormSchema = z
       .transform((value) => value ?? undefined),
     startTime: z
       .string()
-      .regex(timeRegex, "Используйте формат ЧЧ:ММ"),
+      .regex(
+        timeRegex,
+        "Введите корректное время начала в формате ЧЧ:ММ, например 09:30"
+      ),
     endTime: z
       .string()
-      .regex(timeRegex, "Используйте формат ЧЧ:ММ"),
+      .regex(
+        timeRegex,
+        "Введите корректное время окончания в формате ЧЧ:ММ, например 18:45"
+      ),
     location: z
       .string()
       .trim()

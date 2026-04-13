@@ -14,6 +14,17 @@
   font-weight: $fw-500;
   background: $color-brand-primary;
   color: $color-basic-white;
+  transition: opacity 0.2s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:disabled:hover {
+    opacity: 0.6;
+  }
+
   svg {
     position: relative;
     z-index: 1;
@@ -47,7 +58,7 @@
         transition: 0.3s;
       }
     }
-    &:hover {
+    &:not(:disabled):hover {
       background: $color-basic-white;
       color: $color-basic-black;
       border: 1px solid $color-basic-gray;
@@ -70,7 +81,7 @@
       }
     }
     transition: 0.3s;
-    &:hover {
+    &:not(:disabled):hover {
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
       background: $color-brand-secondary;
       color: $color-basic-white;
@@ -99,7 +110,7 @@
     @media (max-width: 320px) {
       width: 240px;
     }
-    &:hover {
+    &:not(:disabled):hover {
       color: $color-basic-black;
       background: $color-basic-white;
       border: 1px solid $color-basic-gray;
@@ -118,7 +129,7 @@
       color: $color-basic-black;
       border: 1px solid $color-basic-gray;
       transition: 0.3s;
-      &:hover {
+      &:not(:disabled):hover {
         background: $color-basic-gray;
         color: $color-basic-white;
       }
@@ -128,7 +139,7 @@
       color: $color-basic-white;
       transition: 0.3s;
       border: 1px solid $color-brand-primary;
-      &:hover {
+      &:not(:disabled):hover {
         background: $color-basic-white;
         color: $color-basic-black;
         border: 1px solid $color-basic-gray;
@@ -139,7 +150,7 @@
       border: 1px solid $color-basic-white;
       color: $color-basic-white;
       transition: 0.3s;
-      &:hover {
+      &:not(:disabled):hover {
         background: $color-brand-primary;
         border: 1px solid transparent;
       }
@@ -162,7 +173,7 @@
       }
     }
 
-    &:hover {
+    &:not(:disabled):hover {
       color: $color-basic-white;
       background: $color-brand-primary;
       border: 1px solid transparent;

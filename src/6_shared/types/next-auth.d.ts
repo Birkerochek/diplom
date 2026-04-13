@@ -7,6 +7,8 @@ declare module "next-auth" {
       email: string;
       name?: string | null;
       role: string;
+      organizerApplicationStatus?: string | null;
+      organizerApplicationRejectionReason?: string | null;
     } & DefaultSession["user"];
     expires: string;
   }
@@ -16,6 +18,8 @@ declare module "next-auth" {
     email: string;
     name?: string | null;
     role: string;
+    organizerApplicationStatus?: string | null;
+    organizerApplicationRejectionReason?: string | null;
   }
 }
 
@@ -25,5 +29,8 @@ declare module "next-auth/jwt" {
     email: string;
     name?: string | null;
     role: string;
+    organizerApplicationStatus?: string | null;
+    organizerApplicationRejectionReason?: string | null;
+    accessStateSyncedAt?: number;
   }
 }

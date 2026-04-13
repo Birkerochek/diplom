@@ -1,7 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
   output        = "../app/generated/prisma"
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -16,14 +16,31 @@ datasource db {
 enum Role {
   volunteer
   organizer
+  admin
+}
+
+enum OrganizerApplicationStatus {
+  pending
+  approved
+  rejected
 }
 
 enum EventStatus {
   draft
-  published
+  pending_moderation
+  rejected
   active
+  suspended
   completed
   cancelled
+  archived
+}
+
+enum EventModerationStatus {
+  pending
+  approved
+  rejected
+  revoked
 }
 
 enum RegistrationStatus {
@@ -49,12 +66,12 @@ model User {
   passwordHash        String
   name                String
   role                Role
-  phone               String?
+  phone               String?  @unique
   bio                 String?
   avatarUrl           String?
   preferredActivities String[] @default([])
 
-  organizationName        String?
+  organizationName        String? @unique
   organizationDescription String?
 
   isActive  Boolean  @default(true)
@@ -67,12 +84,35 @@ model User {
   volunteerHours VolunteerHour[]
   certificates   Certificate[]
 
-  verifiedHours         VolunteerHour[]     @relation("VerifiedByRelation")
-  reviewedRegistrations EventRegistration[] @relation("ReviewedByRelation")
-  issuedCertificates    Certificate[]       @relation("IssuedByRelation")
+  verifiedHours             VolunteerHour[]        @relation("VerifiedByRelation")
+  reviewedRegistrations     EventRegistration[]    @relation("ReviewedByRelation")
+  issuedCertificates        Certificate[]          @relation("IssuedByRelation")
+  organizerRoleRequest      OrganizerRoleRequest?
+  reviewedOrganizerRequests OrganizerRoleRequest[] @relation("OrganizerRequestReviewedBy")
 
   @@index([role])
   @@index([createdAt])
+  @@map("users")
+}
+
+model OrganizerRoleRequest {
+  id              String                     @id @default(uuid()) @db.Uuid
+  userId          String                     @unique @db.Uuid
+  status          OrganizerApplicationStatus @default(pending)
+  requestedAt     DateTime                   @default(now())
+  reviewedAt      DateTime?
+  reviewedById    String?                    @db.Uuid
+  rejectionReason String?
+  createdAt       DateTime                   @default(now())
+  updatedAt       DateTime                   @updatedAt
+
+  user       User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy User? @relation("OrganizerRequestReviewedBy", fields: [reviewedById], references: [id])
+
+  @@index([status])
+  @@index([requestedAt])
+  @@index([reviewedById])
+  @@map("organizer_role_requests")
 }
 
 // ------------------------------------------------------------
@@ -80,37 +120,76 @@ model User {
 // ------------------------------------------------------------
 
 model Event {
-  id                  String      @id @default(uuid()) @db.Uuid
-  organizerId         String      @db.Uuid
-  title               String
-  description         String?
-  activityType        String
-  eventDate           DateTime
-  startTime           DateTime
-  endTime             DateTime
-  location            String
-  address             String?
-  requiredHours       Int
-  maxParticipants     Int?
-  currentParticipants Int?        @default(0)
-  requirements        String?
-  skillsNeeded        String[]    @default([])
-  status              EventStatus @default(draft)
-  tags                String[]    @default([])
-  createdAt           DateTime    @default(now())
-  updatedAt           DateTime    @updatedAt
-  publishedAt         DateTime?
+  id                       String      @id @default(uuid()) @db.Uuid
+  organizerId              String      @db.Uuid
+  title                    String
+  description              String?
+  activityType             String
+  eventDate                DateTime
+  startTime                DateTime
+  endTime                  DateTime
+  location                 String
+  address                  String?
+  requiredHours            Int
+  maxParticipants          Int?
+  currentParticipants      Int?        @default(0)
+  requirements             String?
+  skillsNeeded             String[]    @default([])
+  status                   EventStatus @default(draft)
+  submittedForModerationAt DateTime?
+  lastModeratedAt          DateTime?
+  approvedAt               DateTime?
+  approvedById             String?     @db.Uuid
+  rejectedAt               DateTime?
+  rejectedById             String?     @db.Uuid
+  rejectionReason          String?
+  suspendedAt              DateTime?
+  suspendedById            String?     @db.Uuid
+  suspensionReason         String?
+  archivedAt               DateTime?
+  archivedById             String?     @db.Uuid
+  moderationIteration      Int         @default(0)
+  moderationVersion        Int         @default(0)
+  tags                     String[]    @default([])
+  createdAt                DateTime    @default(now())
+  updatedAt                DateTime    @updatedAt
+  publishedAt              DateTime?
 
   // Relations
-  organizer      User                @relation("OrganizerEvents", fields: [organizerId], references: [id], onDelete: Cascade)
-  registrations  EventRegistration[]
-  volunteerHours VolunteerHour[]
+  organizer          User                     @relation("OrganizerEvents", fields: [organizerId], references: [id], onDelete: Cascade)
+  registrations      EventRegistration[]
+  volunteerHours     VolunteerHour[]
+  moderationRequests EventModerationRequest[]
 
   @@index([organizerId])
   @@index([status])
   @@index([eventDate])
   @@index([activityType])
   @@index([createdAt])
+  @@map("events")
+}
+
+model EventModerationRequest {
+  id             String                @id @default(uuid()) @db.Uuid
+  eventId        String                @db.Uuid
+  iteration      Int
+  status         EventModerationStatus @default(pending)
+  submittedById  String                @db.Uuid
+  submittedAt    DateTime              @default(now())
+  decisionById   String?               @db.Uuid
+  decisionAt     DateTime?
+  decisionReason String?
+  snapshot       Json?
+  version        Int                   @default(0)
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+  @@index([status])
+  @@index([submittedAt])
+  @@map("event_moderation_requests")
 }
 
 // ------------------------------------------------------------
@@ -143,6 +222,7 @@ model EventRegistration {
   @@index([eventId])
   @@index([volunteerId])
   @@index([status])
+  @@map("event_registrations")
 }
 
 // ------------------------------------------------------------
@@ -177,6 +257,7 @@ model VolunteerHour {
   @@index([date])
   @@index([activityType])
   @@index([verified])
+  @@map("volunteer_hours")
 }
 
 // ------------------------------------------------------------
@@ -203,21 +284,5 @@ model Certificate {
   @@index([volunteerId])
   @@index([certificateNumber])
   @@index([issuedAt])
-}
-
-// ------------------------------------------------------------
-// ACTIVITY TYPES
-// ------------------------------------------------------------
-
-model ActivityType {
-  id          String   @id @default(uuid()) @db.Uuid
-  name        String   @unique
-  slug        String   @unique
-  description String?
-  icon        String?
-  color       String?
-  category    String?
-  orderIndex  Int?     @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
+  @@map("certificates")
 }

@@ -11,12 +11,14 @@ import {
   Lock,
   ShieldCheck,
   Phone,
+  Check,
 } from "lucide-react";
 import { Container, Input, Button, Typography } from "@shared/ui";
 import { PAGES, ROLES } from "@shared/constants";
 import s from "./RegisterPage.module.scss";
 import { roles } from "../model/RolesCards";
 import { useRegisterForm } from "../model/useRegisterForm";
+
 export const RegisterPage = () => {
   const {
     form,
@@ -42,19 +44,28 @@ export const RegisterPage = () => {
       setRole(ROLES.ORGANIZER);
     }
   }, [setRole, variant]);
+
   return (
     <section className={s.page}>
       <Container>
         <div className={s.heading}>
-          <Typography variant="h1" as={"h2"}>Присоединяйтесь к нам!</Typography>
-          <Typography variant="body" as={"p"} color="gray">Создайте аккаунт и начните помогать</Typography>
+          <Typography variant="h1" as="h2">
+            Присоединяйтесь к нам!
+          </Typography>
+          <Typography variant="body" as="p" color="gray">
+            Создайте аккаунт и начните помогать
+          </Typography>
         </div>
 
         <div className={s.cardWrapper}>
           <div className={s.card}>
             <div className={s.cardHeading}>
-              <Typography variant="h2" as={'h1'}>Регистрация</Typography>
-              <Typography variant="settings" color="gray">Заполните форму для создания аккаунта</Typography>
+              <Typography variant="h2" as="h1">
+                Регистрация
+              </Typography>
+              <Typography variant="settings" color="gray">
+                Заполните форму для создания аккаунта
+              </Typography>
             </div>
 
             <div className={s.roles}>
@@ -76,9 +87,7 @@ export const RegisterPage = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
               <input type="hidden" {...register("role")} />
-              {serverError ? (
-                <p className={s.serverError}>{serverError}</p>
-              ) : null}
+              {serverError ? <p className={s.serverError}>{serverError}</p> : null}
 
               <div className={s.nameRow}>
                 <Input
@@ -157,6 +166,25 @@ export const RegisterPage = () => {
                 error={errors.confirmPassword?.message}
                 {...register("confirmPassword")}
               />
+
+              <div className={s.checkboxWrapper}>
+                <label className={s.checkboxField}>
+                  <input
+                    type="checkbox"
+                    className={s.checkboxInput}
+                    {...register("acceptPersonalData")}
+                  />
+                  <span className={s.checkboxControl} aria-hidden="true">
+                    <Check size={14} strokeWidth={3} />
+                  </span>
+                  <span className={s.checkboxText}>
+                    Я принимаю <Link href={PAGES.PRIVACY}>политику обработки персональных данных</Link>
+                  </span>
+                </label>
+                {errors.acceptPersonalData?.message ? (
+                  <p className={s.checkboxError}>{errors.acceptPersonalData.message}</p>
+                ) : null}
+              </div>
 
               <Button
                 type="submit"

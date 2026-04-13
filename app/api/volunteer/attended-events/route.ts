@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 
 import { nextAuthOptions } from "@shared/config/nextAuth";
+import { canAccessVolunteerScope } from "@shared/lib/access";
 import { getVolunteerAttendedEvents } from "./services/getVolunteerAttendedEvents";
 
 const MAX_LIMIT = 50;
@@ -31,7 +32,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (session.user.role !== "volunteer") {
+    if (!canAccessVolunteerScope(session.user.role)) {
       return NextResponse.json(
         { message: "Доступ разрешен только волонтерам" },
         { status: 403 }

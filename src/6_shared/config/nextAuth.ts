@@ -4,10 +4,54 @@ import { verify } from "argon2";
 import { loginSchema } from "@shared/zod/auth.schema";
 import { prisma } from "@shared/lib/prisma";
 import type { User } from "next-auth";
-import type { AdapterUser } from "next-auth/adapters";
 import { PAGES } from "@shared/constants";
 
 const MAX_AGE = 30 * 24 * 60 * 60; 
+const ACCESS_STATE_SYNC_INTERVAL_MS = 60 * 1000;
+
+const getUserAccessState = async (userId?: string | null, email?: string | null) => {
+  if (!userId && !email) {
+    return null;
+  }
+
+  if (userId) {
+    return prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        organizerRoleRequest: {
+          select: {
+            status: true,
+            rejectionReason: true,
+            requestedAt: true,
+            reviewedAt: true,
+          },
+        },
+      },
+    });
+  }
+
+  return prisma.user.findUnique({
+    where: { email: email ?? undefined },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      organizerRoleRequest: {
+        select: {
+          status: true,
+          rejectionReason: true,
+          requestedAt: true,
+          reviewedAt: true,
+        },
+      },
+    },
+  });
+};
 
 export const nextAuthOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -37,7 +81,19 @@ export const nextAuthOptions: NextAuthOptions = {
 
         const { email, password } = parsed.data;
 
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findUnique({
+          where: { email },
+          include: {
+            organizerRoleRequest: {
+              select: {
+                status: true,
+                rejectionReason: true,
+                requestedAt: true,
+                reviewedAt: true,
+              },
+            },
+          },
+        });
 
         if (!user) {
           throw new Error("Неверный email или пароль");
@@ -49,11 +105,17 @@ export const nextAuthOptions: NextAuthOptions = {
           throw new Error("Неверный email или пароль");
         }
 
+        if (!user.isActive) {
+          throw new Error("Аккаунт заблокирован");
+        }
+
         const authUser: User = {
           id: user.id,
           email: user.email,
           name: user.name,
           role: user.role,
+          organizerApplicationStatus: user.organizerRoleRequest?.status ?? null,
+          organizerApplicationRejectionReason: user.organizerRoleRequest?.rejectionReason ?? null,
         };
 
         return authUser;
@@ -63,15 +125,46 @@ export const nextAuthOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        const userWithRole = user as User | (AdapterUser & { role?: string });
+        const userWithRole = user as User & {
+          organizerApplicationStatus?: string | null;
+          organizerApplicationRejectionReason?: string | null;
+        };
 
         token.id = userWithRole.id;
         token.email = userWithRole.email;
         token.name = userWithRole.name;
-        if ("role" in userWithRole && userWithRole.role) {
+        if (userWithRole.role) {
           token.role = userWithRole.role;
         }
+        token.organizerApplicationStatus = userWithRole.organizerApplicationStatus ?? null;
+        token.organizerApplicationRejectionReason =
+          userWithRole.organizerApplicationRejectionReason ?? null;
+        token.accessStateSyncedAt = Date.now();
       }
+
+      const lastSyncedAt =
+        typeof token.accessStateSyncedAt === "number" ? token.accessStateSyncedAt : 0;
+      const shouldSyncAccessState =
+        !lastSyncedAt || Date.now() - lastSyncedAt >= ACCESS_STATE_SYNC_INTERVAL_MS;
+
+      if (shouldSyncAccessState) {
+        const freshUser = await getUserAccessState(
+          typeof token.id === "string" ? token.id : null,
+          typeof token.email === "string" ? token.email : null
+        );
+
+        if (freshUser) {
+          token.id = freshUser.id;
+          token.email = freshUser.email;
+          token.name = freshUser.name;
+          token.role = freshUser.role;
+          token.organizerApplicationStatus = freshUser.organizerRoleRequest?.status ?? null;
+          token.organizerApplicationRejectionReason =
+            freshUser.organizerRoleRequest?.rejectionReason ?? null;
+          token.accessStateSyncedAt = Date.now();
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {
@@ -88,12 +181,28 @@ export const nextAuthOptions: NextAuthOptions = {
           session.user.name = token.name;
         }
         session.user.role = role;
+        session.user.organizerApplicationStatus =
+          typeof token.organizerApplicationStatus === "string"
+            ? token.organizerApplicationStatus
+            : null;
+        session.user.organizerApplicationRejectionReason =
+          typeof token.organizerApplicationRejectionReason === "string"
+            ? token.organizerApplicationRejectionReason
+            : null;
       } else {
         session.user = {
           id: token.id ?? "",
           email: token.email ?? "",
           name: token.name ?? undefined,
           role,
+          organizerApplicationStatus:
+            typeof token.organizerApplicationStatus === "string"
+              ? token.organizerApplicationStatus
+              : null,
+          organizerApplicationRejectionReason:
+            typeof token.organizerApplicationRejectionReason === "string"
+              ? token.organizerApplicationRejectionReason
+              : null,
         };
       }
       return session;

@@ -5,6 +5,8 @@ export type CreateEventResponse = {
   success: boolean;
   data: {
     id: string;
+    status: string;
+    moderationMessage: string;
   };
   message?: string;
 };

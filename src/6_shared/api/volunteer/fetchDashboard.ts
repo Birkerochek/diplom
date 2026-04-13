@@ -4,6 +4,12 @@ import type { VolunteerAttendedEvent } from "@shared/types/volunteer";
 export type VolunteerDashboardResponse = {
   volunteerName: string;
   monthlyGoalHours: number;
+  organizerApplication: {
+    status: "pending" | "approved" | "rejected" | null;
+    rejectionReason: string | null;
+    requestedAt: string | null;
+    reviewedAt: string | null;
+  };
   attendedEvents: VolunteerAttendedEvent[];
   attendedEventsTotal: number;
   participationRange: {

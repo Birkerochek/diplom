@@ -1,0 +1,73 @@
+@use "@shared/styles/variables.scss" as *;
+
+.page {
+  display: grid;
+  gap: 24px;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.heroText {
+  display: grid;
+  gap: 8px;
+}
+
+.actionsRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card,
+.activity {
+  border: 1px solid $color-basic-border;
+  border-radius: 20px;
+  background: $color-basic-white;
+  padding: 20px;
+}
+
+.card {
+  display: grid;
+  gap: 8px;
+}
+
+.activity {
+  display: grid;
+  gap: 16px;
+}
+
+.activityList {
+  display: grid;
+  gap: 12px;
+}
+
+.activityItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $color-basic-border;
+}
+
+.activityItem:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}

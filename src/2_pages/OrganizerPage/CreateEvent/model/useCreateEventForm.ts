@@ -52,7 +52,7 @@ export const useCreateEventForm = () => {
           throw new Error(result.message ?? "Не удалось создать мероприятие");
         }
 
-        toast.success("Мероприятие успешно создано. ");
+        toast.success(result.data.moderationMessage || "Мероприятие отправлено на модерацию");
         reset();
         router.push(PAGES.ORGANIZER_EVENTS)
       } catch (error) {

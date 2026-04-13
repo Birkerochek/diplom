@@ -119,6 +119,12 @@ export const useVolunteerDashboard = () => {
 
   const attendedEvents = dashboardData?.attendedEvents ?? [];
   const attendedEventsTotal = dashboardData?.attendedEventsTotal ?? attendedEvents.length;
+  const organizerApplication = dashboardData?.organizerApplication ?? {
+    status: null,
+    rejectionReason: null,
+    requestedAt: null,
+    reviewedAt: null,
+  };
 
   return {
     volunteerName,
@@ -130,5 +136,6 @@ export const useVolunteerDashboard = () => {
     activityPeriodLabel,
     attendedEvents,
     attendedEventsTotal,
+    organizerApplication,
   };
 };

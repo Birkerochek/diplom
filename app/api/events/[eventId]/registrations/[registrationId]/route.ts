@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@shared/config/nextAuth";
+import { canAccessOrganizerScope } from "@shared/lib/access";
 import { updateRegistrationStatus } from "../../../services/updateRegistrationStatus";
 
 type RouteParams = { params: Promise<{ eventId: string; registrationId: string }> };
@@ -14,7 +15,7 @@ export async function PATCH(request: Request, context: RouteParams) {
       return NextResponse.json({ message: "Требуется авторизация" }, { status: 401 });
     }
 
-    if (session.user.role !== "organizer") {
+    if (!canAccessOrganizerScope(session.user.role)) {
       return NextResponse.json({ message: "Недостаточно прав" }, { status: 403 });
     }
 

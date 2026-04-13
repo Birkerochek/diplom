@@ -59,6 +59,9 @@
   padding: 8px 16px;
   border-radius: 10px;
   background: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   border: 1px solid #e5e7eb;
   width: fit-content;
 }
@@ -86,10 +89,8 @@
 }
 
 .section {
-  background: $color-basic-white;
-  border-radius: 16px;
+ 
   padding: 24px;
-  @include shadow;
   display: flex;
   flex-direction: column;
   gap: 20px;

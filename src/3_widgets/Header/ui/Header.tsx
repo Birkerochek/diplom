@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Calendar, Heart, ListChecks, Menu, Users, X } from "lucide-react";
+import { Calendar, Heart, ListChecks, Menu, ShieldCheck, Users, X } from "lucide-react";
 
 import { useSession, signOut } from "@shared/api";
 import { PAGES, ROLES } from "@shared/constants";
@@ -15,9 +15,12 @@ export const Header = () => {
   const isAuthenticated = status === "authenticated" && Boolean(session?.user);
   const role = session?.user?.role;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const dashboardPath =
-    role === ROLES.ORGANIZER
+    role === ROLES.ADMIN
+      ? PAGES.ADMIN_DASHBOARD
+      : role === ROLES.ORGANIZER
       ? PAGES.ORGANIZER_DASHBOARD
       : role === ROLES.VOLUNTEER
         ? PAGES.VOLUNTEER_DASHBOARD
@@ -31,9 +34,19 @@ export const Header = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    if (isSigningOut) {
+      return;
+    }
+
     handleCloseMenu();
-    void signOut();
+    setIsSigningOut(true);
+
+    try {
+      await signOut();
+    } finally {
+      setIsSigningOut(false);
+    }
   };
 
   return (
@@ -42,7 +55,30 @@ export const Header = () => {
         <div className={s.header}>
           <Logo />
           <div className={s.header__center}>
-            {role === ROLES.ORGANIZER ? (
+            {role === ROLES.ADMIN ? (
+              <>
+                <Link className={s.header__center_item} href={PAGES.ADMIN_DASHBOARD}>
+                  <Users size={18} />
+                  <Typography color="inherit">Админка</Typography>
+                </Link>
+                <Link className={s.header__center_item} href={PAGES.ADMIN_EVENTS}>
+                  <Calendar size={18} />
+                  <Typography color="inherit">Модерация</Typography>
+                </Link>
+                <Link className={s.header__center_item} href={PAGES.ADMIN_ACTIVE_EVENTS}>
+                  <Calendar size={18} />
+                  <Typography color="inherit">Активные</Typography>
+                </Link>
+                <Link className={s.header__center_item} href={PAGES.ADMIN_VOLUNTEERS}>
+                  <ShieldCheck size={18} />
+                  <Typography color="inherit">Волонтёры</Typography>
+                </Link>
+                <Link className={s.header__center_item} href={PAGES.ADMIN_ORGANIZER_REQUESTS}>
+                  <ShieldCheck size={18} />
+                  <Typography color="inherit">Заявки организаторов</Typography>
+                </Link>
+              </>
+            ) : role === ROLES.ORGANIZER ? (
               <>
                 <Link className={s.header__center_item} href={PAGES.ORGANIZER_DASHBOARD}>
                   <Users size={18} />
@@ -84,7 +120,7 @@ export const Header = () => {
                 <Link href={dashboardPath}>
                   <Button color="white">Перейти в профиль</Button>
                 </Link>
-                <Button color="primary" onClick={handleSignOut}>
+                <Button color="primary" onClick={handleSignOut} disabled={isSigningOut}>
                   Выйти
                 </Button>
               </>
@@ -118,7 +154,50 @@ export const Header = () => {
             />
             <div className={s.mobileMenu}>
               <div className={s.mobileMenu__section}>
-                {role === ROLES.ORGANIZER ? (
+                {role === ROLES.ADMIN ? (
+                  <>
+                    <Link
+                      className={s.mobileMenu__link}
+                      href={PAGES.ADMIN_DASHBOARD}
+                      onClick={handleCloseMenu}
+                    >
+                      <Users size={18} />
+                      <Typography color="inherit">Админка</Typography>
+                    </Link>
+                    <Link
+                      className={s.mobileMenu__link}
+                      href={PAGES.ADMIN_EVENTS}
+                      onClick={handleCloseMenu}
+                    >
+                      <Calendar size={18} />
+                      <Typography color="inherit">Модерация</Typography>
+                    </Link>
+                    <Link
+                      className={s.mobileMenu__link}
+                      href={PAGES.ADMIN_ACTIVE_EVENTS}
+                      onClick={handleCloseMenu}
+                    >
+                      <Calendar size={18} />
+                      <Typography color="inherit">Активные</Typography>
+                    </Link>
+                    <Link
+                      className={s.mobileMenu__link}
+                      href={PAGES.ADMIN_ORGANIZER_REQUESTS}
+                      onClick={handleCloseMenu}
+                    >
+                      <ShieldCheck size={18} />
+                      <Typography color="inherit">Заявки организаторов</Typography>
+                    </Link>
+                    <Link
+                      className={s.mobileMenu__link}
+                      href={PAGES.ADMIN_VOLUNTEERS}
+                      onClick={handleCloseMenu}
+                    >
+                      <ShieldCheck size={18} />
+                      <Typography color="inherit">Волонтёры</Typography>
+                    </Link>
+                  </>
+                ) : role === ROLES.ORGANIZER ? (
                   <>
                     <Link
                       className={s.mobileMenu__link}
@@ -173,9 +252,9 @@ export const Header = () => {
                     <Link href={dashboardPath} onClick={handleCloseMenu}>
                       <Button color="white">Перейти в профиль</Button>
                     </Link>
-                    <Button color="primary" onClick={handleSignOut}>
-                      Выйти
-                    </Button>
+                     <Button color="primary" onClick={handleSignOut} disabled={isSigningOut}>
+                       Выйти
+                     </Button>
                   </>
                 ) : (
                   <>

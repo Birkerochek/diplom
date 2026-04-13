@@ -4,7 +4,8 @@ import { prisma } from "@shared/lib/prisma";
 // Types
 // -----------------------------------------------------------------------------
 type DeleteEventInput = {
-  organizerId: string;
+  actorId: string;
+  actorRole: "organizer" | "admin";
   eventId: string;
 };
 
@@ -15,7 +16,7 @@ type DeleteEventResult =
 // -----------------------------------------------------------------------------
 // Public API
 // -----------------------------------------------------------------------------
-export const deleteEvent = async ({ organizerId, eventId }: DeleteEventInput) => {
+export const deleteEvent = async ({ actorId, actorRole, eventId }: DeleteEventInput) => {
   const event = await prisma.event.findUnique({
     where: { id: eventId },
     select: { organizerId: true, status: true },
@@ -25,7 +26,7 @@ export const deleteEvent = async ({ organizerId, eventId }: DeleteEventInput) =>
     return { status: 404, body: { message: "Мероприятие не найдено" } } satisfies DeleteEventResult;
   }
 
-  if (event.organizerId !== organizerId) {
+  if (actorRole === "organizer" && event.organizerId !== actorId) {
     return { status: 403, body: { message: "Недостаточно прав" } } satisfies DeleteEventResult;
   }
 

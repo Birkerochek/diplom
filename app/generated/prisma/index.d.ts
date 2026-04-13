@@ -19,10 +19,20 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model OrganizerRoleRequest
+ * 
+ */
+export type OrganizerRoleRequest = $Result.DefaultSelection<Prisma.$OrganizerRoleRequestPayload>
+/**
  * Model Event
  * 
  */
 export type Event = $Result.DefaultSelection<Prisma.$EventPayload>
+/**
+ * Model EventModerationRequest
+ * 
+ */
+export type EventModerationRequest = $Result.DefaultSelection<Prisma.$EventModerationRequestPayload>
 /**
  * Model EventRegistration
  * 
@@ -38,11 +48,6 @@ export type VolunteerHour = $Result.DefaultSelection<Prisma.$VolunteerHourPayloa
  * 
  */
 export type Certificate = $Result.DefaultSelection<Prisma.$CertificatePayload>
-/**
- * Model ActivityType
- * 
- */
-export type ActivityType = $Result.DefaultSelection<Prisma.$ActivityTypePayload>
 
 /**
  * Enums
@@ -50,20 +55,44 @@ export type ActivityType = $Result.DefaultSelection<Prisma.$ActivityTypePayload>
 export namespace $Enums {
   export const Role: {
   volunteer: 'volunteer',
-  organizer: 'organizer'
+  organizer: 'organizer',
+  admin: 'admin'
 };
 
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const OrganizerApplicationStatus: {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected'
+};
+
+export type OrganizerApplicationStatus = (typeof OrganizerApplicationStatus)[keyof typeof OrganizerApplicationStatus]
+
+
 export const EventStatus: {
   draft: 'draft',
+  pending_moderation: 'pending_moderation',
+  rejected: 'rejected',
   active: 'active',
+  suspended: 'suspended',
   completed: 'completed',
-  cancelled: 'cancelled'
+  cancelled: 'cancelled',
+  archived: 'archived'
 };
 
 export type EventStatus = (typeof EventStatus)[keyof typeof EventStatus]
+
+
+export const EventModerationStatus: {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected',
+  revoked: 'revoked'
+};
+
+export type EventModerationStatus = (typeof EventModerationStatus)[keyof typeof EventModerationStatus]
 
 
 export const RegistrationStatus: {
@@ -90,9 +119,17 @@ export type Role = $Enums.Role
 
 export const Role: typeof $Enums.Role
 
+export type OrganizerApplicationStatus = $Enums.OrganizerApplicationStatus
+
+export const OrganizerApplicationStatus: typeof $Enums.OrganizerApplicationStatus
+
 export type EventStatus = $Enums.EventStatus
 
 export const EventStatus: typeof $Enums.EventStatus
+
+export type EventModerationStatus = $Enums.EventModerationStatus
+
+export const EventModerationStatus: typeof $Enums.EventModerationStatus
 
 export type RegistrationStatus = $Enums.RegistrationStatus
 
@@ -231,6 +268,16 @@ export class PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.organizerRoleRequest`: Exposes CRUD operations for the **OrganizerRoleRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrganizerRoleRequests
+    * const organizerRoleRequests = await prisma.organizerRoleRequest.findMany()
+    * ```
+    */
+  get organizerRoleRequest(): Prisma.OrganizerRoleRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.event`: Exposes CRUD operations for the **Event** model.
     * Example usage:
     * ```ts
@@ -239,6 +286,16 @@ export class PrismaClient<
     * ```
     */
   get event(): Prisma.EventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.eventModerationRequest`: Exposes CRUD operations for the **EventModerationRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EventModerationRequests
+    * const eventModerationRequests = await prisma.eventModerationRequest.findMany()
+    * ```
+    */
+  get eventModerationRequest(): Prisma.EventModerationRequestDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.eventRegistration`: Exposes CRUD operations for the **EventRegistration** model.
@@ -269,16 +326,6 @@ export class PrismaClient<
     * ```
     */
   get certificate(): Prisma.CertificateDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.activityType`: Exposes CRUD operations for the **ActivityType** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ActivityTypes
-    * const activityTypes = await prisma.activityType.findMany()
-    * ```
-    */
-  get activityType(): Prisma.ActivityTypeDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -720,11 +767,12 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    OrganizerRoleRequest: 'OrganizerRoleRequest',
     Event: 'Event',
+    EventModerationRequest: 'EventModerationRequest',
     EventRegistration: 'EventRegistration',
     VolunteerHour: 'VolunteerHour',
-    Certificate: 'Certificate',
-    ActivityType: 'ActivityType'
+    Certificate: 'Certificate'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -743,7 +791,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "event" | "eventRegistration" | "volunteerHour" | "certificate" | "activityType"
+      modelProps: "user" | "organizerRoleRequest" | "event" | "eventModerationRequest" | "eventRegistration" | "volunteerHour" | "certificate"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -821,6 +869,80 @@ export namespace Prisma {
           }
         }
       }
+      OrganizerRoleRequest: {
+        payload: Prisma.$OrganizerRoleRequestPayload<ExtArgs>
+        fields: Prisma.OrganizerRoleRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.OrganizerRoleRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.OrganizerRoleRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.OrganizerRoleRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.OrganizerRoleRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload>
+          }
+          findMany: {
+            args: Prisma.OrganizerRoleRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload>[]
+          }
+          create: {
+            args: Prisma.OrganizerRoleRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload>
+          }
+          createMany: {
+            args: Prisma.OrganizerRoleRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.OrganizerRoleRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.OrganizerRoleRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload>
+          }
+          update: {
+            args: Prisma.OrganizerRoleRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.OrganizerRoleRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.OrganizerRoleRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.OrganizerRoleRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.OrganizerRoleRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$OrganizerRoleRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.OrganizerRoleRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateOrganizerRoleRequest>
+          }
+          groupBy: {
+            args: Prisma.OrganizerRoleRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<OrganizerRoleRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.OrganizerRoleRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<OrganizerRoleRequestCountAggregateOutputType> | number
+          }
+        }
+      }
       Event: {
         payload: Prisma.$EventPayload<ExtArgs>
         fields: Prisma.EventFieldRefs
@@ -892,6 +1014,80 @@ export namespace Prisma {
           count: {
             args: Prisma.EventCountArgs<ExtArgs>
             result: $Utils.Optional<EventCountAggregateOutputType> | number
+          }
+        }
+      }
+      EventModerationRequest: {
+        payload: Prisma.$EventModerationRequestPayload<ExtArgs>
+        fields: Prisma.EventModerationRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EventModerationRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EventModerationRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.EventModerationRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EventModerationRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload>
+          }
+          findMany: {
+            args: Prisma.EventModerationRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload>[]
+          }
+          create: {
+            args: Prisma.EventModerationRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload>
+          }
+          createMany: {
+            args: Prisma.EventModerationRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EventModerationRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.EventModerationRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload>
+          }
+          update: {
+            args: Prisma.EventModerationRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.EventModerationRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EventModerationRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EventModerationRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.EventModerationRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventModerationRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.EventModerationRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEventModerationRequest>
+          }
+          groupBy: {
+            args: Prisma.EventModerationRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EventModerationRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EventModerationRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<EventModerationRequestCountAggregateOutputType> | number
           }
         }
       }
@@ -1117,80 +1313,6 @@ export namespace Prisma {
           }
         }
       }
-      ActivityType: {
-        payload: Prisma.$ActivityTypePayload<ExtArgs>
-        fields: Prisma.ActivityTypeFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ActivityTypeFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ActivityTypeFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload>
-          }
-          findFirst: {
-            args: Prisma.ActivityTypeFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ActivityTypeFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload>
-          }
-          findMany: {
-            args: Prisma.ActivityTypeFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload>[]
-          }
-          create: {
-            args: Prisma.ActivityTypeCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload>
-          }
-          createMany: {
-            args: Prisma.ActivityTypeCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ActivityTypeCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload>[]
-          }
-          delete: {
-            args: Prisma.ActivityTypeDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload>
-          }
-          update: {
-            args: Prisma.ActivityTypeUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload>
-          }
-          deleteMany: {
-            args: Prisma.ActivityTypeDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ActivityTypeUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ActivityTypeUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload>[]
-          }
-          upsert: {
-            args: Prisma.ActivityTypeUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ActivityTypePayload>
-          }
-          aggregate: {
-            args: Prisma.ActivityTypeAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateActivityType>
-          }
-          groupBy: {
-            args: Prisma.ActivityTypeGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ActivityTypeGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ActivityTypeCountArgs<ExtArgs>
-            result: $Utils.Optional<ActivityTypeCountAggregateOutputType> | number
-          }
-        }
-      }
     }
   } & {
     other: {
@@ -1284,11 +1406,12 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    organizerRoleRequest?: OrganizerRoleRequestOmit
     event?: EventOmit
+    eventModerationRequest?: EventModerationRequestOmit
     eventRegistration?: EventRegistrationOmit
     volunteerHour?: VolunteerHourOmit
     certificate?: CertificateOmit
-    activityType?: ActivityTypeOmit
   }
 
   /* Types for Logging */
@@ -1376,6 +1499,7 @@ export namespace Prisma {
     verifiedHours: number
     reviewedRegistrations: number
     issuedCertificates: number
+    reviewedOrganizerRequests: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1386,6 +1510,7 @@ export namespace Prisma {
     verifiedHours?: boolean | UserCountOutputTypeCountVerifiedHoursArgs
     reviewedRegistrations?: boolean | UserCountOutputTypeCountReviewedRegistrationsArgs
     issuedCertificates?: boolean | UserCountOutputTypeCountIssuedCertificatesArgs
+    reviewedOrganizerRequests?: boolean | UserCountOutputTypeCountReviewedOrganizerRequestsArgs
   }
 
   // Custom InputTypes
@@ -1448,6 +1573,13 @@ export namespace Prisma {
     where?: CertificateWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReviewedOrganizerRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrganizerRoleRequestWhereInput
+  }
+
 
   /**
    * Count Type EventCountOutputType
@@ -1456,11 +1588,13 @@ export namespace Prisma {
   export type EventCountOutputType = {
     registrations: number
     volunteerHours: number
+    moderationRequests: number
   }
 
   export type EventCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registrations?: boolean | EventCountOutputTypeCountRegistrationsArgs
     volunteerHours?: boolean | EventCountOutputTypeCountVolunteerHoursArgs
+    moderationRequests?: boolean | EventCountOutputTypeCountModerationRequestsArgs
   }
 
   // Custom InputTypes
@@ -1486,6 +1620,13 @@ export namespace Prisma {
    */
   export type EventCountOutputTypeCountVolunteerHoursArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: VolunteerHourWhereInput
+  }
+
+  /**
+   * EventCountOutputType without action
+   */
+  export type EventCountOutputTypeCountModerationRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventModerationRequestWhereInput
   }
 
 
@@ -1763,6 +1904,8 @@ export namespace Prisma {
     verifiedHours?: boolean | User$verifiedHoursArgs<ExtArgs>
     reviewedRegistrations?: boolean | User$reviewedRegistrationsArgs<ExtArgs>
     issuedCertificates?: boolean | User$issuedCertificatesArgs<ExtArgs>
+    organizerRoleRequest?: boolean | User$organizerRoleRequestArgs<ExtArgs>
+    reviewedOrganizerRequests?: boolean | User$reviewedOrganizerRequestsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1826,6 +1969,8 @@ export namespace Prisma {
     verifiedHours?: boolean | User$verifiedHoursArgs<ExtArgs>
     reviewedRegistrations?: boolean | User$reviewedRegistrationsArgs<ExtArgs>
     issuedCertificates?: boolean | User$issuedCertificatesArgs<ExtArgs>
+    organizerRoleRequest?: boolean | User$organizerRoleRequestArgs<ExtArgs>
+    reviewedOrganizerRequests?: boolean | User$reviewedOrganizerRequestsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1841,6 +1986,8 @@ export namespace Prisma {
       verifiedHours: Prisma.$VolunteerHourPayload<ExtArgs>[]
       reviewedRegistrations: Prisma.$EventRegistrationPayload<ExtArgs>[]
       issuedCertificates: Prisma.$CertificatePayload<ExtArgs>[]
+      organizerRoleRequest: Prisma.$OrganizerRoleRequestPayload<ExtArgs> | null
+      reviewedOrganizerRequests: Prisma.$OrganizerRoleRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2258,6 +2405,8 @@ export namespace Prisma {
     verifiedHours<T extends User$verifiedHoursArgs<ExtArgs> = {}>(args?: Subset<T, User$verifiedHoursArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VolunteerHourPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviewedRegistrations<T extends User$reviewedRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     issuedCertificates<T extends User$issuedCertificatesArgs<ExtArgs> = {}>(args?: Subset<T, User$issuedCertificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    organizerRoleRequest<T extends User$organizerRoleRequestArgs<ExtArgs> = {}>(args?: Subset<T, User$organizerRoleRequestArgs<ExtArgs>>): Prisma__OrganizerRoleRequestClient<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    reviewedOrganizerRequests<T extends User$reviewedOrganizerRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedOrganizerRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2857,6 +3006,49 @@ export namespace Prisma {
   }
 
   /**
+   * User.organizerRoleRequest
+   */
+  export type User$organizerRoleRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    where?: OrganizerRoleRequestWhereInput
+  }
+
+  /**
+   * User.reviewedOrganizerRequests
+   */
+  export type User$reviewedOrganizerRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    where?: OrganizerRoleRequestWhereInput
+    orderBy?: OrganizerRoleRequestOrderByWithRelationInput | OrganizerRoleRequestOrderByWithRelationInput[]
+    cursor?: OrganizerRoleRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OrganizerRoleRequestScalarFieldEnum | OrganizerRoleRequestScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2876,6 +3068,1143 @@ export namespace Prisma {
 
 
   /**
+   * Model OrganizerRoleRequest
+   */
+
+  export type AggregateOrganizerRoleRequest = {
+    _count: OrganizerRoleRequestCountAggregateOutputType | null
+    _min: OrganizerRoleRequestMinAggregateOutputType | null
+    _max: OrganizerRoleRequestMaxAggregateOutputType | null
+  }
+
+  export type OrganizerRoleRequestMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    status: $Enums.OrganizerApplicationStatus | null
+    requestedAt: Date | null
+    reviewedAt: Date | null
+    reviewedById: string | null
+    rejectionReason: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OrganizerRoleRequestMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    status: $Enums.OrganizerApplicationStatus | null
+    requestedAt: Date | null
+    reviewedAt: Date | null
+    reviewedById: string | null
+    rejectionReason: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type OrganizerRoleRequestCountAggregateOutputType = {
+    id: number
+    userId: number
+    status: number
+    requestedAt: number
+    reviewedAt: number
+    reviewedById: number
+    rejectionReason: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type OrganizerRoleRequestMinAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    requestedAt?: true
+    reviewedAt?: true
+    reviewedById?: true
+    rejectionReason?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrganizerRoleRequestMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    requestedAt?: true
+    reviewedAt?: true
+    reviewedById?: true
+    rejectionReason?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type OrganizerRoleRequestCountAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    requestedAt?: true
+    reviewedAt?: true
+    reviewedById?: true
+    rejectionReason?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type OrganizerRoleRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrganizerRoleRequest to aggregate.
+     */
+    where?: OrganizerRoleRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrganizerRoleRequests to fetch.
+     */
+    orderBy?: OrganizerRoleRequestOrderByWithRelationInput | OrganizerRoleRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: OrganizerRoleRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrganizerRoleRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrganizerRoleRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned OrganizerRoleRequests
+    **/
+    _count?: true | OrganizerRoleRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: OrganizerRoleRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: OrganizerRoleRequestMaxAggregateInputType
+  }
+
+  export type GetOrganizerRoleRequestAggregateType<T extends OrganizerRoleRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateOrganizerRoleRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateOrganizerRoleRequest[P]>
+      : GetScalarType<T[P], AggregateOrganizerRoleRequest[P]>
+  }
+
+
+
+
+  export type OrganizerRoleRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrganizerRoleRequestWhereInput
+    orderBy?: OrganizerRoleRequestOrderByWithAggregationInput | OrganizerRoleRequestOrderByWithAggregationInput[]
+    by: OrganizerRoleRequestScalarFieldEnum[] | OrganizerRoleRequestScalarFieldEnum
+    having?: OrganizerRoleRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: OrganizerRoleRequestCountAggregateInputType | true
+    _min?: OrganizerRoleRequestMinAggregateInputType
+    _max?: OrganizerRoleRequestMaxAggregateInputType
+  }
+
+  export type OrganizerRoleRequestGroupByOutputType = {
+    id: string
+    userId: string
+    status: $Enums.OrganizerApplicationStatus
+    requestedAt: Date
+    reviewedAt: Date | null
+    reviewedById: string | null
+    rejectionReason: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: OrganizerRoleRequestCountAggregateOutputType | null
+    _min: OrganizerRoleRequestMinAggregateOutputType | null
+    _max: OrganizerRoleRequestMaxAggregateOutputType | null
+  }
+
+  type GetOrganizerRoleRequestGroupByPayload<T extends OrganizerRoleRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<OrganizerRoleRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof OrganizerRoleRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], OrganizerRoleRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], OrganizerRoleRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type OrganizerRoleRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    requestedAt?: boolean
+    reviewedAt?: boolean
+    reviewedById?: boolean
+    rejectionReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | OrganizerRoleRequest$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["organizerRoleRequest"]>
+
+  export type OrganizerRoleRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    requestedAt?: boolean
+    reviewedAt?: boolean
+    reviewedById?: boolean
+    rejectionReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | OrganizerRoleRequest$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["organizerRoleRequest"]>
+
+  export type OrganizerRoleRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    requestedAt?: boolean
+    reviewedAt?: boolean
+    reviewedById?: boolean
+    rejectionReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | OrganizerRoleRequest$reviewedByArgs<ExtArgs>
+  }, ExtArgs["result"]["organizerRoleRequest"]>
+
+  export type OrganizerRoleRequestSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    requestedAt?: boolean
+    reviewedAt?: boolean
+    reviewedById?: boolean
+    rejectionReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type OrganizerRoleRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "status" | "requestedAt" | "reviewedAt" | "reviewedById" | "rejectionReason" | "createdAt" | "updatedAt", ExtArgs["result"]["organizerRoleRequest"]>
+  export type OrganizerRoleRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | OrganizerRoleRequest$reviewedByArgs<ExtArgs>
+  }
+  export type OrganizerRoleRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | OrganizerRoleRequest$reviewedByArgs<ExtArgs>
+  }
+  export type OrganizerRoleRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    reviewedBy?: boolean | OrganizerRoleRequest$reviewedByArgs<ExtArgs>
+  }
+
+  export type $OrganizerRoleRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "OrganizerRoleRequest"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      reviewedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      status: $Enums.OrganizerApplicationStatus
+      requestedAt: Date
+      reviewedAt: Date | null
+      reviewedById: string | null
+      rejectionReason: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["organizerRoleRequest"]>
+    composites: {}
+  }
+
+  type OrganizerRoleRequestGetPayload<S extends boolean | null | undefined | OrganizerRoleRequestDefaultArgs> = $Result.GetResult<Prisma.$OrganizerRoleRequestPayload, S>
+
+  type OrganizerRoleRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<OrganizerRoleRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: OrganizerRoleRequestCountAggregateInputType | true
+    }
+
+  export interface OrganizerRoleRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['OrganizerRoleRequest'], meta: { name: 'OrganizerRoleRequest' } }
+    /**
+     * Find zero or one OrganizerRoleRequest that matches the filter.
+     * @param {OrganizerRoleRequestFindUniqueArgs} args - Arguments to find a OrganizerRoleRequest
+     * @example
+     * // Get one OrganizerRoleRequest
+     * const organizerRoleRequest = await prisma.organizerRoleRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends OrganizerRoleRequestFindUniqueArgs>(args: SelectSubset<T, OrganizerRoleRequestFindUniqueArgs<ExtArgs>>): Prisma__OrganizerRoleRequestClient<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one OrganizerRoleRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {OrganizerRoleRequestFindUniqueOrThrowArgs} args - Arguments to find a OrganizerRoleRequest
+     * @example
+     * // Get one OrganizerRoleRequest
+     * const organizerRoleRequest = await prisma.organizerRoleRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends OrganizerRoleRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, OrganizerRoleRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__OrganizerRoleRequestClient<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrganizerRoleRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizerRoleRequestFindFirstArgs} args - Arguments to find a OrganizerRoleRequest
+     * @example
+     * // Get one OrganizerRoleRequest
+     * const organizerRoleRequest = await prisma.organizerRoleRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends OrganizerRoleRequestFindFirstArgs>(args?: SelectSubset<T, OrganizerRoleRequestFindFirstArgs<ExtArgs>>): Prisma__OrganizerRoleRequestClient<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first OrganizerRoleRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizerRoleRequestFindFirstOrThrowArgs} args - Arguments to find a OrganizerRoleRequest
+     * @example
+     * // Get one OrganizerRoleRequest
+     * const organizerRoleRequest = await prisma.organizerRoleRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends OrganizerRoleRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, OrganizerRoleRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__OrganizerRoleRequestClient<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more OrganizerRoleRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizerRoleRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all OrganizerRoleRequests
+     * const organizerRoleRequests = await prisma.organizerRoleRequest.findMany()
+     * 
+     * // Get first 10 OrganizerRoleRequests
+     * const organizerRoleRequests = await prisma.organizerRoleRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const organizerRoleRequestWithIdOnly = await prisma.organizerRoleRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends OrganizerRoleRequestFindManyArgs>(args?: SelectSubset<T, OrganizerRoleRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a OrganizerRoleRequest.
+     * @param {OrganizerRoleRequestCreateArgs} args - Arguments to create a OrganizerRoleRequest.
+     * @example
+     * // Create one OrganizerRoleRequest
+     * const OrganizerRoleRequest = await prisma.organizerRoleRequest.create({
+     *   data: {
+     *     // ... data to create a OrganizerRoleRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends OrganizerRoleRequestCreateArgs>(args: SelectSubset<T, OrganizerRoleRequestCreateArgs<ExtArgs>>): Prisma__OrganizerRoleRequestClient<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many OrganizerRoleRequests.
+     * @param {OrganizerRoleRequestCreateManyArgs} args - Arguments to create many OrganizerRoleRequests.
+     * @example
+     * // Create many OrganizerRoleRequests
+     * const organizerRoleRequest = await prisma.organizerRoleRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends OrganizerRoleRequestCreateManyArgs>(args?: SelectSubset<T, OrganizerRoleRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many OrganizerRoleRequests and returns the data saved in the database.
+     * @param {OrganizerRoleRequestCreateManyAndReturnArgs} args - Arguments to create many OrganizerRoleRequests.
+     * @example
+     * // Create many OrganizerRoleRequests
+     * const organizerRoleRequest = await prisma.organizerRoleRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many OrganizerRoleRequests and only return the `id`
+     * const organizerRoleRequestWithIdOnly = await prisma.organizerRoleRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends OrganizerRoleRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, OrganizerRoleRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a OrganizerRoleRequest.
+     * @param {OrganizerRoleRequestDeleteArgs} args - Arguments to delete one OrganizerRoleRequest.
+     * @example
+     * // Delete one OrganizerRoleRequest
+     * const OrganizerRoleRequest = await prisma.organizerRoleRequest.delete({
+     *   where: {
+     *     // ... filter to delete one OrganizerRoleRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends OrganizerRoleRequestDeleteArgs>(args: SelectSubset<T, OrganizerRoleRequestDeleteArgs<ExtArgs>>): Prisma__OrganizerRoleRequestClient<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one OrganizerRoleRequest.
+     * @param {OrganizerRoleRequestUpdateArgs} args - Arguments to update one OrganizerRoleRequest.
+     * @example
+     * // Update one OrganizerRoleRequest
+     * const organizerRoleRequest = await prisma.organizerRoleRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends OrganizerRoleRequestUpdateArgs>(args: SelectSubset<T, OrganizerRoleRequestUpdateArgs<ExtArgs>>): Prisma__OrganizerRoleRequestClient<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more OrganizerRoleRequests.
+     * @param {OrganizerRoleRequestDeleteManyArgs} args - Arguments to filter OrganizerRoleRequests to delete.
+     * @example
+     * // Delete a few OrganizerRoleRequests
+     * const { count } = await prisma.organizerRoleRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends OrganizerRoleRequestDeleteManyArgs>(args?: SelectSubset<T, OrganizerRoleRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrganizerRoleRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizerRoleRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many OrganizerRoleRequests
+     * const organizerRoleRequest = await prisma.organizerRoleRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends OrganizerRoleRequestUpdateManyArgs>(args: SelectSubset<T, OrganizerRoleRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more OrganizerRoleRequests and returns the data updated in the database.
+     * @param {OrganizerRoleRequestUpdateManyAndReturnArgs} args - Arguments to update many OrganizerRoleRequests.
+     * @example
+     * // Update many OrganizerRoleRequests
+     * const organizerRoleRequest = await prisma.organizerRoleRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more OrganizerRoleRequests and only return the `id`
+     * const organizerRoleRequestWithIdOnly = await prisma.organizerRoleRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends OrganizerRoleRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, OrganizerRoleRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one OrganizerRoleRequest.
+     * @param {OrganizerRoleRequestUpsertArgs} args - Arguments to update or create a OrganizerRoleRequest.
+     * @example
+     * // Update or create a OrganizerRoleRequest
+     * const organizerRoleRequest = await prisma.organizerRoleRequest.upsert({
+     *   create: {
+     *     // ... data to create a OrganizerRoleRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the OrganizerRoleRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends OrganizerRoleRequestUpsertArgs>(args: SelectSubset<T, OrganizerRoleRequestUpsertArgs<ExtArgs>>): Prisma__OrganizerRoleRequestClient<$Result.GetResult<Prisma.$OrganizerRoleRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of OrganizerRoleRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizerRoleRequestCountArgs} args - Arguments to filter OrganizerRoleRequests to count.
+     * @example
+     * // Count the number of OrganizerRoleRequests
+     * const count = await prisma.organizerRoleRequest.count({
+     *   where: {
+     *     // ... the filter for the OrganizerRoleRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends OrganizerRoleRequestCountArgs>(
+      args?: Subset<T, OrganizerRoleRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], OrganizerRoleRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a OrganizerRoleRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizerRoleRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends OrganizerRoleRequestAggregateArgs>(args: Subset<T, OrganizerRoleRequestAggregateArgs>): Prisma.PrismaPromise<GetOrganizerRoleRequestAggregateType<T>>
+
+    /**
+     * Group by OrganizerRoleRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {OrganizerRoleRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends OrganizerRoleRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: OrganizerRoleRequestGroupByArgs['orderBy'] }
+        : { orderBy?: OrganizerRoleRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, OrganizerRoleRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetOrganizerRoleRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the OrganizerRoleRequest model
+   */
+  readonly fields: OrganizerRoleRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for OrganizerRoleRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__OrganizerRoleRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    reviewedBy<T extends OrganizerRoleRequest$reviewedByArgs<ExtArgs> = {}>(args?: Subset<T, OrganizerRoleRequest$reviewedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the OrganizerRoleRequest model
+   */
+  interface OrganizerRoleRequestFieldRefs {
+    readonly id: FieldRef<"OrganizerRoleRequest", 'String'>
+    readonly userId: FieldRef<"OrganizerRoleRequest", 'String'>
+    readonly status: FieldRef<"OrganizerRoleRequest", 'OrganizerApplicationStatus'>
+    readonly requestedAt: FieldRef<"OrganizerRoleRequest", 'DateTime'>
+    readonly reviewedAt: FieldRef<"OrganizerRoleRequest", 'DateTime'>
+    readonly reviewedById: FieldRef<"OrganizerRoleRequest", 'String'>
+    readonly rejectionReason: FieldRef<"OrganizerRoleRequest", 'String'>
+    readonly createdAt: FieldRef<"OrganizerRoleRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"OrganizerRoleRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * OrganizerRoleRequest findUnique
+   */
+  export type OrganizerRoleRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which OrganizerRoleRequest to fetch.
+     */
+    where: OrganizerRoleRequestWhereUniqueInput
+  }
+
+  /**
+   * OrganizerRoleRequest findUniqueOrThrow
+   */
+  export type OrganizerRoleRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which OrganizerRoleRequest to fetch.
+     */
+    where: OrganizerRoleRequestWhereUniqueInput
+  }
+
+  /**
+   * OrganizerRoleRequest findFirst
+   */
+  export type OrganizerRoleRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which OrganizerRoleRequest to fetch.
+     */
+    where?: OrganizerRoleRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrganizerRoleRequests to fetch.
+     */
+    orderBy?: OrganizerRoleRequestOrderByWithRelationInput | OrganizerRoleRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrganizerRoleRequests.
+     */
+    cursor?: OrganizerRoleRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrganizerRoleRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrganizerRoleRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrganizerRoleRequests.
+     */
+    distinct?: OrganizerRoleRequestScalarFieldEnum | OrganizerRoleRequestScalarFieldEnum[]
+  }
+
+  /**
+   * OrganizerRoleRequest findFirstOrThrow
+   */
+  export type OrganizerRoleRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which OrganizerRoleRequest to fetch.
+     */
+    where?: OrganizerRoleRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrganizerRoleRequests to fetch.
+     */
+    orderBy?: OrganizerRoleRequestOrderByWithRelationInput | OrganizerRoleRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for OrganizerRoleRequests.
+     */
+    cursor?: OrganizerRoleRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrganizerRoleRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrganizerRoleRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of OrganizerRoleRequests.
+     */
+    distinct?: OrganizerRoleRequestScalarFieldEnum | OrganizerRoleRequestScalarFieldEnum[]
+  }
+
+  /**
+   * OrganizerRoleRequest findMany
+   */
+  export type OrganizerRoleRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which OrganizerRoleRequests to fetch.
+     */
+    where?: OrganizerRoleRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of OrganizerRoleRequests to fetch.
+     */
+    orderBy?: OrganizerRoleRequestOrderByWithRelationInput | OrganizerRoleRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing OrganizerRoleRequests.
+     */
+    cursor?: OrganizerRoleRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` OrganizerRoleRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` OrganizerRoleRequests.
+     */
+    skip?: number
+    distinct?: OrganizerRoleRequestScalarFieldEnum | OrganizerRoleRequestScalarFieldEnum[]
+  }
+
+  /**
+   * OrganizerRoleRequest create
+   */
+  export type OrganizerRoleRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a OrganizerRoleRequest.
+     */
+    data: XOR<OrganizerRoleRequestCreateInput, OrganizerRoleRequestUncheckedCreateInput>
+  }
+
+  /**
+   * OrganizerRoleRequest createMany
+   */
+  export type OrganizerRoleRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many OrganizerRoleRequests.
+     */
+    data: OrganizerRoleRequestCreateManyInput | OrganizerRoleRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * OrganizerRoleRequest createManyAndReturn
+   */
+  export type OrganizerRoleRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many OrganizerRoleRequests.
+     */
+    data: OrganizerRoleRequestCreateManyInput | OrganizerRoleRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrganizerRoleRequest update
+   */
+  export type OrganizerRoleRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a OrganizerRoleRequest.
+     */
+    data: XOR<OrganizerRoleRequestUpdateInput, OrganizerRoleRequestUncheckedUpdateInput>
+    /**
+     * Choose, which OrganizerRoleRequest to update.
+     */
+    where: OrganizerRoleRequestWhereUniqueInput
+  }
+
+  /**
+   * OrganizerRoleRequest updateMany
+   */
+  export type OrganizerRoleRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update OrganizerRoleRequests.
+     */
+    data: XOR<OrganizerRoleRequestUpdateManyMutationInput, OrganizerRoleRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which OrganizerRoleRequests to update
+     */
+    where?: OrganizerRoleRequestWhereInput
+    /**
+     * Limit how many OrganizerRoleRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrganizerRoleRequest updateManyAndReturn
+   */
+  export type OrganizerRoleRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update OrganizerRoleRequests.
+     */
+    data: XOR<OrganizerRoleRequestUpdateManyMutationInput, OrganizerRoleRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which OrganizerRoleRequests to update
+     */
+    where?: OrganizerRoleRequestWhereInput
+    /**
+     * Limit how many OrganizerRoleRequests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * OrganizerRoleRequest upsert
+   */
+  export type OrganizerRoleRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the OrganizerRoleRequest to update in case it exists.
+     */
+    where: OrganizerRoleRequestWhereUniqueInput
+    /**
+     * In case the OrganizerRoleRequest found by the `where` argument doesn't exist, create a new OrganizerRoleRequest with this data.
+     */
+    create: XOR<OrganizerRoleRequestCreateInput, OrganizerRoleRequestUncheckedCreateInput>
+    /**
+     * In case the OrganizerRoleRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<OrganizerRoleRequestUpdateInput, OrganizerRoleRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * OrganizerRoleRequest delete
+   */
+  export type OrganizerRoleRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+    /**
+     * Filter which OrganizerRoleRequest to delete.
+     */
+    where: OrganizerRoleRequestWhereUniqueInput
+  }
+
+  /**
+   * OrganizerRoleRequest deleteMany
+   */
+  export type OrganizerRoleRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which OrganizerRoleRequests to delete
+     */
+    where?: OrganizerRoleRequestWhereInput
+    /**
+     * Limit how many OrganizerRoleRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * OrganizerRoleRequest.reviewedBy
+   */
+  export type OrganizerRoleRequest$reviewedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * OrganizerRoleRequest without action
+   */
+  export type OrganizerRoleRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OrganizerRoleRequest
+     */
+    select?: OrganizerRoleRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OrganizerRoleRequest
+     */
+    omit?: OrganizerRoleRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrganizerRoleRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Event
    */
 
@@ -2891,12 +4220,16 @@ export namespace Prisma {
     requiredHours: number | null
     maxParticipants: number | null
     currentParticipants: number | null
+    moderationIteration: number | null
+    moderationVersion: number | null
   }
 
   export type EventSumAggregateOutputType = {
     requiredHours: number | null
     maxParticipants: number | null
     currentParticipants: number | null
+    moderationIteration: number | null
+    moderationVersion: number | null
   }
 
   export type EventMinAggregateOutputType = {
@@ -2915,6 +4248,20 @@ export namespace Prisma {
     currentParticipants: number | null
     requirements: string | null
     status: $Enums.EventStatus | null
+    submittedForModerationAt: Date | null
+    lastModeratedAt: Date | null
+    approvedAt: Date | null
+    approvedById: string | null
+    rejectedAt: Date | null
+    rejectedById: string | null
+    rejectionReason: string | null
+    suspendedAt: Date | null
+    suspendedById: string | null
+    suspensionReason: string | null
+    archivedAt: Date | null
+    archivedById: string | null
+    moderationIteration: number | null
+    moderationVersion: number | null
     createdAt: Date | null
     updatedAt: Date | null
     publishedAt: Date | null
@@ -2936,6 +4283,20 @@ export namespace Prisma {
     currentParticipants: number | null
     requirements: string | null
     status: $Enums.EventStatus | null
+    submittedForModerationAt: Date | null
+    lastModeratedAt: Date | null
+    approvedAt: Date | null
+    approvedById: string | null
+    rejectedAt: Date | null
+    rejectedById: string | null
+    rejectionReason: string | null
+    suspendedAt: Date | null
+    suspendedById: string | null
+    suspensionReason: string | null
+    archivedAt: Date | null
+    archivedById: string | null
+    moderationIteration: number | null
+    moderationVersion: number | null
     createdAt: Date | null
     updatedAt: Date | null
     publishedAt: Date | null
@@ -2958,6 +4319,20 @@ export namespace Prisma {
     requirements: number
     skillsNeeded: number
     status: number
+    submittedForModerationAt: number
+    lastModeratedAt: number
+    approvedAt: number
+    approvedById: number
+    rejectedAt: number
+    rejectedById: number
+    rejectionReason: number
+    suspendedAt: number
+    suspendedById: number
+    suspensionReason: number
+    archivedAt: number
+    archivedById: number
+    moderationIteration: number
+    moderationVersion: number
     tags: number
     createdAt: number
     updatedAt: number
@@ -2970,12 +4345,16 @@ export namespace Prisma {
     requiredHours?: true
     maxParticipants?: true
     currentParticipants?: true
+    moderationIteration?: true
+    moderationVersion?: true
   }
 
   export type EventSumAggregateInputType = {
     requiredHours?: true
     maxParticipants?: true
     currentParticipants?: true
+    moderationIteration?: true
+    moderationVersion?: true
   }
 
   export type EventMinAggregateInputType = {
@@ -2994,6 +4373,20 @@ export namespace Prisma {
     currentParticipants?: true
     requirements?: true
     status?: true
+    submittedForModerationAt?: true
+    lastModeratedAt?: true
+    approvedAt?: true
+    approvedById?: true
+    rejectedAt?: true
+    rejectedById?: true
+    rejectionReason?: true
+    suspendedAt?: true
+    suspendedById?: true
+    suspensionReason?: true
+    archivedAt?: true
+    archivedById?: true
+    moderationIteration?: true
+    moderationVersion?: true
     createdAt?: true
     updatedAt?: true
     publishedAt?: true
@@ -3015,6 +4408,20 @@ export namespace Prisma {
     currentParticipants?: true
     requirements?: true
     status?: true
+    submittedForModerationAt?: true
+    lastModeratedAt?: true
+    approvedAt?: true
+    approvedById?: true
+    rejectedAt?: true
+    rejectedById?: true
+    rejectionReason?: true
+    suspendedAt?: true
+    suspendedById?: true
+    suspensionReason?: true
+    archivedAt?: true
+    archivedById?: true
+    moderationIteration?: true
+    moderationVersion?: true
     createdAt?: true
     updatedAt?: true
     publishedAt?: true
@@ -3037,6 +4444,20 @@ export namespace Prisma {
     requirements?: true
     skillsNeeded?: true
     status?: true
+    submittedForModerationAt?: true
+    lastModeratedAt?: true
+    approvedAt?: true
+    approvedById?: true
+    rejectedAt?: true
+    rejectedById?: true
+    rejectionReason?: true
+    suspendedAt?: true
+    suspendedById?: true
+    suspensionReason?: true
+    archivedAt?: true
+    archivedById?: true
+    moderationIteration?: true
+    moderationVersion?: true
     tags?: true
     createdAt?: true
     updatedAt?: true
@@ -3147,6 +4568,20 @@ export namespace Prisma {
     requirements: string | null
     skillsNeeded: string[]
     status: $Enums.EventStatus
+    submittedForModerationAt: Date | null
+    lastModeratedAt: Date | null
+    approvedAt: Date | null
+    approvedById: string | null
+    rejectedAt: Date | null
+    rejectedById: string | null
+    rejectionReason: string | null
+    suspendedAt: Date | null
+    suspendedById: string | null
+    suspensionReason: string | null
+    archivedAt: Date | null
+    archivedById: string | null
+    moderationIteration: number
+    moderationVersion: number
     tags: string[]
     createdAt: Date
     updatedAt: Date
@@ -3189,6 +4624,20 @@ export namespace Prisma {
     requirements?: boolean
     skillsNeeded?: boolean
     status?: boolean
+    submittedForModerationAt?: boolean
+    lastModeratedAt?: boolean
+    approvedAt?: boolean
+    approvedById?: boolean
+    rejectedAt?: boolean
+    rejectedById?: boolean
+    rejectionReason?: boolean
+    suspendedAt?: boolean
+    suspendedById?: boolean
+    suspensionReason?: boolean
+    archivedAt?: boolean
+    archivedById?: boolean
+    moderationIteration?: boolean
+    moderationVersion?: boolean
     tags?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3196,6 +4645,7 @@ export namespace Prisma {
     organizer?: boolean | UserDefaultArgs<ExtArgs>
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     volunteerHours?: boolean | Event$volunteerHoursArgs<ExtArgs>
+    moderationRequests?: boolean | Event$moderationRequestsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -3216,6 +4666,20 @@ export namespace Prisma {
     requirements?: boolean
     skillsNeeded?: boolean
     status?: boolean
+    submittedForModerationAt?: boolean
+    lastModeratedAt?: boolean
+    approvedAt?: boolean
+    approvedById?: boolean
+    rejectedAt?: boolean
+    rejectedById?: boolean
+    rejectionReason?: boolean
+    suspendedAt?: boolean
+    suspendedById?: boolean
+    suspensionReason?: boolean
+    archivedAt?: boolean
+    archivedById?: boolean
+    moderationIteration?: boolean
+    moderationVersion?: boolean
     tags?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3240,6 +4704,20 @@ export namespace Prisma {
     requirements?: boolean
     skillsNeeded?: boolean
     status?: boolean
+    submittedForModerationAt?: boolean
+    lastModeratedAt?: boolean
+    approvedAt?: boolean
+    approvedById?: boolean
+    rejectedAt?: boolean
+    rejectedById?: boolean
+    rejectionReason?: boolean
+    suspendedAt?: boolean
+    suspendedById?: boolean
+    suspensionReason?: boolean
+    archivedAt?: boolean
+    archivedById?: boolean
+    moderationIteration?: boolean
+    moderationVersion?: boolean
     tags?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3264,17 +4742,32 @@ export namespace Prisma {
     requirements?: boolean
     skillsNeeded?: boolean
     status?: boolean
+    submittedForModerationAt?: boolean
+    lastModeratedAt?: boolean
+    approvedAt?: boolean
+    approvedById?: boolean
+    rejectedAt?: boolean
+    rejectedById?: boolean
+    rejectionReason?: boolean
+    suspendedAt?: boolean
+    suspendedById?: boolean
+    suspensionReason?: boolean
+    archivedAt?: boolean
+    archivedById?: boolean
+    moderationIteration?: boolean
+    moderationVersion?: boolean
     tags?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     publishedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizerId" | "title" | "description" | "activityType" | "eventDate" | "startTime" | "endTime" | "location" | "address" | "requiredHours" | "maxParticipants" | "currentParticipants" | "requirements" | "skillsNeeded" | "status" | "tags" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizerId" | "title" | "description" | "activityType" | "eventDate" | "startTime" | "endTime" | "location" | "address" | "requiredHours" | "maxParticipants" | "currentParticipants" | "requirements" | "skillsNeeded" | "status" | "submittedForModerationAt" | "lastModeratedAt" | "approvedAt" | "approvedById" | "rejectedAt" | "rejectedById" | "rejectionReason" | "suspendedAt" | "suspendedById" | "suspensionReason" | "archivedAt" | "archivedById" | "moderationIteration" | "moderationVersion" | "tags" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organizer?: boolean | UserDefaultArgs<ExtArgs>
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
     volunteerHours?: boolean | Event$volunteerHoursArgs<ExtArgs>
+    moderationRequests?: boolean | Event$moderationRequestsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3290,6 +4783,7 @@ export namespace Prisma {
       organizer: Prisma.$UserPayload<ExtArgs>
       registrations: Prisma.$EventRegistrationPayload<ExtArgs>[]
       volunteerHours: Prisma.$VolunteerHourPayload<ExtArgs>[]
+      moderationRequests: Prisma.$EventModerationRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3308,6 +4802,20 @@ export namespace Prisma {
       requirements: string | null
       skillsNeeded: string[]
       status: $Enums.EventStatus
+      submittedForModerationAt: Date | null
+      lastModeratedAt: Date | null
+      approvedAt: Date | null
+      approvedById: string | null
+      rejectedAt: Date | null
+      rejectedById: string | null
+      rejectionReason: string | null
+      suspendedAt: Date | null
+      suspendedById: string | null
+      suspensionReason: string | null
+      archivedAt: Date | null
+      archivedById: string | null
+      moderationIteration: number
+      moderationVersion: number
       tags: string[]
       createdAt: Date
       updatedAt: Date
@@ -3709,6 +5217,7 @@ export namespace Prisma {
     organizer<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     registrations<T extends Event$registrationsArgs<ExtArgs> = {}>(args?: Subset<T, Event$registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     volunteerHours<T extends Event$volunteerHoursArgs<ExtArgs> = {}>(args?: Subset<T, Event$volunteerHoursArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VolunteerHourPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    moderationRequests<T extends Event$moderationRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Event$moderationRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3754,6 +5263,20 @@ export namespace Prisma {
     readonly requirements: FieldRef<"Event", 'String'>
     readonly skillsNeeded: FieldRef<"Event", 'String[]'>
     readonly status: FieldRef<"Event", 'EventStatus'>
+    readonly submittedForModerationAt: FieldRef<"Event", 'DateTime'>
+    readonly lastModeratedAt: FieldRef<"Event", 'DateTime'>
+    readonly approvedAt: FieldRef<"Event", 'DateTime'>
+    readonly approvedById: FieldRef<"Event", 'String'>
+    readonly rejectedAt: FieldRef<"Event", 'DateTime'>
+    readonly rejectedById: FieldRef<"Event", 'String'>
+    readonly rejectionReason: FieldRef<"Event", 'String'>
+    readonly suspendedAt: FieldRef<"Event", 'DateTime'>
+    readonly suspendedById: FieldRef<"Event", 'String'>
+    readonly suspensionReason: FieldRef<"Event", 'String'>
+    readonly archivedAt: FieldRef<"Event", 'DateTime'>
+    readonly archivedById: FieldRef<"Event", 'String'>
+    readonly moderationIteration: FieldRef<"Event", 'Int'>
+    readonly moderationVersion: FieldRef<"Event", 'Int'>
     readonly tags: FieldRef<"Event", 'String[]'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
@@ -4202,6 +5725,30 @@ export namespace Prisma {
   }
 
   /**
+   * Event.moderationRequests
+   */
+  export type Event$moderationRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
+    where?: EventModerationRequestWhereInput
+    orderBy?: EventModerationRequestOrderByWithRelationInput | EventModerationRequestOrderByWithRelationInput[]
+    cursor?: EventModerationRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventModerationRequestScalarFieldEnum | EventModerationRequestScalarFieldEnum[]
+  }
+
+  /**
    * Event without action
    */
   export type EventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4217,6 +5764,1202 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EventInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EventModerationRequest
+   */
+
+  export type AggregateEventModerationRequest = {
+    _count: EventModerationRequestCountAggregateOutputType | null
+    _avg: EventModerationRequestAvgAggregateOutputType | null
+    _sum: EventModerationRequestSumAggregateOutputType | null
+    _min: EventModerationRequestMinAggregateOutputType | null
+    _max: EventModerationRequestMaxAggregateOutputType | null
+  }
+
+  export type EventModerationRequestAvgAggregateOutputType = {
+    iteration: number | null
+    version: number | null
+  }
+
+  export type EventModerationRequestSumAggregateOutputType = {
+    iteration: number | null
+    version: number | null
+  }
+
+  export type EventModerationRequestMinAggregateOutputType = {
+    id: string | null
+    eventId: string | null
+    iteration: number | null
+    status: $Enums.EventModerationStatus | null
+    submittedById: string | null
+    submittedAt: Date | null
+    decisionById: string | null
+    decisionAt: Date | null
+    decisionReason: string | null
+    version: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EventModerationRequestMaxAggregateOutputType = {
+    id: string | null
+    eventId: string | null
+    iteration: number | null
+    status: $Enums.EventModerationStatus | null
+    submittedById: string | null
+    submittedAt: Date | null
+    decisionById: string | null
+    decisionAt: Date | null
+    decisionReason: string | null
+    version: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EventModerationRequestCountAggregateOutputType = {
+    id: number
+    eventId: number
+    iteration: number
+    status: number
+    submittedById: number
+    submittedAt: number
+    decisionById: number
+    decisionAt: number
+    decisionReason: number
+    snapshot: number
+    version: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type EventModerationRequestAvgAggregateInputType = {
+    iteration?: true
+    version?: true
+  }
+
+  export type EventModerationRequestSumAggregateInputType = {
+    iteration?: true
+    version?: true
+  }
+
+  export type EventModerationRequestMinAggregateInputType = {
+    id?: true
+    eventId?: true
+    iteration?: true
+    status?: true
+    submittedById?: true
+    submittedAt?: true
+    decisionById?: true
+    decisionAt?: true
+    decisionReason?: true
+    version?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EventModerationRequestMaxAggregateInputType = {
+    id?: true
+    eventId?: true
+    iteration?: true
+    status?: true
+    submittedById?: true
+    submittedAt?: true
+    decisionById?: true
+    decisionAt?: true
+    decisionReason?: true
+    version?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EventModerationRequestCountAggregateInputType = {
+    id?: true
+    eventId?: true
+    iteration?: true
+    status?: true
+    submittedById?: true
+    submittedAt?: true
+    decisionById?: true
+    decisionAt?: true
+    decisionReason?: true
+    snapshot?: true
+    version?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type EventModerationRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EventModerationRequest to aggregate.
+     */
+    where?: EventModerationRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventModerationRequests to fetch.
+     */
+    orderBy?: EventModerationRequestOrderByWithRelationInput | EventModerationRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EventModerationRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventModerationRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventModerationRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EventModerationRequests
+    **/
+    _count?: true | EventModerationRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EventModerationRequestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EventModerationRequestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EventModerationRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EventModerationRequestMaxAggregateInputType
+  }
+
+  export type GetEventModerationRequestAggregateType<T extends EventModerationRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateEventModerationRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEventModerationRequest[P]>
+      : GetScalarType<T[P], AggregateEventModerationRequest[P]>
+  }
+
+
+
+
+  export type EventModerationRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventModerationRequestWhereInput
+    orderBy?: EventModerationRequestOrderByWithAggregationInput | EventModerationRequestOrderByWithAggregationInput[]
+    by: EventModerationRequestScalarFieldEnum[] | EventModerationRequestScalarFieldEnum
+    having?: EventModerationRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EventModerationRequestCountAggregateInputType | true
+    _avg?: EventModerationRequestAvgAggregateInputType
+    _sum?: EventModerationRequestSumAggregateInputType
+    _min?: EventModerationRequestMinAggregateInputType
+    _max?: EventModerationRequestMaxAggregateInputType
+  }
+
+  export type EventModerationRequestGroupByOutputType = {
+    id: string
+    eventId: string
+    iteration: number
+    status: $Enums.EventModerationStatus
+    submittedById: string
+    submittedAt: Date
+    decisionById: string | null
+    decisionAt: Date | null
+    decisionReason: string | null
+    snapshot: JsonValue | null
+    version: number
+    createdAt: Date
+    updatedAt: Date
+    _count: EventModerationRequestCountAggregateOutputType | null
+    _avg: EventModerationRequestAvgAggregateOutputType | null
+    _sum: EventModerationRequestSumAggregateOutputType | null
+    _min: EventModerationRequestMinAggregateOutputType | null
+    _max: EventModerationRequestMaxAggregateOutputType | null
+  }
+
+  type GetEventModerationRequestGroupByPayload<T extends EventModerationRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EventModerationRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EventModerationRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EventModerationRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], EventModerationRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EventModerationRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    iteration?: boolean
+    status?: boolean
+    submittedById?: boolean
+    submittedAt?: boolean
+    decisionById?: boolean
+    decisionAt?: boolean
+    decisionReason?: boolean
+    snapshot?: boolean
+    version?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["eventModerationRequest"]>
+
+  export type EventModerationRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    iteration?: boolean
+    status?: boolean
+    submittedById?: boolean
+    submittedAt?: boolean
+    decisionById?: boolean
+    decisionAt?: boolean
+    decisionReason?: boolean
+    snapshot?: boolean
+    version?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["eventModerationRequest"]>
+
+  export type EventModerationRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventId?: boolean
+    iteration?: boolean
+    status?: boolean
+    submittedById?: boolean
+    submittedAt?: boolean
+    decisionById?: boolean
+    decisionAt?: boolean
+    decisionReason?: boolean
+    snapshot?: boolean
+    version?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["eventModerationRequest"]>
+
+  export type EventModerationRequestSelectScalar = {
+    id?: boolean
+    eventId?: boolean
+    iteration?: boolean
+    status?: boolean
+    submittedById?: boolean
+    submittedAt?: boolean
+    decisionById?: boolean
+    decisionAt?: boolean
+    decisionReason?: boolean
+    snapshot?: boolean
+    version?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type EventModerationRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "iteration" | "status" | "submittedById" | "submittedAt" | "decisionById" | "decisionAt" | "decisionReason" | "snapshot" | "version" | "createdAt" | "updatedAt", ExtArgs["result"]["eventModerationRequest"]>
+  export type EventModerationRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }
+  export type EventModerationRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }
+  export type EventModerationRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }
+
+  export type $EventModerationRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EventModerationRequest"
+    objects: {
+      event: Prisma.$EventPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      eventId: string
+      iteration: number
+      status: $Enums.EventModerationStatus
+      submittedById: string
+      submittedAt: Date
+      decisionById: string | null
+      decisionAt: Date | null
+      decisionReason: string | null
+      snapshot: Prisma.JsonValue | null
+      version: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["eventModerationRequest"]>
+    composites: {}
+  }
+
+  type EventModerationRequestGetPayload<S extends boolean | null | undefined | EventModerationRequestDefaultArgs> = $Result.GetResult<Prisma.$EventModerationRequestPayload, S>
+
+  type EventModerationRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EventModerationRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EventModerationRequestCountAggregateInputType | true
+    }
+
+  export interface EventModerationRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EventModerationRequest'], meta: { name: 'EventModerationRequest' } }
+    /**
+     * Find zero or one EventModerationRequest that matches the filter.
+     * @param {EventModerationRequestFindUniqueArgs} args - Arguments to find a EventModerationRequest
+     * @example
+     * // Get one EventModerationRequest
+     * const eventModerationRequest = await prisma.eventModerationRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EventModerationRequestFindUniqueArgs>(args: SelectSubset<T, EventModerationRequestFindUniqueArgs<ExtArgs>>): Prisma__EventModerationRequestClient<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EventModerationRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EventModerationRequestFindUniqueOrThrowArgs} args - Arguments to find a EventModerationRequest
+     * @example
+     * // Get one EventModerationRequest
+     * const eventModerationRequest = await prisma.eventModerationRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EventModerationRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, EventModerationRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EventModerationRequestClient<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EventModerationRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventModerationRequestFindFirstArgs} args - Arguments to find a EventModerationRequest
+     * @example
+     * // Get one EventModerationRequest
+     * const eventModerationRequest = await prisma.eventModerationRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EventModerationRequestFindFirstArgs>(args?: SelectSubset<T, EventModerationRequestFindFirstArgs<ExtArgs>>): Prisma__EventModerationRequestClient<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EventModerationRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventModerationRequestFindFirstOrThrowArgs} args - Arguments to find a EventModerationRequest
+     * @example
+     * // Get one EventModerationRequest
+     * const eventModerationRequest = await prisma.eventModerationRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EventModerationRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, EventModerationRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__EventModerationRequestClient<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EventModerationRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventModerationRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EventModerationRequests
+     * const eventModerationRequests = await prisma.eventModerationRequest.findMany()
+     * 
+     * // Get first 10 EventModerationRequests
+     * const eventModerationRequests = await prisma.eventModerationRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const eventModerationRequestWithIdOnly = await prisma.eventModerationRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EventModerationRequestFindManyArgs>(args?: SelectSubset<T, EventModerationRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EventModerationRequest.
+     * @param {EventModerationRequestCreateArgs} args - Arguments to create a EventModerationRequest.
+     * @example
+     * // Create one EventModerationRequest
+     * const EventModerationRequest = await prisma.eventModerationRequest.create({
+     *   data: {
+     *     // ... data to create a EventModerationRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends EventModerationRequestCreateArgs>(args: SelectSubset<T, EventModerationRequestCreateArgs<ExtArgs>>): Prisma__EventModerationRequestClient<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EventModerationRequests.
+     * @param {EventModerationRequestCreateManyArgs} args - Arguments to create many EventModerationRequests.
+     * @example
+     * // Create many EventModerationRequests
+     * const eventModerationRequest = await prisma.eventModerationRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EventModerationRequestCreateManyArgs>(args?: SelectSubset<T, EventModerationRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EventModerationRequests and returns the data saved in the database.
+     * @param {EventModerationRequestCreateManyAndReturnArgs} args - Arguments to create many EventModerationRequests.
+     * @example
+     * // Create many EventModerationRequests
+     * const eventModerationRequest = await prisma.eventModerationRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EventModerationRequests and only return the `id`
+     * const eventModerationRequestWithIdOnly = await prisma.eventModerationRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EventModerationRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, EventModerationRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EventModerationRequest.
+     * @param {EventModerationRequestDeleteArgs} args - Arguments to delete one EventModerationRequest.
+     * @example
+     * // Delete one EventModerationRequest
+     * const EventModerationRequest = await prisma.eventModerationRequest.delete({
+     *   where: {
+     *     // ... filter to delete one EventModerationRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EventModerationRequestDeleteArgs>(args: SelectSubset<T, EventModerationRequestDeleteArgs<ExtArgs>>): Prisma__EventModerationRequestClient<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EventModerationRequest.
+     * @param {EventModerationRequestUpdateArgs} args - Arguments to update one EventModerationRequest.
+     * @example
+     * // Update one EventModerationRequest
+     * const eventModerationRequest = await prisma.eventModerationRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EventModerationRequestUpdateArgs>(args: SelectSubset<T, EventModerationRequestUpdateArgs<ExtArgs>>): Prisma__EventModerationRequestClient<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EventModerationRequests.
+     * @param {EventModerationRequestDeleteManyArgs} args - Arguments to filter EventModerationRequests to delete.
+     * @example
+     * // Delete a few EventModerationRequests
+     * const { count } = await prisma.eventModerationRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EventModerationRequestDeleteManyArgs>(args?: SelectSubset<T, EventModerationRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EventModerationRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventModerationRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EventModerationRequests
+     * const eventModerationRequest = await prisma.eventModerationRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EventModerationRequestUpdateManyArgs>(args: SelectSubset<T, EventModerationRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EventModerationRequests and returns the data updated in the database.
+     * @param {EventModerationRequestUpdateManyAndReturnArgs} args - Arguments to update many EventModerationRequests.
+     * @example
+     * // Update many EventModerationRequests
+     * const eventModerationRequest = await prisma.eventModerationRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EventModerationRequests and only return the `id`
+     * const eventModerationRequestWithIdOnly = await prisma.eventModerationRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EventModerationRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, EventModerationRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EventModerationRequest.
+     * @param {EventModerationRequestUpsertArgs} args - Arguments to update or create a EventModerationRequest.
+     * @example
+     * // Update or create a EventModerationRequest
+     * const eventModerationRequest = await prisma.eventModerationRequest.upsert({
+     *   create: {
+     *     // ... data to create a EventModerationRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EventModerationRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EventModerationRequestUpsertArgs>(args: SelectSubset<T, EventModerationRequestUpsertArgs<ExtArgs>>): Prisma__EventModerationRequestClient<$Result.GetResult<Prisma.$EventModerationRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EventModerationRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventModerationRequestCountArgs} args - Arguments to filter EventModerationRequests to count.
+     * @example
+     * // Count the number of EventModerationRequests
+     * const count = await prisma.eventModerationRequest.count({
+     *   where: {
+     *     // ... the filter for the EventModerationRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends EventModerationRequestCountArgs>(
+      args?: Subset<T, EventModerationRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EventModerationRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EventModerationRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventModerationRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EventModerationRequestAggregateArgs>(args: Subset<T, EventModerationRequestAggregateArgs>): Prisma.PrismaPromise<GetEventModerationRequestAggregateType<T>>
+
+    /**
+     * Group by EventModerationRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventModerationRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EventModerationRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EventModerationRequestGroupByArgs['orderBy'] }
+        : { orderBy?: EventModerationRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EventModerationRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEventModerationRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EventModerationRequest model
+   */
+  readonly fields: EventModerationRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EventModerationRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EventModerationRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    event<T extends EventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EventDefaultArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EventModerationRequest model
+   */
+  interface EventModerationRequestFieldRefs {
+    readonly id: FieldRef<"EventModerationRequest", 'String'>
+    readonly eventId: FieldRef<"EventModerationRequest", 'String'>
+    readonly iteration: FieldRef<"EventModerationRequest", 'Int'>
+    readonly status: FieldRef<"EventModerationRequest", 'EventModerationStatus'>
+    readonly submittedById: FieldRef<"EventModerationRequest", 'String'>
+    readonly submittedAt: FieldRef<"EventModerationRequest", 'DateTime'>
+    readonly decisionById: FieldRef<"EventModerationRequest", 'String'>
+    readonly decisionAt: FieldRef<"EventModerationRequest", 'DateTime'>
+    readonly decisionReason: FieldRef<"EventModerationRequest", 'String'>
+    readonly snapshot: FieldRef<"EventModerationRequest", 'Json'>
+    readonly version: FieldRef<"EventModerationRequest", 'Int'>
+    readonly createdAt: FieldRef<"EventModerationRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"EventModerationRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EventModerationRequest findUnique
+   */
+  export type EventModerationRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EventModerationRequest to fetch.
+     */
+    where: EventModerationRequestWhereUniqueInput
+  }
+
+  /**
+   * EventModerationRequest findUniqueOrThrow
+   */
+  export type EventModerationRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EventModerationRequest to fetch.
+     */
+    where: EventModerationRequestWhereUniqueInput
+  }
+
+  /**
+   * EventModerationRequest findFirst
+   */
+  export type EventModerationRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EventModerationRequest to fetch.
+     */
+    where?: EventModerationRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventModerationRequests to fetch.
+     */
+    orderBy?: EventModerationRequestOrderByWithRelationInput | EventModerationRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EventModerationRequests.
+     */
+    cursor?: EventModerationRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventModerationRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventModerationRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EventModerationRequests.
+     */
+    distinct?: EventModerationRequestScalarFieldEnum | EventModerationRequestScalarFieldEnum[]
+  }
+
+  /**
+   * EventModerationRequest findFirstOrThrow
+   */
+  export type EventModerationRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EventModerationRequest to fetch.
+     */
+    where?: EventModerationRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventModerationRequests to fetch.
+     */
+    orderBy?: EventModerationRequestOrderByWithRelationInput | EventModerationRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EventModerationRequests.
+     */
+    cursor?: EventModerationRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventModerationRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventModerationRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EventModerationRequests.
+     */
+    distinct?: EventModerationRequestScalarFieldEnum | EventModerationRequestScalarFieldEnum[]
+  }
+
+  /**
+   * EventModerationRequest findMany
+   */
+  export type EventModerationRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EventModerationRequests to fetch.
+     */
+    where?: EventModerationRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventModerationRequests to fetch.
+     */
+    orderBy?: EventModerationRequestOrderByWithRelationInput | EventModerationRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EventModerationRequests.
+     */
+    cursor?: EventModerationRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventModerationRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventModerationRequests.
+     */
+    skip?: number
+    distinct?: EventModerationRequestScalarFieldEnum | EventModerationRequestScalarFieldEnum[]
+  }
+
+  /**
+   * EventModerationRequest create
+   */
+  export type EventModerationRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EventModerationRequest.
+     */
+    data: XOR<EventModerationRequestCreateInput, EventModerationRequestUncheckedCreateInput>
+  }
+
+  /**
+   * EventModerationRequest createMany
+   */
+  export type EventModerationRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EventModerationRequests.
+     */
+    data: EventModerationRequestCreateManyInput | EventModerationRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EventModerationRequest createManyAndReturn
+   */
+  export type EventModerationRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many EventModerationRequests.
+     */
+    data: EventModerationRequestCreateManyInput | EventModerationRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EventModerationRequest update
+   */
+  export type EventModerationRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EventModerationRequest.
+     */
+    data: XOR<EventModerationRequestUpdateInput, EventModerationRequestUncheckedUpdateInput>
+    /**
+     * Choose, which EventModerationRequest to update.
+     */
+    where: EventModerationRequestWhereUniqueInput
+  }
+
+  /**
+   * EventModerationRequest updateMany
+   */
+  export type EventModerationRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EventModerationRequests.
+     */
+    data: XOR<EventModerationRequestUpdateManyMutationInput, EventModerationRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which EventModerationRequests to update
+     */
+    where?: EventModerationRequestWhereInput
+    /**
+     * Limit how many EventModerationRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EventModerationRequest updateManyAndReturn
+   */
+  export type EventModerationRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update EventModerationRequests.
+     */
+    data: XOR<EventModerationRequestUpdateManyMutationInput, EventModerationRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which EventModerationRequests to update
+     */
+    where?: EventModerationRequestWhereInput
+    /**
+     * Limit how many EventModerationRequests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EventModerationRequest upsert
+   */
+  export type EventModerationRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EventModerationRequest to update in case it exists.
+     */
+    where: EventModerationRequestWhereUniqueInput
+    /**
+     * In case the EventModerationRequest found by the `where` argument doesn't exist, create a new EventModerationRequest with this data.
+     */
+    create: XOR<EventModerationRequestCreateInput, EventModerationRequestUncheckedCreateInput>
+    /**
+     * In case the EventModerationRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EventModerationRequestUpdateInput, EventModerationRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * EventModerationRequest delete
+   */
+  export type EventModerationRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
+    /**
+     * Filter which EventModerationRequest to delete.
+     */
+    where: EventModerationRequestWhereUniqueInput
+  }
+
+  /**
+   * EventModerationRequest deleteMany
+   */
+  export type EventModerationRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EventModerationRequests to delete
+     */
+    where?: EventModerationRequestWhereInput
+    /**
+     * Limit how many EventModerationRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EventModerationRequest without action
+   */
+  export type EventModerationRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventModerationRequest
+     */
+    select?: EventModerationRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventModerationRequest
+     */
+    omit?: EventModerationRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventModerationRequestInclude<ExtArgs> | null
   }
 
 
@@ -7999,1100 +10742,6 @@ export namespace Prisma {
 
 
   /**
-   * Model ActivityType
-   */
-
-  export type AggregateActivityType = {
-    _count: ActivityTypeCountAggregateOutputType | null
-    _avg: ActivityTypeAvgAggregateOutputType | null
-    _sum: ActivityTypeSumAggregateOutputType | null
-    _min: ActivityTypeMinAggregateOutputType | null
-    _max: ActivityTypeMaxAggregateOutputType | null
-  }
-
-  export type ActivityTypeAvgAggregateOutputType = {
-    orderIndex: number | null
-  }
-
-  export type ActivityTypeSumAggregateOutputType = {
-    orderIndex: number | null
-  }
-
-  export type ActivityTypeMinAggregateOutputType = {
-    id: string | null
-    name: string | null
-    slug: string | null
-    description: string | null
-    icon: string | null
-    color: string | null
-    category: string | null
-    orderIndex: number | null
-    isActive: boolean | null
-    createdAt: Date | null
-  }
-
-  export type ActivityTypeMaxAggregateOutputType = {
-    id: string | null
-    name: string | null
-    slug: string | null
-    description: string | null
-    icon: string | null
-    color: string | null
-    category: string | null
-    orderIndex: number | null
-    isActive: boolean | null
-    createdAt: Date | null
-  }
-
-  export type ActivityTypeCountAggregateOutputType = {
-    id: number
-    name: number
-    slug: number
-    description: number
-    icon: number
-    color: number
-    category: number
-    orderIndex: number
-    isActive: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type ActivityTypeAvgAggregateInputType = {
-    orderIndex?: true
-  }
-
-  export type ActivityTypeSumAggregateInputType = {
-    orderIndex?: true
-  }
-
-  export type ActivityTypeMinAggregateInputType = {
-    id?: true
-    name?: true
-    slug?: true
-    description?: true
-    icon?: true
-    color?: true
-    category?: true
-    orderIndex?: true
-    isActive?: true
-    createdAt?: true
-  }
-
-  export type ActivityTypeMaxAggregateInputType = {
-    id?: true
-    name?: true
-    slug?: true
-    description?: true
-    icon?: true
-    color?: true
-    category?: true
-    orderIndex?: true
-    isActive?: true
-    createdAt?: true
-  }
-
-  export type ActivityTypeCountAggregateInputType = {
-    id?: true
-    name?: true
-    slug?: true
-    description?: true
-    icon?: true
-    color?: true
-    category?: true
-    orderIndex?: true
-    isActive?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type ActivityTypeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ActivityType to aggregate.
-     */
-    where?: ActivityTypeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ActivityTypes to fetch.
-     */
-    orderBy?: ActivityTypeOrderByWithRelationInput | ActivityTypeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ActivityTypeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ActivityTypes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ActivityTypes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ActivityTypes
-    **/
-    _count?: true | ActivityTypeCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ActivityTypeAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ActivityTypeSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ActivityTypeMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ActivityTypeMaxAggregateInputType
-  }
-
-  export type GetActivityTypeAggregateType<T extends ActivityTypeAggregateArgs> = {
-        [P in keyof T & keyof AggregateActivityType]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateActivityType[P]>
-      : GetScalarType<T[P], AggregateActivityType[P]>
-  }
-
-
-
-
-  export type ActivityTypeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ActivityTypeWhereInput
-    orderBy?: ActivityTypeOrderByWithAggregationInput | ActivityTypeOrderByWithAggregationInput[]
-    by: ActivityTypeScalarFieldEnum[] | ActivityTypeScalarFieldEnum
-    having?: ActivityTypeScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ActivityTypeCountAggregateInputType | true
-    _avg?: ActivityTypeAvgAggregateInputType
-    _sum?: ActivityTypeSumAggregateInputType
-    _min?: ActivityTypeMinAggregateInputType
-    _max?: ActivityTypeMaxAggregateInputType
-  }
-
-  export type ActivityTypeGroupByOutputType = {
-    id: string
-    name: string
-    slug: string
-    description: string | null
-    icon: string | null
-    color: string | null
-    category: string | null
-    orderIndex: number | null
-    isActive: boolean
-    createdAt: Date
-    _count: ActivityTypeCountAggregateOutputType | null
-    _avg: ActivityTypeAvgAggregateOutputType | null
-    _sum: ActivityTypeSumAggregateOutputType | null
-    _min: ActivityTypeMinAggregateOutputType | null
-    _max: ActivityTypeMaxAggregateOutputType | null
-  }
-
-  type GetActivityTypeGroupByPayload<T extends ActivityTypeGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ActivityTypeGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ActivityTypeGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ActivityTypeGroupByOutputType[P]>
-            : GetScalarType<T[P], ActivityTypeGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ActivityTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    slug?: boolean
-    description?: boolean
-    icon?: boolean
-    color?: boolean
-    category?: boolean
-    orderIndex?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-  }, ExtArgs["result"]["activityType"]>
-
-  export type ActivityTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    slug?: boolean
-    description?: boolean
-    icon?: boolean
-    color?: boolean
-    category?: boolean
-    orderIndex?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-  }, ExtArgs["result"]["activityType"]>
-
-  export type ActivityTypeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    slug?: boolean
-    description?: boolean
-    icon?: boolean
-    color?: boolean
-    category?: boolean
-    orderIndex?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-  }, ExtArgs["result"]["activityType"]>
-
-  export type ActivityTypeSelectScalar = {
-    id?: boolean
-    name?: boolean
-    slug?: boolean
-    description?: boolean
-    icon?: boolean
-    color?: boolean
-    category?: boolean
-    orderIndex?: boolean
-    isActive?: boolean
-    createdAt?: boolean
-  }
-
-  export type ActivityTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "icon" | "color" | "category" | "orderIndex" | "isActive" | "createdAt", ExtArgs["result"]["activityType"]>
-
-  export type $ActivityTypePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ActivityType"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      name: string
-      slug: string
-      description: string | null
-      icon: string | null
-      color: string | null
-      category: string | null
-      orderIndex: number | null
-      isActive: boolean
-      createdAt: Date
-    }, ExtArgs["result"]["activityType"]>
-    composites: {}
-  }
-
-  type ActivityTypeGetPayload<S extends boolean | null | undefined | ActivityTypeDefaultArgs> = $Result.GetResult<Prisma.$ActivityTypePayload, S>
-
-  type ActivityTypeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ActivityTypeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ActivityTypeCountAggregateInputType | true
-    }
-
-  export interface ActivityTypeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ActivityType'], meta: { name: 'ActivityType' } }
-    /**
-     * Find zero or one ActivityType that matches the filter.
-     * @param {ActivityTypeFindUniqueArgs} args - Arguments to find a ActivityType
-     * @example
-     * // Get one ActivityType
-     * const activityType = await prisma.activityType.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ActivityTypeFindUniqueArgs>(args: SelectSubset<T, ActivityTypeFindUniqueArgs<ExtArgs>>): Prisma__ActivityTypeClient<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ActivityType that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ActivityTypeFindUniqueOrThrowArgs} args - Arguments to find a ActivityType
-     * @example
-     * // Get one ActivityType
-     * const activityType = await prisma.activityType.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ActivityTypeFindUniqueOrThrowArgs>(args: SelectSubset<T, ActivityTypeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ActivityTypeClient<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ActivityType that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityTypeFindFirstArgs} args - Arguments to find a ActivityType
-     * @example
-     * // Get one ActivityType
-     * const activityType = await prisma.activityType.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ActivityTypeFindFirstArgs>(args?: SelectSubset<T, ActivityTypeFindFirstArgs<ExtArgs>>): Prisma__ActivityTypeClient<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ActivityType that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityTypeFindFirstOrThrowArgs} args - Arguments to find a ActivityType
-     * @example
-     * // Get one ActivityType
-     * const activityType = await prisma.activityType.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ActivityTypeFindFirstOrThrowArgs>(args?: SelectSubset<T, ActivityTypeFindFirstOrThrowArgs<ExtArgs>>): Prisma__ActivityTypeClient<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ActivityTypes that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityTypeFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ActivityTypes
-     * const activityTypes = await prisma.activityType.findMany()
-     * 
-     * // Get first 10 ActivityTypes
-     * const activityTypes = await prisma.activityType.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const activityTypeWithIdOnly = await prisma.activityType.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ActivityTypeFindManyArgs>(args?: SelectSubset<T, ActivityTypeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ActivityType.
-     * @param {ActivityTypeCreateArgs} args - Arguments to create a ActivityType.
-     * @example
-     * // Create one ActivityType
-     * const ActivityType = await prisma.activityType.create({
-     *   data: {
-     *     // ... data to create a ActivityType
-     *   }
-     * })
-     * 
-     */
-    create<T extends ActivityTypeCreateArgs>(args: SelectSubset<T, ActivityTypeCreateArgs<ExtArgs>>): Prisma__ActivityTypeClient<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ActivityTypes.
-     * @param {ActivityTypeCreateManyArgs} args - Arguments to create many ActivityTypes.
-     * @example
-     * // Create many ActivityTypes
-     * const activityType = await prisma.activityType.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ActivityTypeCreateManyArgs>(args?: SelectSubset<T, ActivityTypeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many ActivityTypes and returns the data saved in the database.
-     * @param {ActivityTypeCreateManyAndReturnArgs} args - Arguments to create many ActivityTypes.
-     * @example
-     * // Create many ActivityTypes
-     * const activityType = await prisma.activityType.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many ActivityTypes and only return the `id`
-     * const activityTypeWithIdOnly = await prisma.activityType.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ActivityTypeCreateManyAndReturnArgs>(args?: SelectSubset<T, ActivityTypeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a ActivityType.
-     * @param {ActivityTypeDeleteArgs} args - Arguments to delete one ActivityType.
-     * @example
-     * // Delete one ActivityType
-     * const ActivityType = await prisma.activityType.delete({
-     *   where: {
-     *     // ... filter to delete one ActivityType
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ActivityTypeDeleteArgs>(args: SelectSubset<T, ActivityTypeDeleteArgs<ExtArgs>>): Prisma__ActivityTypeClient<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ActivityType.
-     * @param {ActivityTypeUpdateArgs} args - Arguments to update one ActivityType.
-     * @example
-     * // Update one ActivityType
-     * const activityType = await prisma.activityType.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ActivityTypeUpdateArgs>(args: SelectSubset<T, ActivityTypeUpdateArgs<ExtArgs>>): Prisma__ActivityTypeClient<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ActivityTypes.
-     * @param {ActivityTypeDeleteManyArgs} args - Arguments to filter ActivityTypes to delete.
-     * @example
-     * // Delete a few ActivityTypes
-     * const { count } = await prisma.activityType.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ActivityTypeDeleteManyArgs>(args?: SelectSubset<T, ActivityTypeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ActivityTypes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityTypeUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ActivityTypes
-     * const activityType = await prisma.activityType.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ActivityTypeUpdateManyArgs>(args: SelectSubset<T, ActivityTypeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ActivityTypes and returns the data updated in the database.
-     * @param {ActivityTypeUpdateManyAndReturnArgs} args - Arguments to update many ActivityTypes.
-     * @example
-     * // Update many ActivityTypes
-     * const activityType = await prisma.activityType.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more ActivityTypes and only return the `id`
-     * const activityTypeWithIdOnly = await prisma.activityType.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ActivityTypeUpdateManyAndReturnArgs>(args: SelectSubset<T, ActivityTypeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one ActivityType.
-     * @param {ActivityTypeUpsertArgs} args - Arguments to update or create a ActivityType.
-     * @example
-     * // Update or create a ActivityType
-     * const activityType = await prisma.activityType.upsert({
-     *   create: {
-     *     // ... data to create a ActivityType
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ActivityType we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ActivityTypeUpsertArgs>(args: SelectSubset<T, ActivityTypeUpsertArgs<ExtArgs>>): Prisma__ActivityTypeClient<$Result.GetResult<Prisma.$ActivityTypePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ActivityTypes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityTypeCountArgs} args - Arguments to filter ActivityTypes to count.
-     * @example
-     * // Count the number of ActivityTypes
-     * const count = await prisma.activityType.count({
-     *   where: {
-     *     // ... the filter for the ActivityTypes we want to count
-     *   }
-     * })
-    **/
-    count<T extends ActivityTypeCountArgs>(
-      args?: Subset<T, ActivityTypeCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ActivityTypeCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ActivityType.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityTypeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ActivityTypeAggregateArgs>(args: Subset<T, ActivityTypeAggregateArgs>): Prisma.PrismaPromise<GetActivityTypeAggregateType<T>>
-
-    /**
-     * Group by ActivityType.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ActivityTypeGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ActivityTypeGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ActivityTypeGroupByArgs['orderBy'] }
-        : { orderBy?: ActivityTypeGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ActivityTypeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetActivityTypeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ActivityType model
-   */
-  readonly fields: ActivityTypeFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ActivityType.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ActivityTypeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the ActivityType model
-   */
-  interface ActivityTypeFieldRefs {
-    readonly id: FieldRef<"ActivityType", 'String'>
-    readonly name: FieldRef<"ActivityType", 'String'>
-    readonly slug: FieldRef<"ActivityType", 'String'>
-    readonly description: FieldRef<"ActivityType", 'String'>
-    readonly icon: FieldRef<"ActivityType", 'String'>
-    readonly color: FieldRef<"ActivityType", 'String'>
-    readonly category: FieldRef<"ActivityType", 'String'>
-    readonly orderIndex: FieldRef<"ActivityType", 'Int'>
-    readonly isActive: FieldRef<"ActivityType", 'Boolean'>
-    readonly createdAt: FieldRef<"ActivityType", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * ActivityType findUnique
-   */
-  export type ActivityTypeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * Filter, which ActivityType to fetch.
-     */
-    where: ActivityTypeWhereUniqueInput
-  }
-
-  /**
-   * ActivityType findUniqueOrThrow
-   */
-  export type ActivityTypeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * Filter, which ActivityType to fetch.
-     */
-    where: ActivityTypeWhereUniqueInput
-  }
-
-  /**
-   * ActivityType findFirst
-   */
-  export type ActivityTypeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * Filter, which ActivityType to fetch.
-     */
-    where?: ActivityTypeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ActivityTypes to fetch.
-     */
-    orderBy?: ActivityTypeOrderByWithRelationInput | ActivityTypeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ActivityTypes.
-     */
-    cursor?: ActivityTypeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ActivityTypes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ActivityTypes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ActivityTypes.
-     */
-    distinct?: ActivityTypeScalarFieldEnum | ActivityTypeScalarFieldEnum[]
-  }
-
-  /**
-   * ActivityType findFirstOrThrow
-   */
-  export type ActivityTypeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * Filter, which ActivityType to fetch.
-     */
-    where?: ActivityTypeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ActivityTypes to fetch.
-     */
-    orderBy?: ActivityTypeOrderByWithRelationInput | ActivityTypeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ActivityTypes.
-     */
-    cursor?: ActivityTypeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ActivityTypes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ActivityTypes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ActivityTypes.
-     */
-    distinct?: ActivityTypeScalarFieldEnum | ActivityTypeScalarFieldEnum[]
-  }
-
-  /**
-   * ActivityType findMany
-   */
-  export type ActivityTypeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * Filter, which ActivityTypes to fetch.
-     */
-    where?: ActivityTypeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ActivityTypes to fetch.
-     */
-    orderBy?: ActivityTypeOrderByWithRelationInput | ActivityTypeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ActivityTypes.
-     */
-    cursor?: ActivityTypeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ActivityTypes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ActivityTypes.
-     */
-    skip?: number
-    distinct?: ActivityTypeScalarFieldEnum | ActivityTypeScalarFieldEnum[]
-  }
-
-  /**
-   * ActivityType create
-   */
-  export type ActivityTypeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * The data needed to create a ActivityType.
-     */
-    data: XOR<ActivityTypeCreateInput, ActivityTypeUncheckedCreateInput>
-  }
-
-  /**
-   * ActivityType createMany
-   */
-  export type ActivityTypeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ActivityTypes.
-     */
-    data: ActivityTypeCreateManyInput | ActivityTypeCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ActivityType createManyAndReturn
-   */
-  export type ActivityTypeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * The data used to create many ActivityTypes.
-     */
-    data: ActivityTypeCreateManyInput | ActivityTypeCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ActivityType update
-   */
-  export type ActivityTypeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * The data needed to update a ActivityType.
-     */
-    data: XOR<ActivityTypeUpdateInput, ActivityTypeUncheckedUpdateInput>
-    /**
-     * Choose, which ActivityType to update.
-     */
-    where: ActivityTypeWhereUniqueInput
-  }
-
-  /**
-   * ActivityType updateMany
-   */
-  export type ActivityTypeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ActivityTypes.
-     */
-    data: XOR<ActivityTypeUpdateManyMutationInput, ActivityTypeUncheckedUpdateManyInput>
-    /**
-     * Filter which ActivityTypes to update
-     */
-    where?: ActivityTypeWhereInput
-    /**
-     * Limit how many ActivityTypes to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ActivityType updateManyAndReturn
-   */
-  export type ActivityTypeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * The data used to update ActivityTypes.
-     */
-    data: XOR<ActivityTypeUpdateManyMutationInput, ActivityTypeUncheckedUpdateManyInput>
-    /**
-     * Filter which ActivityTypes to update
-     */
-    where?: ActivityTypeWhereInput
-    /**
-     * Limit how many ActivityTypes to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ActivityType upsert
-   */
-  export type ActivityTypeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * The filter to search for the ActivityType to update in case it exists.
-     */
-    where: ActivityTypeWhereUniqueInput
-    /**
-     * In case the ActivityType found by the `where` argument doesn't exist, create a new ActivityType with this data.
-     */
-    create: XOR<ActivityTypeCreateInput, ActivityTypeUncheckedCreateInput>
-    /**
-     * In case the ActivityType was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ActivityTypeUpdateInput, ActivityTypeUncheckedUpdateInput>
-  }
-
-  /**
-   * ActivityType delete
-   */
-  export type ActivityTypeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-    /**
-     * Filter which ActivityType to delete.
-     */
-    where: ActivityTypeWhereUniqueInput
-  }
-
-  /**
-   * ActivityType deleteMany
-   */
-  export type ActivityTypeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ActivityTypes to delete
-     */
-    where?: ActivityTypeWhereInput
-    /**
-     * Limit how many ActivityTypes to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * ActivityType without action
-   */
-  export type ActivityTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ActivityType
-     */
-    select?: ActivityTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ActivityType
-     */
-    omit?: ActivityTypeOmit<ExtArgs> | null
-  }
-
-
-  /**
    * Enums
    */
 
@@ -9126,6 +10775,21 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const OrganizerRoleRequestScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    status: 'status',
+    requestedAt: 'requestedAt',
+    reviewedAt: 'reviewedAt',
+    reviewedById: 'reviewedById',
+    rejectionReason: 'rejectionReason',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type OrganizerRoleRequestScalarFieldEnum = (typeof OrganizerRoleRequestScalarFieldEnum)[keyof typeof OrganizerRoleRequestScalarFieldEnum]
+
+
   export const EventScalarFieldEnum: {
     id: 'id',
     organizerId: 'organizerId',
@@ -9143,6 +10807,20 @@ export namespace Prisma {
     requirements: 'requirements',
     skillsNeeded: 'skillsNeeded',
     status: 'status',
+    submittedForModerationAt: 'submittedForModerationAt',
+    lastModeratedAt: 'lastModeratedAt',
+    approvedAt: 'approvedAt',
+    approvedById: 'approvedById',
+    rejectedAt: 'rejectedAt',
+    rejectedById: 'rejectedById',
+    rejectionReason: 'rejectionReason',
+    suspendedAt: 'suspendedAt',
+    suspendedById: 'suspendedById',
+    suspensionReason: 'suspensionReason',
+    archivedAt: 'archivedAt',
+    archivedById: 'archivedById',
+    moderationIteration: 'moderationIteration',
+    moderationVersion: 'moderationVersion',
     tags: 'tags',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -9150,6 +10828,25 @@ export namespace Prisma {
   };
 
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
+  export const EventModerationRequestScalarFieldEnum: {
+    id: 'id',
+    eventId: 'eventId',
+    iteration: 'iteration',
+    status: 'status',
+    submittedById: 'submittedById',
+    submittedAt: 'submittedAt',
+    decisionById: 'decisionById',
+    decisionAt: 'decisionAt',
+    decisionReason: 'decisionReason',
+    snapshot: 'snapshot',
+    version: 'version',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type EventModerationRequestScalarFieldEnum = (typeof EventModerationRequestScalarFieldEnum)[keyof typeof EventModerationRequestScalarFieldEnum]
 
 
   export const EventRegistrationScalarFieldEnum: {
@@ -9210,28 +10907,20 @@ export namespace Prisma {
   export type CertificateScalarFieldEnum = (typeof CertificateScalarFieldEnum)[keyof typeof CertificateScalarFieldEnum]
 
 
-  export const ActivityTypeScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    slug: 'slug',
-    description: 'description',
-    icon: 'icon',
-    color: 'color',
-    category: 'category',
-    orderIndex: 'orderIndex',
-    isActive: 'isActive',
-    createdAt: 'createdAt'
-  };
-
-  export type ActivityTypeScalarFieldEnum = (typeof ActivityTypeScalarFieldEnum)[keyof typeof ActivityTypeScalarFieldEnum]
-
-
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -9248,6 +10937,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -9305,6 +11003,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'OrganizerApplicationStatus'
+   */
+  export type EnumOrganizerApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrganizerApplicationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'OrganizerApplicationStatus[]'
+   */
+  export type ListEnumOrganizerApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrganizerApplicationStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -9329,6 +11041,34 @@ export namespace Prisma {
    * Reference to a field of type 'EventStatus[]'
    */
   export type ListEnumEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'EventModerationStatus'
+   */
+  export type EnumEventModerationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventModerationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'EventModerationStatus[]'
+   */
+  export type ListEnumEventModerationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventModerationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -9402,6 +11142,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourListRelationFilter
     reviewedRegistrations?: EventRegistrationListRelationFilter
     issuedCertificates?: CertificateListRelationFilter
+    organizerRoleRequest?: XOR<OrganizerRoleRequestNullableScalarRelationFilter, OrganizerRoleRequestWhereInput> | null
+    reviewedOrganizerRequests?: OrganizerRoleRequestListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -9426,6 +11168,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourOrderByRelationAggregateInput
     reviewedRegistrations?: EventRegistrationOrderByRelationAggregateInput
     issuedCertificates?: CertificateOrderByRelationAggregateInput
+    organizerRoleRequest?: OrganizerRoleRequestOrderByWithRelationInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -9453,6 +11197,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourListRelationFilter
     reviewedRegistrations?: EventRegistrationListRelationFilter
     issuedCertificates?: CertificateListRelationFilter
+    organizerRoleRequest?: XOR<OrganizerRoleRequestNullableScalarRelationFilter, OrganizerRoleRequestWhereInput> | null
+    reviewedOrganizerRequests?: OrganizerRoleRequestListRelationFilter
   }, "id" | "email" | "phone" | "organizationName">
 
   export type UserOrderByWithAggregationInput = {
@@ -9495,6 +11241,84 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
+  export type OrganizerRoleRequestWhereInput = {
+    AND?: OrganizerRoleRequestWhereInput | OrganizerRoleRequestWhereInput[]
+    OR?: OrganizerRoleRequestWhereInput[]
+    NOT?: OrganizerRoleRequestWhereInput | OrganizerRoleRequestWhereInput[]
+    id?: UuidFilter<"OrganizerRoleRequest"> | string
+    userId?: UuidFilter<"OrganizerRoleRequest"> | string
+    status?: EnumOrganizerApplicationStatusFilter<"OrganizerRoleRequest"> | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFilter<"OrganizerRoleRequest"> | Date | string
+    reviewedAt?: DateTimeNullableFilter<"OrganizerRoleRequest"> | Date | string | null
+    reviewedById?: UuidNullableFilter<"OrganizerRoleRequest"> | string | null
+    rejectionReason?: StringNullableFilter<"OrganizerRoleRequest"> | string | null
+    createdAt?: DateTimeFilter<"OrganizerRoleRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"OrganizerRoleRequest"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    reviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type OrganizerRoleRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    requestedAt?: SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    reviewedBy?: UserOrderByWithRelationInput
+  }
+
+  export type OrganizerRoleRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: OrganizerRoleRequestWhereInput | OrganizerRoleRequestWhereInput[]
+    OR?: OrganizerRoleRequestWhereInput[]
+    NOT?: OrganizerRoleRequestWhereInput | OrganizerRoleRequestWhereInput[]
+    status?: EnumOrganizerApplicationStatusFilter<"OrganizerRoleRequest"> | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFilter<"OrganizerRoleRequest"> | Date | string
+    reviewedAt?: DateTimeNullableFilter<"OrganizerRoleRequest"> | Date | string | null
+    reviewedById?: UuidNullableFilter<"OrganizerRoleRequest"> | string | null
+    rejectionReason?: StringNullableFilter<"OrganizerRoleRequest"> | string | null
+    createdAt?: DateTimeFilter<"OrganizerRoleRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"OrganizerRoleRequest"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    reviewedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "userId">
+
+  export type OrganizerRoleRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    requestedAt?: SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: OrganizerRoleRequestCountOrderByAggregateInput
+    _max?: OrganizerRoleRequestMaxOrderByAggregateInput
+    _min?: OrganizerRoleRequestMinOrderByAggregateInput
+  }
+
+  export type OrganizerRoleRequestScalarWhereWithAggregatesInput = {
+    AND?: OrganizerRoleRequestScalarWhereWithAggregatesInput | OrganizerRoleRequestScalarWhereWithAggregatesInput[]
+    OR?: OrganizerRoleRequestScalarWhereWithAggregatesInput[]
+    NOT?: OrganizerRoleRequestScalarWhereWithAggregatesInput | OrganizerRoleRequestScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"OrganizerRoleRequest"> | string
+    userId?: UuidWithAggregatesFilter<"OrganizerRoleRequest"> | string
+    status?: EnumOrganizerApplicationStatusWithAggregatesFilter<"OrganizerRoleRequest"> | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeWithAggregatesFilter<"OrganizerRoleRequest"> | Date | string
+    reviewedAt?: DateTimeNullableWithAggregatesFilter<"OrganizerRoleRequest"> | Date | string | null
+    reviewedById?: UuidNullableWithAggregatesFilter<"OrganizerRoleRequest"> | string | null
+    rejectionReason?: StringNullableWithAggregatesFilter<"OrganizerRoleRequest"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"OrganizerRoleRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"OrganizerRoleRequest"> | Date | string
+  }
+
   export type EventWhereInput = {
     AND?: EventWhereInput | EventWhereInput[]
     OR?: EventWhereInput[]
@@ -9515,6 +11339,20 @@ export namespace Prisma {
     requirements?: StringNullableFilter<"Event"> | string | null
     skillsNeeded?: StringNullableListFilter<"Event">
     status?: EnumEventStatusFilter<"Event"> | $Enums.EventStatus
+    submittedForModerationAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    lastModeratedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    approvedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    approvedById?: UuidNullableFilter<"Event"> | string | null
+    rejectedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    rejectedById?: UuidNullableFilter<"Event"> | string | null
+    rejectionReason?: StringNullableFilter<"Event"> | string | null
+    suspendedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    suspendedById?: UuidNullableFilter<"Event"> | string | null
+    suspensionReason?: StringNullableFilter<"Event"> | string | null
+    archivedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    archivedById?: UuidNullableFilter<"Event"> | string | null
+    moderationIteration?: IntFilter<"Event"> | number
+    moderationVersion?: IntFilter<"Event"> | number
     tags?: StringNullableListFilter<"Event">
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
@@ -9522,6 +11360,7 @@ export namespace Prisma {
     organizer?: XOR<UserScalarRelationFilter, UserWhereInput>
     registrations?: EventRegistrationListRelationFilter
     volunteerHours?: VolunteerHourListRelationFilter
+    moderationRequests?: EventModerationRequestListRelationFilter
   }
 
   export type EventOrderByWithRelationInput = {
@@ -9541,6 +11380,20 @@ export namespace Prisma {
     requirements?: SortOrderInput | SortOrder
     skillsNeeded?: SortOrder
     status?: SortOrder
+    submittedForModerationAt?: SortOrderInput | SortOrder
+    lastModeratedAt?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    approvedById?: SortOrderInput | SortOrder
+    rejectedAt?: SortOrderInput | SortOrder
+    rejectedById?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    suspendedAt?: SortOrderInput | SortOrder
+    suspendedById?: SortOrderInput | SortOrder
+    suspensionReason?: SortOrderInput | SortOrder
+    archivedAt?: SortOrderInput | SortOrder
+    archivedById?: SortOrderInput | SortOrder
+    moderationIteration?: SortOrder
+    moderationVersion?: SortOrder
     tags?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -9548,6 +11401,7 @@ export namespace Prisma {
     organizer?: UserOrderByWithRelationInput
     registrations?: EventRegistrationOrderByRelationAggregateInput
     volunteerHours?: VolunteerHourOrderByRelationAggregateInput
+    moderationRequests?: EventModerationRequestOrderByRelationAggregateInput
   }
 
   export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -9570,6 +11424,20 @@ export namespace Prisma {
     requirements?: StringNullableFilter<"Event"> | string | null
     skillsNeeded?: StringNullableListFilter<"Event">
     status?: EnumEventStatusFilter<"Event"> | $Enums.EventStatus
+    submittedForModerationAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    lastModeratedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    approvedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    approvedById?: UuidNullableFilter<"Event"> | string | null
+    rejectedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    rejectedById?: UuidNullableFilter<"Event"> | string | null
+    rejectionReason?: StringNullableFilter<"Event"> | string | null
+    suspendedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    suspendedById?: UuidNullableFilter<"Event"> | string | null
+    suspensionReason?: StringNullableFilter<"Event"> | string | null
+    archivedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    archivedById?: UuidNullableFilter<"Event"> | string | null
+    moderationIteration?: IntFilter<"Event"> | number
+    moderationVersion?: IntFilter<"Event"> | number
     tags?: StringNullableListFilter<"Event">
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
@@ -9577,6 +11445,7 @@ export namespace Prisma {
     organizer?: XOR<UserScalarRelationFilter, UserWhereInput>
     registrations?: EventRegistrationListRelationFilter
     volunteerHours?: VolunteerHourListRelationFilter
+    moderationRequests?: EventModerationRequestListRelationFilter
   }, "id">
 
   export type EventOrderByWithAggregationInput = {
@@ -9596,6 +11465,20 @@ export namespace Prisma {
     requirements?: SortOrderInput | SortOrder
     skillsNeeded?: SortOrder
     status?: SortOrder
+    submittedForModerationAt?: SortOrderInput | SortOrder
+    lastModeratedAt?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    approvedById?: SortOrderInput | SortOrder
+    rejectedAt?: SortOrderInput | SortOrder
+    rejectedById?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    suspendedAt?: SortOrderInput | SortOrder
+    suspendedById?: SortOrderInput | SortOrder
+    suspensionReason?: SortOrderInput | SortOrder
+    archivedAt?: SortOrderInput | SortOrder
+    archivedById?: SortOrderInput | SortOrder
+    moderationIteration?: SortOrder
+    moderationVersion?: SortOrder
     tags?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -9627,10 +11510,121 @@ export namespace Prisma {
     requirements?: StringNullableWithAggregatesFilter<"Event"> | string | null
     skillsNeeded?: StringNullableListFilter<"Event">
     status?: EnumEventStatusWithAggregatesFilter<"Event"> | $Enums.EventStatus
+    submittedForModerationAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
+    lastModeratedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
+    approvedById?: UuidNullableWithAggregatesFilter<"Event"> | string | null
+    rejectedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
+    rejectedById?: UuidNullableWithAggregatesFilter<"Event"> | string | null
+    rejectionReason?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    suspendedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
+    suspendedById?: UuidNullableWithAggregatesFilter<"Event"> | string | null
+    suspensionReason?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    archivedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
+    archivedById?: UuidNullableWithAggregatesFilter<"Event"> | string | null
+    moderationIteration?: IntWithAggregatesFilter<"Event"> | number
+    moderationVersion?: IntWithAggregatesFilter<"Event"> | number
     tags?: StringNullableListFilter<"Event">
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     publishedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
+  }
+
+  export type EventModerationRequestWhereInput = {
+    AND?: EventModerationRequestWhereInput | EventModerationRequestWhereInput[]
+    OR?: EventModerationRequestWhereInput[]
+    NOT?: EventModerationRequestWhereInput | EventModerationRequestWhereInput[]
+    id?: UuidFilter<"EventModerationRequest"> | string
+    eventId?: UuidFilter<"EventModerationRequest"> | string
+    iteration?: IntFilter<"EventModerationRequest"> | number
+    status?: EnumEventModerationStatusFilter<"EventModerationRequest"> | $Enums.EventModerationStatus
+    submittedById?: UuidFilter<"EventModerationRequest"> | string
+    submittedAt?: DateTimeFilter<"EventModerationRequest"> | Date | string
+    decisionById?: UuidNullableFilter<"EventModerationRequest"> | string | null
+    decisionAt?: DateTimeNullableFilter<"EventModerationRequest"> | Date | string | null
+    decisionReason?: StringNullableFilter<"EventModerationRequest"> | string | null
+    snapshot?: JsonNullableFilter<"EventModerationRequest">
+    version?: IntFilter<"EventModerationRequest"> | number
+    createdAt?: DateTimeFilter<"EventModerationRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"EventModerationRequest"> | Date | string
+    event?: XOR<EventScalarRelationFilter, EventWhereInput>
+  }
+
+  export type EventModerationRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    iteration?: SortOrder
+    status?: SortOrder
+    submittedById?: SortOrder
+    submittedAt?: SortOrder
+    decisionById?: SortOrderInput | SortOrder
+    decisionAt?: SortOrderInput | SortOrder
+    decisionReason?: SortOrderInput | SortOrder
+    snapshot?: SortOrderInput | SortOrder
+    version?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    event?: EventOrderByWithRelationInput
+  }
+
+  export type EventModerationRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EventModerationRequestWhereInput | EventModerationRequestWhereInput[]
+    OR?: EventModerationRequestWhereInput[]
+    NOT?: EventModerationRequestWhereInput | EventModerationRequestWhereInput[]
+    eventId?: UuidFilter<"EventModerationRequest"> | string
+    iteration?: IntFilter<"EventModerationRequest"> | number
+    status?: EnumEventModerationStatusFilter<"EventModerationRequest"> | $Enums.EventModerationStatus
+    submittedById?: UuidFilter<"EventModerationRequest"> | string
+    submittedAt?: DateTimeFilter<"EventModerationRequest"> | Date | string
+    decisionById?: UuidNullableFilter<"EventModerationRequest"> | string | null
+    decisionAt?: DateTimeNullableFilter<"EventModerationRequest"> | Date | string | null
+    decisionReason?: StringNullableFilter<"EventModerationRequest"> | string | null
+    snapshot?: JsonNullableFilter<"EventModerationRequest">
+    version?: IntFilter<"EventModerationRequest"> | number
+    createdAt?: DateTimeFilter<"EventModerationRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"EventModerationRequest"> | Date | string
+    event?: XOR<EventScalarRelationFilter, EventWhereInput>
+  }, "id">
+
+  export type EventModerationRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    iteration?: SortOrder
+    status?: SortOrder
+    submittedById?: SortOrder
+    submittedAt?: SortOrder
+    decisionById?: SortOrderInput | SortOrder
+    decisionAt?: SortOrderInput | SortOrder
+    decisionReason?: SortOrderInput | SortOrder
+    snapshot?: SortOrderInput | SortOrder
+    version?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: EventModerationRequestCountOrderByAggregateInput
+    _avg?: EventModerationRequestAvgOrderByAggregateInput
+    _max?: EventModerationRequestMaxOrderByAggregateInput
+    _min?: EventModerationRequestMinOrderByAggregateInput
+    _sum?: EventModerationRequestSumOrderByAggregateInput
+  }
+
+  export type EventModerationRequestScalarWhereWithAggregatesInput = {
+    AND?: EventModerationRequestScalarWhereWithAggregatesInput | EventModerationRequestScalarWhereWithAggregatesInput[]
+    OR?: EventModerationRequestScalarWhereWithAggregatesInput[]
+    NOT?: EventModerationRequestScalarWhereWithAggregatesInput | EventModerationRequestScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"EventModerationRequest"> | string
+    eventId?: UuidWithAggregatesFilter<"EventModerationRequest"> | string
+    iteration?: IntWithAggregatesFilter<"EventModerationRequest"> | number
+    status?: EnumEventModerationStatusWithAggregatesFilter<"EventModerationRequest"> | $Enums.EventModerationStatus
+    submittedById?: UuidWithAggregatesFilter<"EventModerationRequest"> | string
+    submittedAt?: DateTimeWithAggregatesFilter<"EventModerationRequest"> | Date | string
+    decisionById?: UuidNullableWithAggregatesFilter<"EventModerationRequest"> | string | null
+    decisionAt?: DateTimeNullableWithAggregatesFilter<"EventModerationRequest"> | Date | string | null
+    decisionReason?: StringNullableWithAggregatesFilter<"EventModerationRequest"> | string | null
+    snapshot?: JsonNullableWithAggregatesFilter<"EventModerationRequest">
+    version?: IntWithAggregatesFilter<"EventModerationRequest"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"EventModerationRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EventModerationRequest"> | Date | string
   }
 
   export type EventRegistrationWhereInput = {
@@ -9951,85 +11945,6 @@ export namespace Prisma {
     issuedAt?: DateTimeWithAggregatesFilter<"Certificate"> | Date | string
   }
 
-  export type ActivityTypeWhereInput = {
-    AND?: ActivityTypeWhereInput | ActivityTypeWhereInput[]
-    OR?: ActivityTypeWhereInput[]
-    NOT?: ActivityTypeWhereInput | ActivityTypeWhereInput[]
-    id?: UuidFilter<"ActivityType"> | string
-    name?: StringFilter<"ActivityType"> | string
-    slug?: StringFilter<"ActivityType"> | string
-    description?: StringNullableFilter<"ActivityType"> | string | null
-    icon?: StringNullableFilter<"ActivityType"> | string | null
-    color?: StringNullableFilter<"ActivityType"> | string | null
-    category?: StringNullableFilter<"ActivityType"> | string | null
-    orderIndex?: IntNullableFilter<"ActivityType"> | number | null
-    isActive?: BoolFilter<"ActivityType"> | boolean
-    createdAt?: DateTimeFilter<"ActivityType"> | Date | string
-  }
-
-  export type ActivityTypeOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    slug?: SortOrder
-    description?: SortOrderInput | SortOrder
-    icon?: SortOrderInput | SortOrder
-    color?: SortOrderInput | SortOrder
-    category?: SortOrderInput | SortOrder
-    orderIndex?: SortOrderInput | SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ActivityTypeWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    name?: string
-    slug?: string
-    AND?: ActivityTypeWhereInput | ActivityTypeWhereInput[]
-    OR?: ActivityTypeWhereInput[]
-    NOT?: ActivityTypeWhereInput | ActivityTypeWhereInput[]
-    description?: StringNullableFilter<"ActivityType"> | string | null
-    icon?: StringNullableFilter<"ActivityType"> | string | null
-    color?: StringNullableFilter<"ActivityType"> | string | null
-    category?: StringNullableFilter<"ActivityType"> | string | null
-    orderIndex?: IntNullableFilter<"ActivityType"> | number | null
-    isActive?: BoolFilter<"ActivityType"> | boolean
-    createdAt?: DateTimeFilter<"ActivityType"> | Date | string
-  }, "id" | "name" | "slug">
-
-  export type ActivityTypeOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    slug?: SortOrder
-    description?: SortOrderInput | SortOrder
-    icon?: SortOrderInput | SortOrder
-    color?: SortOrderInput | SortOrder
-    category?: SortOrderInput | SortOrder
-    orderIndex?: SortOrderInput | SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-    _count?: ActivityTypeCountOrderByAggregateInput
-    _avg?: ActivityTypeAvgOrderByAggregateInput
-    _max?: ActivityTypeMaxOrderByAggregateInput
-    _min?: ActivityTypeMinOrderByAggregateInput
-    _sum?: ActivityTypeSumOrderByAggregateInput
-  }
-
-  export type ActivityTypeScalarWhereWithAggregatesInput = {
-    AND?: ActivityTypeScalarWhereWithAggregatesInput | ActivityTypeScalarWhereWithAggregatesInput[]
-    OR?: ActivityTypeScalarWhereWithAggregatesInput[]
-    NOT?: ActivityTypeScalarWhereWithAggregatesInput | ActivityTypeScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"ActivityType"> | string
-    name?: StringWithAggregatesFilter<"ActivityType"> | string
-    slug?: StringWithAggregatesFilter<"ActivityType"> | string
-    description?: StringNullableWithAggregatesFilter<"ActivityType"> | string | null
-    icon?: StringNullableWithAggregatesFilter<"ActivityType"> | string | null
-    color?: StringNullableWithAggregatesFilter<"ActivityType"> | string | null
-    category?: StringNullableWithAggregatesFilter<"ActivityType"> | string | null
-    orderIndex?: IntNullableWithAggregatesFilter<"ActivityType"> | number | null
-    isActive?: BoolWithAggregatesFilter<"ActivityType"> | boolean
-    createdAt?: DateTimeWithAggregatesFilter<"ActivityType"> | Date | string
-  }
-
   export type UserCreateInput = {
     id?: string
     email: string
@@ -10052,6 +11967,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -10076,6 +11993,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUncheckedCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateUncheckedCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUpdateInput = {
@@ -10100,6 +12019,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -10124,6 +12045,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUncheckedUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUncheckedUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -10177,6 +12100,88 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OrganizerRoleRequestCreateInput = {
+    id?: string
+    status?: $Enums.OrganizerApplicationStatus
+    requestedAt?: Date | string
+    reviewedAt?: Date | string | null
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutOrganizerRoleRequestInput
+    reviewedBy?: UserCreateNestedOneWithoutReviewedOrganizerRequestsInput
+  }
+
+  export type OrganizerRoleRequestUncheckedCreateInput = {
+    id?: string
+    userId: string
+    status?: $Enums.OrganizerApplicationStatus
+    requestedAt?: Date | string
+    reviewedAt?: Date | string | null
+    reviewedById?: string | null
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrganizerRoleRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrganizerApplicationStatusFieldUpdateOperationsInput | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutOrganizerRoleRequestNestedInput
+    reviewedBy?: UserUpdateOneWithoutReviewedOrganizerRequestsNestedInput
+  }
+
+  export type OrganizerRoleRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrganizerApplicationStatusFieldUpdateOperationsInput | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrganizerRoleRequestCreateManyInput = {
+    id?: string
+    userId: string
+    status?: $Enums.OrganizerApplicationStatus
+    requestedAt?: Date | string
+    reviewedAt?: Date | string | null
+    reviewedById?: string | null
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrganizerRoleRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrganizerApplicationStatusFieldUpdateOperationsInput | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrganizerRoleRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrganizerApplicationStatusFieldUpdateOperationsInput | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type EventCreateInput = {
     id?: string
     title: string
@@ -10193,6 +12198,20 @@ export namespace Prisma {
     requirements?: string | null
     skillsNeeded?: EventCreateskillsNeededInput | string[]
     status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10200,6 +12219,7 @@ export namespace Prisma {
     organizer: UserCreateNestedOneWithoutEventsInput
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
     volunteerHours?: VolunteerHourCreateNestedManyWithoutEventInput
+    moderationRequests?: EventModerationRequestCreateNestedManyWithoutEventInput
   }
 
   export type EventUncheckedCreateInput = {
@@ -10219,12 +12239,27 @@ export namespace Prisma {
     requirements?: string | null
     skillsNeeded?: EventCreateskillsNeededInput | string[]
     status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
     volunteerHours?: VolunteerHourUncheckedCreateNestedManyWithoutEventInput
+    moderationRequests?: EventModerationRequestUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventUpdateInput = {
@@ -10243,6 +12278,20 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10250,6 +12299,7 @@ export namespace Prisma {
     organizer?: UserUpdateOneRequiredWithoutEventsNestedInput
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
     volunteerHours?: VolunteerHourUpdateManyWithoutEventNestedInput
+    moderationRequests?: EventModerationRequestUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateInput = {
@@ -10269,12 +12319,27 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
     volunteerHours?: VolunteerHourUncheckedUpdateManyWithoutEventNestedInput
+    moderationRequests?: EventModerationRequestUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type EventCreateManyInput = {
@@ -10294,6 +12359,20 @@ export namespace Prisma {
     requirements?: string | null
     skillsNeeded?: EventCreateskillsNeededInput | string[]
     status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10316,6 +12395,20 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10339,10 +12432,135 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type EventModerationRequestCreateInput = {
+    id?: string
+    iteration: number
+    status?: $Enums.EventModerationStatus
+    submittedById: string
+    submittedAt?: Date | string
+    decisionById?: string | null
+    decisionAt?: Date | string | null
+    decisionReason?: string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    event: EventCreateNestedOneWithoutModerationRequestsInput
+  }
+
+  export type EventModerationRequestUncheckedCreateInput = {
+    id?: string
+    eventId: string
+    iteration: number
+    status?: $Enums.EventModerationStatus
+    submittedById: string
+    submittedAt?: Date | string
+    decisionById?: string | null
+    decisionAt?: Date | string | null
+    decisionReason?: string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventModerationRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    iteration?: IntFieldUpdateOperationsInput | number
+    status?: EnumEventModerationStatusFieldUpdateOperationsInput | $Enums.EventModerationStatus
+    submittedById?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionById?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: EventUpdateOneRequiredWithoutModerationRequestsNestedInput
+  }
+
+  export type EventModerationRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    iteration?: IntFieldUpdateOperationsInput | number
+    status?: EnumEventModerationStatusFieldUpdateOperationsInput | $Enums.EventModerationStatus
+    submittedById?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionById?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventModerationRequestCreateManyInput = {
+    id?: string
+    eventId: string
+    iteration: number
+    status?: $Enums.EventModerationStatus
+    submittedById: string
+    submittedAt?: Date | string
+    decisionById?: string | null
+    decisionAt?: Date | string | null
+    decisionReason?: string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventModerationRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    iteration?: IntFieldUpdateOperationsInput | number
+    status?: EnumEventModerationStatusFieldUpdateOperationsInput | $Enums.EventModerationStatus
+    submittedById?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionById?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventModerationRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventId?: StringFieldUpdateOperationsInput | string
+    iteration?: IntFieldUpdateOperationsInput | number
+    status?: EnumEventModerationStatusFieldUpdateOperationsInput | $Enums.EventModerationStatus
+    submittedById?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionById?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventRegistrationCreateInput = {
@@ -10683,97 +12901,6 @@ export namespace Prisma {
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ActivityTypeCreateInput = {
-    id?: string
-    name: string
-    slug: string
-    description?: string | null
-    icon?: string | null
-    color?: string | null
-    category?: string | null
-    orderIndex?: number | null
-    isActive?: boolean
-    createdAt?: Date | string
-  }
-
-  export type ActivityTypeUncheckedCreateInput = {
-    id?: string
-    name: string
-    slug: string
-    description?: string | null
-    icon?: string | null
-    color?: string | null
-    category?: string | null
-    orderIndex?: number | null
-    isActive?: boolean
-    createdAt?: Date | string
-  }
-
-  export type ActivityTypeUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    color?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    orderIndex?: NullableIntFieldUpdateOperationsInput | number | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityTypeUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    color?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    orderIndex?: NullableIntFieldUpdateOperationsInput | number | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityTypeCreateManyInput = {
-    id?: string
-    name: string
-    slug: string
-    description?: string | null
-    icon?: string | null
-    color?: string | null
-    category?: string | null
-    orderIndex?: number | null
-    isActive?: boolean
-    createdAt?: Date | string
-  }
-
-  export type ActivityTypeUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    color?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    orderIndex?: NullableIntFieldUpdateOperationsInput | number | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ActivityTypeUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    color?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: NullableStringFieldUpdateOperationsInput | string | null
-    orderIndex?: NullableIntFieldUpdateOperationsInput | number | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -10871,6 +12998,17 @@ export namespace Prisma {
     none?: CertificateWhereInput
   }
 
+  export type OrganizerRoleRequestNullableScalarRelationFilter = {
+    is?: OrganizerRoleRequestWhereInput | null
+    isNot?: OrganizerRoleRequestWhereInput | null
+  }
+
+  export type OrganizerRoleRequestListRelationFilter = {
+    every?: OrganizerRoleRequestWhereInput
+    some?: OrganizerRoleRequestWhereInput
+    none?: OrganizerRoleRequestWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -10889,6 +13027,10 @@ export namespace Prisma {
   }
 
   export type CertificateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OrganizerRoleRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -11024,6 +13166,121 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumOrganizerApplicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrganizerApplicationStatus | EnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrganizerApplicationStatus[] | ListEnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrganizerApplicationStatus[] | ListEnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrganizerApplicationStatusFilter<$PrismaModel> | $Enums.OrganizerApplicationStatus
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type UuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type OrganizerRoleRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    requestedAt?: SortOrder
+    reviewedAt?: SortOrder
+    reviewedById?: SortOrder
+    rejectionReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrganizerRoleRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    requestedAt?: SortOrder
+    reviewedAt?: SortOrder
+    reviewedById?: SortOrder
+    rejectionReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type OrganizerRoleRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    requestedAt?: SortOrder
+    reviewedAt?: SortOrder
+    reviewedById?: SortOrder
+    rejectionReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumOrganizerApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrganizerApplicationStatus | EnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrganizerApplicationStatus[] | ListEnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrganizerApplicationStatus[] | ListEnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrganizerApplicationStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrganizerApplicationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrganizerApplicationStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrganizerApplicationStatusFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -11053,20 +13310,14 @@ export namespace Prisma {
     not?: NestedEnumEventStatusFilter<$PrismaModel> | $Enums.EventStatus
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  export type EventModerationRequestListRelationFilter = {
+    every?: EventModerationRequestWhereInput
+    some?: EventModerationRequestWhereInput
+    none?: EventModerationRequestWhereInput
   }
 
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
+  export type EventModerationRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type EventCountOrderByAggregateInput = {
@@ -11086,6 +13337,20 @@ export namespace Prisma {
     requirements?: SortOrder
     skillsNeeded?: SortOrder
     status?: SortOrder
+    submittedForModerationAt?: SortOrder
+    lastModeratedAt?: SortOrder
+    approvedAt?: SortOrder
+    approvedById?: SortOrder
+    rejectedAt?: SortOrder
+    rejectedById?: SortOrder
+    rejectionReason?: SortOrder
+    suspendedAt?: SortOrder
+    suspendedById?: SortOrder
+    suspensionReason?: SortOrder
+    archivedAt?: SortOrder
+    archivedById?: SortOrder
+    moderationIteration?: SortOrder
+    moderationVersion?: SortOrder
     tags?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11096,6 +13361,8 @@ export namespace Prisma {
     requiredHours?: SortOrder
     maxParticipants?: SortOrder
     currentParticipants?: SortOrder
+    moderationIteration?: SortOrder
+    moderationVersion?: SortOrder
   }
 
   export type EventMaxOrderByAggregateInput = {
@@ -11114,6 +13381,20 @@ export namespace Prisma {
     currentParticipants?: SortOrder
     requirements?: SortOrder
     status?: SortOrder
+    submittedForModerationAt?: SortOrder
+    lastModeratedAt?: SortOrder
+    approvedAt?: SortOrder
+    approvedById?: SortOrder
+    rejectedAt?: SortOrder
+    rejectedById?: SortOrder
+    rejectionReason?: SortOrder
+    suspendedAt?: SortOrder
+    suspendedById?: SortOrder
+    suspensionReason?: SortOrder
+    archivedAt?: SortOrder
+    archivedById?: SortOrder
+    moderationIteration?: SortOrder
+    moderationVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrder
@@ -11135,6 +13416,20 @@ export namespace Prisma {
     currentParticipants?: SortOrder
     requirements?: SortOrder
     status?: SortOrder
+    submittedForModerationAt?: SortOrder
+    lastModeratedAt?: SortOrder
+    approvedAt?: SortOrder
+    approvedById?: SortOrder
+    rejectedAt?: SortOrder
+    rejectedById?: SortOrder
+    rejectionReason?: SortOrder
+    suspendedAt?: SortOrder
+    suspendedById?: SortOrder
+    suspensionReason?: SortOrder
+    archivedAt?: SortOrder
+    archivedById?: SortOrder
+    moderationIteration?: SortOrder
+    moderationVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrder
@@ -11144,6 +13439,8 @@ export namespace Prisma {
     requiredHours?: SortOrder
     maxParticipants?: SortOrder
     currentParticipants?: SortOrder
+    moderationIteration?: SortOrder
+    moderationVersion?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -11188,37 +13485,34 @@ export namespace Prisma {
     _max?: NestedEnumEventStatusFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  export type EnumEventModerationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventModerationStatus | EnumEventModerationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventModerationStatus[] | ListEnumEventModerationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventModerationStatus[] | ListEnumEventModerationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventModerationStatusFilter<$PrismaModel> | $Enums.EventModerationStatus
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
 
-  export type EnumRegistrationStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.RegistrationStatus | EnumRegistrationStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.RegistrationStatus[] | ListEnumRegistrationStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RegistrationStatus[] | ListEnumRegistrationStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumRegistrationStatusFilter<$PrismaModel> | $Enums.RegistrationStatus
-  }
-
-  export type UuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type EventScalarRelationFilter = {
@@ -11226,9 +13520,103 @@ export namespace Prisma {
     isNot?: EventWhereInput
   }
 
-  export type UserNullableScalarRelationFilter = {
-    is?: UserWhereInput | null
-    isNot?: UserWhereInput | null
+  export type EventModerationRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    iteration?: SortOrder
+    status?: SortOrder
+    submittedById?: SortOrder
+    submittedAt?: SortOrder
+    decisionById?: SortOrder
+    decisionAt?: SortOrder
+    decisionReason?: SortOrder
+    snapshot?: SortOrder
+    version?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EventModerationRequestAvgOrderByAggregateInput = {
+    iteration?: SortOrder
+    version?: SortOrder
+  }
+
+  export type EventModerationRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    iteration?: SortOrder
+    status?: SortOrder
+    submittedById?: SortOrder
+    submittedAt?: SortOrder
+    decisionById?: SortOrder
+    decisionAt?: SortOrder
+    decisionReason?: SortOrder
+    version?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EventModerationRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+    iteration?: SortOrder
+    status?: SortOrder
+    submittedById?: SortOrder
+    submittedAt?: SortOrder
+    decisionById?: SortOrder
+    decisionAt?: SortOrder
+    decisionReason?: SortOrder
+    version?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EventModerationRequestSumOrderByAggregateInput = {
+    iteration?: SortOrder
+    version?: SortOrder
+  }
+
+  export type EnumEventModerationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventModerationStatus | EnumEventModerationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventModerationStatus[] | ListEnumEventModerationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventModerationStatus[] | ListEnumEventModerationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventModerationStatusWithAggregatesFilter<$PrismaModel> | $Enums.EventModerationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventModerationStatusFilter<$PrismaModel>
+    _max?: NestedEnumEventModerationStatusFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type EnumRegistrationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RegistrationStatus | EnumRegistrationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RegistrationStatus[] | ListEnumRegistrationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RegistrationStatus[] | ListEnumRegistrationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRegistrationStatusFilter<$PrismaModel> | $Enums.RegistrationStatus
   }
 
   export type EventRegistrationEventIdVolunteerIdCompoundUniqueInput = {
@@ -11305,21 +13693,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRegistrationStatusFilter<$PrismaModel>
     _max?: NestedEnumRegistrationStatusFilter<$PrismaModel>
-  }
-
-  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type EnumSourceTypeFilter<$PrismaModel = never> = {
@@ -11461,53 +13834,6 @@ export namespace Prisma {
     totalHours?: SortOrder
   }
 
-  export type ActivityTypeCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    slug?: SortOrder
-    description?: SortOrder
-    icon?: SortOrder
-    color?: SortOrder
-    category?: SortOrder
-    orderIndex?: SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ActivityTypeAvgOrderByAggregateInput = {
-    orderIndex?: SortOrder
-  }
-
-  export type ActivityTypeMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    slug?: SortOrder
-    description?: SortOrder
-    icon?: SortOrder
-    color?: SortOrder
-    category?: SortOrder
-    orderIndex?: SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ActivityTypeMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    slug?: SortOrder
-    description?: SortOrder
-    icon?: SortOrder
-    color?: SortOrder
-    category?: SortOrder
-    orderIndex?: SortOrder
-    isActive?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ActivityTypeSumOrderByAggregateInput = {
-    orderIndex?: SortOrder
-  }
-
   export type UserCreatepreferredActivitiesInput = {
     set: string[]
   }
@@ -11561,6 +13887,19 @@ export namespace Prisma {
     connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
   }
 
+  export type OrganizerRoleRequestCreateNestedOneWithoutUserInput = {
+    create?: XOR<OrganizerRoleRequestCreateWithoutUserInput, OrganizerRoleRequestUncheckedCreateWithoutUserInput>
+    connectOrCreate?: OrganizerRoleRequestCreateOrConnectWithoutUserInput
+    connect?: OrganizerRoleRequestWhereUniqueInput
+  }
+
+  export type OrganizerRoleRequestCreateNestedManyWithoutReviewedByInput = {
+    create?: XOR<OrganizerRoleRequestCreateWithoutReviewedByInput, OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput> | OrganizerRoleRequestCreateWithoutReviewedByInput[] | OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: OrganizerRoleRequestCreateOrConnectWithoutReviewedByInput | OrganizerRoleRequestCreateOrConnectWithoutReviewedByInput[]
+    createMany?: OrganizerRoleRequestCreateManyReviewedByInputEnvelope
+    connect?: OrganizerRoleRequestWhereUniqueInput | OrganizerRoleRequestWhereUniqueInput[]
+  }
+
   export type EventUncheckedCreateNestedManyWithoutOrganizerInput = {
     create?: XOR<EventCreateWithoutOrganizerInput, EventUncheckedCreateWithoutOrganizerInput> | EventCreateWithoutOrganizerInput[] | EventUncheckedCreateWithoutOrganizerInput[]
     connectOrCreate?: EventCreateOrConnectWithoutOrganizerInput | EventCreateOrConnectWithoutOrganizerInput[]
@@ -11608,6 +13947,19 @@ export namespace Prisma {
     connectOrCreate?: CertificateCreateOrConnectWithoutIssuedByInput | CertificateCreateOrConnectWithoutIssuedByInput[]
     createMany?: CertificateCreateManyIssuedByInputEnvelope
     connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
+  }
+
+  export type OrganizerRoleRequestUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<OrganizerRoleRequestCreateWithoutUserInput, OrganizerRoleRequestUncheckedCreateWithoutUserInput>
+    connectOrCreate?: OrganizerRoleRequestCreateOrConnectWithoutUserInput
+    connect?: OrganizerRoleRequestWhereUniqueInput
+  }
+
+  export type OrganizerRoleRequestUncheckedCreateNestedManyWithoutReviewedByInput = {
+    create?: XOR<OrganizerRoleRequestCreateWithoutReviewedByInput, OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput> | OrganizerRoleRequestCreateWithoutReviewedByInput[] | OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: OrganizerRoleRequestCreateOrConnectWithoutReviewedByInput | OrganizerRoleRequestCreateOrConnectWithoutReviewedByInput[]
+    createMany?: OrganizerRoleRequestCreateManyReviewedByInputEnvelope
+    connect?: OrganizerRoleRequestWhereUniqueInput | OrganizerRoleRequestWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -11733,6 +14085,30 @@ export namespace Prisma {
     deleteMany?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
   }
 
+  export type OrganizerRoleRequestUpdateOneWithoutUserNestedInput = {
+    create?: XOR<OrganizerRoleRequestCreateWithoutUserInput, OrganizerRoleRequestUncheckedCreateWithoutUserInput>
+    connectOrCreate?: OrganizerRoleRequestCreateOrConnectWithoutUserInput
+    upsert?: OrganizerRoleRequestUpsertWithoutUserInput
+    disconnect?: OrganizerRoleRequestWhereInput | boolean
+    delete?: OrganizerRoleRequestWhereInput | boolean
+    connect?: OrganizerRoleRequestWhereUniqueInput
+    update?: XOR<XOR<OrganizerRoleRequestUpdateToOneWithWhereWithoutUserInput, OrganizerRoleRequestUpdateWithoutUserInput>, OrganizerRoleRequestUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OrganizerRoleRequestUpdateManyWithoutReviewedByNestedInput = {
+    create?: XOR<OrganizerRoleRequestCreateWithoutReviewedByInput, OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput> | OrganizerRoleRequestCreateWithoutReviewedByInput[] | OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: OrganizerRoleRequestCreateOrConnectWithoutReviewedByInput | OrganizerRoleRequestCreateOrConnectWithoutReviewedByInput[]
+    upsert?: OrganizerRoleRequestUpsertWithWhereUniqueWithoutReviewedByInput | OrganizerRoleRequestUpsertWithWhereUniqueWithoutReviewedByInput[]
+    createMany?: OrganizerRoleRequestCreateManyReviewedByInputEnvelope
+    set?: OrganizerRoleRequestWhereUniqueInput | OrganizerRoleRequestWhereUniqueInput[]
+    disconnect?: OrganizerRoleRequestWhereUniqueInput | OrganizerRoleRequestWhereUniqueInput[]
+    delete?: OrganizerRoleRequestWhereUniqueInput | OrganizerRoleRequestWhereUniqueInput[]
+    connect?: OrganizerRoleRequestWhereUniqueInput | OrganizerRoleRequestWhereUniqueInput[]
+    update?: OrganizerRoleRequestUpdateWithWhereUniqueWithoutReviewedByInput | OrganizerRoleRequestUpdateWithWhereUniqueWithoutReviewedByInput[]
+    updateMany?: OrganizerRoleRequestUpdateManyWithWhereWithoutReviewedByInput | OrganizerRoleRequestUpdateManyWithWhereWithoutReviewedByInput[]
+    deleteMany?: OrganizerRoleRequestScalarWhereInput | OrganizerRoleRequestScalarWhereInput[]
+  }
+
   export type EventUncheckedUpdateManyWithoutOrganizerNestedInput = {
     create?: XOR<EventCreateWithoutOrganizerInput, EventUncheckedCreateWithoutOrganizerInput> | EventCreateWithoutOrganizerInput[] | EventUncheckedCreateWithoutOrganizerInput[]
     connectOrCreate?: EventCreateOrConnectWithoutOrganizerInput | EventCreateOrConnectWithoutOrganizerInput[]
@@ -11831,6 +14207,68 @@ export namespace Prisma {
     deleteMany?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
   }
 
+  export type OrganizerRoleRequestUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<OrganizerRoleRequestCreateWithoutUserInput, OrganizerRoleRequestUncheckedCreateWithoutUserInput>
+    connectOrCreate?: OrganizerRoleRequestCreateOrConnectWithoutUserInput
+    upsert?: OrganizerRoleRequestUpsertWithoutUserInput
+    disconnect?: OrganizerRoleRequestWhereInput | boolean
+    delete?: OrganizerRoleRequestWhereInput | boolean
+    connect?: OrganizerRoleRequestWhereUniqueInput
+    update?: XOR<XOR<OrganizerRoleRequestUpdateToOneWithWhereWithoutUserInput, OrganizerRoleRequestUpdateWithoutUserInput>, OrganizerRoleRequestUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByNestedInput = {
+    create?: XOR<OrganizerRoleRequestCreateWithoutReviewedByInput, OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput> | OrganizerRoleRequestCreateWithoutReviewedByInput[] | OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput[]
+    connectOrCreate?: OrganizerRoleRequestCreateOrConnectWithoutReviewedByInput | OrganizerRoleRequestCreateOrConnectWithoutReviewedByInput[]
+    upsert?: OrganizerRoleRequestUpsertWithWhereUniqueWithoutReviewedByInput | OrganizerRoleRequestUpsertWithWhereUniqueWithoutReviewedByInput[]
+    createMany?: OrganizerRoleRequestCreateManyReviewedByInputEnvelope
+    set?: OrganizerRoleRequestWhereUniqueInput | OrganizerRoleRequestWhereUniqueInput[]
+    disconnect?: OrganizerRoleRequestWhereUniqueInput | OrganizerRoleRequestWhereUniqueInput[]
+    delete?: OrganizerRoleRequestWhereUniqueInput | OrganizerRoleRequestWhereUniqueInput[]
+    connect?: OrganizerRoleRequestWhereUniqueInput | OrganizerRoleRequestWhereUniqueInput[]
+    update?: OrganizerRoleRequestUpdateWithWhereUniqueWithoutReviewedByInput | OrganizerRoleRequestUpdateWithWhereUniqueWithoutReviewedByInput[]
+    updateMany?: OrganizerRoleRequestUpdateManyWithWhereWithoutReviewedByInput | OrganizerRoleRequestUpdateManyWithWhereWithoutReviewedByInput[]
+    deleteMany?: OrganizerRoleRequestScalarWhereInput | OrganizerRoleRequestScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutOrganizerRoleRequestInput = {
+    create?: XOR<UserCreateWithoutOrganizerRoleRequestInput, UserUncheckedCreateWithoutOrganizerRoleRequestInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizerRoleRequestInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReviewedOrganizerRequestsInput = {
+    create?: XOR<UserCreateWithoutReviewedOrganizerRequestsInput, UserUncheckedCreateWithoutReviewedOrganizerRequestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedOrganizerRequestsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumOrganizerApplicationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.OrganizerApplicationStatus
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type UserUpdateOneRequiredWithoutOrganizerRoleRequestNestedInput = {
+    create?: XOR<UserCreateWithoutOrganizerRoleRequestInput, UserUncheckedCreateWithoutOrganizerRoleRequestInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOrganizerRoleRequestInput
+    upsert?: UserUpsertWithoutOrganizerRoleRequestInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOrganizerRoleRequestInput, UserUpdateWithoutOrganizerRoleRequestInput>, UserUncheckedUpdateWithoutOrganizerRoleRequestInput>
+  }
+
+  export type UserUpdateOneWithoutReviewedOrganizerRequestsNestedInput = {
+    create?: XOR<UserCreateWithoutReviewedOrganizerRequestsInput, UserUncheckedCreateWithoutReviewedOrganizerRequestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReviewedOrganizerRequestsInput
+    upsert?: UserUpsertWithoutReviewedOrganizerRequestsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewedOrganizerRequestsInput, UserUpdateWithoutReviewedOrganizerRequestsInput>, UserUncheckedUpdateWithoutReviewedOrganizerRequestsInput>
+  }
+
   export type EventCreateskillsNeededInput = {
     set: string[]
   }
@@ -11859,6 +14297,13 @@ export namespace Prisma {
     connect?: VolunteerHourWhereUniqueInput | VolunteerHourWhereUniqueInput[]
   }
 
+  export type EventModerationRequestCreateNestedManyWithoutEventInput = {
+    create?: XOR<EventModerationRequestCreateWithoutEventInput, EventModerationRequestUncheckedCreateWithoutEventInput> | EventModerationRequestCreateWithoutEventInput[] | EventModerationRequestUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventModerationRequestCreateOrConnectWithoutEventInput | EventModerationRequestCreateOrConnectWithoutEventInput[]
+    createMany?: EventModerationRequestCreateManyEventInputEnvelope
+    connect?: EventModerationRequestWhereUniqueInput | EventModerationRequestWhereUniqueInput[]
+  }
+
   export type EventRegistrationUncheckedCreateNestedManyWithoutEventInput = {
     create?: XOR<EventRegistrationCreateWithoutEventInput, EventRegistrationUncheckedCreateWithoutEventInput> | EventRegistrationCreateWithoutEventInput[] | EventRegistrationUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EventRegistrationCreateOrConnectWithoutEventInput | EventRegistrationCreateOrConnectWithoutEventInput[]
@@ -11871,6 +14316,13 @@ export namespace Prisma {
     connectOrCreate?: VolunteerHourCreateOrConnectWithoutEventInput | VolunteerHourCreateOrConnectWithoutEventInput[]
     createMany?: VolunteerHourCreateManyEventInputEnvelope
     connect?: VolunteerHourWhereUniqueInput | VolunteerHourWhereUniqueInput[]
+  }
+
+  export type EventModerationRequestUncheckedCreateNestedManyWithoutEventInput = {
+    create?: XOR<EventModerationRequestCreateWithoutEventInput, EventModerationRequestUncheckedCreateWithoutEventInput> | EventModerationRequestCreateWithoutEventInput[] | EventModerationRequestUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventModerationRequestCreateOrConnectWithoutEventInput | EventModerationRequestCreateOrConnectWithoutEventInput[]
+    createMany?: EventModerationRequestCreateManyEventInputEnvelope
+    connect?: EventModerationRequestWhereUniqueInput | EventModerationRequestWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -11901,10 +14353,6 @@ export namespace Prisma {
   export type EventUpdatetagsInput = {
     set?: string[]
     push?: string | string[]
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type UserUpdateOneRequiredWithoutEventsNestedInput = {
@@ -11943,6 +14391,20 @@ export namespace Prisma {
     deleteMany?: VolunteerHourScalarWhereInput | VolunteerHourScalarWhereInput[]
   }
 
+  export type EventModerationRequestUpdateManyWithoutEventNestedInput = {
+    create?: XOR<EventModerationRequestCreateWithoutEventInput, EventModerationRequestUncheckedCreateWithoutEventInput> | EventModerationRequestCreateWithoutEventInput[] | EventModerationRequestUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventModerationRequestCreateOrConnectWithoutEventInput | EventModerationRequestCreateOrConnectWithoutEventInput[]
+    upsert?: EventModerationRequestUpsertWithWhereUniqueWithoutEventInput | EventModerationRequestUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: EventModerationRequestCreateManyEventInputEnvelope
+    set?: EventModerationRequestWhereUniqueInput | EventModerationRequestWhereUniqueInput[]
+    disconnect?: EventModerationRequestWhereUniqueInput | EventModerationRequestWhereUniqueInput[]
+    delete?: EventModerationRequestWhereUniqueInput | EventModerationRequestWhereUniqueInput[]
+    connect?: EventModerationRequestWhereUniqueInput | EventModerationRequestWhereUniqueInput[]
+    update?: EventModerationRequestUpdateWithWhereUniqueWithoutEventInput | EventModerationRequestUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: EventModerationRequestUpdateManyWithWhereWithoutEventInput | EventModerationRequestUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: EventModerationRequestScalarWhereInput | EventModerationRequestScalarWhereInput[]
+  }
+
   export type EventRegistrationUncheckedUpdateManyWithoutEventNestedInput = {
     create?: XOR<EventRegistrationCreateWithoutEventInput, EventRegistrationUncheckedCreateWithoutEventInput> | EventRegistrationCreateWithoutEventInput[] | EventRegistrationUncheckedCreateWithoutEventInput[]
     connectOrCreate?: EventRegistrationCreateOrConnectWithoutEventInput | EventRegistrationCreateOrConnectWithoutEventInput[]
@@ -11969,6 +14431,38 @@ export namespace Prisma {
     update?: VolunteerHourUpdateWithWhereUniqueWithoutEventInput | VolunteerHourUpdateWithWhereUniqueWithoutEventInput[]
     updateMany?: VolunteerHourUpdateManyWithWhereWithoutEventInput | VolunteerHourUpdateManyWithWhereWithoutEventInput[]
     deleteMany?: VolunteerHourScalarWhereInput | VolunteerHourScalarWhereInput[]
+  }
+
+  export type EventModerationRequestUncheckedUpdateManyWithoutEventNestedInput = {
+    create?: XOR<EventModerationRequestCreateWithoutEventInput, EventModerationRequestUncheckedCreateWithoutEventInput> | EventModerationRequestCreateWithoutEventInput[] | EventModerationRequestUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventModerationRequestCreateOrConnectWithoutEventInput | EventModerationRequestCreateOrConnectWithoutEventInput[]
+    upsert?: EventModerationRequestUpsertWithWhereUniqueWithoutEventInput | EventModerationRequestUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: EventModerationRequestCreateManyEventInputEnvelope
+    set?: EventModerationRequestWhereUniqueInput | EventModerationRequestWhereUniqueInput[]
+    disconnect?: EventModerationRequestWhereUniqueInput | EventModerationRequestWhereUniqueInput[]
+    delete?: EventModerationRequestWhereUniqueInput | EventModerationRequestWhereUniqueInput[]
+    connect?: EventModerationRequestWhereUniqueInput | EventModerationRequestWhereUniqueInput[]
+    update?: EventModerationRequestUpdateWithWhereUniqueWithoutEventInput | EventModerationRequestUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: EventModerationRequestUpdateManyWithWhereWithoutEventInput | EventModerationRequestUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: EventModerationRequestScalarWhereInput | EventModerationRequestScalarWhereInput[]
+  }
+
+  export type EventCreateNestedOneWithoutModerationRequestsInput = {
+    create?: XOR<EventCreateWithoutModerationRequestsInput, EventUncheckedCreateWithoutModerationRequestsInput>
+    connectOrCreate?: EventCreateOrConnectWithoutModerationRequestsInput
+    connect?: EventWhereUniqueInput
+  }
+
+  export type EnumEventModerationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EventModerationStatus
+  }
+
+  export type EventUpdateOneRequiredWithoutModerationRequestsNestedInput = {
+    create?: XOR<EventCreateWithoutModerationRequestsInput, EventUncheckedCreateWithoutModerationRequestsInput>
+    connectOrCreate?: EventCreateOrConnectWithoutModerationRequestsInput
+    upsert?: EventUpsertWithoutModerationRequestsInput
+    connect?: EventWhereUniqueInput
+    update?: XOR<XOR<EventUpdateToOneWithWhereWithoutModerationRequestsInput, EventUpdateWithoutModerationRequestsInput>, EventUncheckedUpdateWithoutModerationRequestsInput>
   }
 
   export type EventCreateNestedOneWithoutRegistrationsInput = {
@@ -12321,11 +14815,11 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumEventStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.EventStatus | EnumEventStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumEventStatusFilter<$PrismaModel> | $Enums.EventStatus
+  export type NestedEnumOrganizerApplicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrganizerApplicationStatus | EnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrganizerApplicationStatus[] | ListEnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrganizerApplicationStatus[] | ListEnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrganizerApplicationStatusFilter<$PrismaModel> | $Enums.OrganizerApplicationStatus
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -12337,6 +14831,62 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedEnumOrganizerApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OrganizerApplicationStatus | EnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.OrganizerApplicationStatus[] | ListEnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OrganizerApplicationStatus[] | ListEnumOrganizerApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumOrganizerApplicationStatusWithAggregatesFilter<$PrismaModel> | $Enums.OrganizerApplicationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOrganizerApplicationStatusFilter<$PrismaModel>
+    _max?: NestedEnumOrganizerApplicationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumEventStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventStatus | EnumEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventStatusFilter<$PrismaModel> | $Enums.EventStatus
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -12403,18 +14953,44 @@ export namespace Prisma {
     _max?: NestedEnumEventStatusFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  export type NestedEnumEventModerationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventModerationStatus | EnumEventModerationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventModerationStatus[] | ListEnumEventModerationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventModerationStatus[] | ListEnumEventModerationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventModerationStatusFilter<$PrismaModel> | $Enums.EventModerationStatus
+  }
+
+  export type NestedEnumEventModerationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventModerationStatus | EnumEventModerationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventModerationStatus[] | ListEnumEventModerationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventModerationStatus[] | ListEnumEventModerationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventModerationStatusWithAggregatesFilter<$PrismaModel> | $Enums.EventModerationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventModerationStatusFilter<$PrismaModel>
+    _max?: NestedEnumEventModerationStatusFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumRegistrationStatusFilter<$PrismaModel = never> = {
@@ -12422,17 +14998,6 @@ export namespace Prisma {
     in?: $Enums.RegistrationStatus[] | ListEnumRegistrationStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.RegistrationStatus[] | ListEnumRegistrationStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumRegistrationStatusFilter<$PrismaModel> | $Enums.RegistrationStatus
-  }
-
-  export type NestedUuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedEnumRegistrationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -12443,20 +15008,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRegistrationStatusFilter<$PrismaModel>
     _max?: NestedEnumRegistrationStatusFilter<$PrismaModel>
-  }
-
-  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumSourceTypeFilter<$PrismaModel = never> = {
@@ -12492,12 +15043,27 @@ export namespace Prisma {
     requirements?: string | null
     skillsNeeded?: EventCreateskillsNeededInput | string[]
     status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
     volunteerHours?: VolunteerHourCreateNestedManyWithoutEventInput
+    moderationRequests?: EventModerationRequestCreateNestedManyWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutOrganizerInput = {
@@ -12516,12 +15082,27 @@ export namespace Prisma {
     requirements?: string | null
     skillsNeeded?: EventCreateskillsNeededInput | string[]
     status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
     volunteerHours?: VolunteerHourUncheckedCreateNestedManyWithoutEventInput
+    moderationRequests?: EventModerationRequestUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutOrganizerInput = {
@@ -12782,6 +15363,65 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OrganizerRoleRequestCreateWithoutUserInput = {
+    id?: string
+    status?: $Enums.OrganizerApplicationStatus
+    requestedAt?: Date | string
+    reviewedAt?: Date | string | null
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviewedBy?: UserCreateNestedOneWithoutReviewedOrganizerRequestsInput
+  }
+
+  export type OrganizerRoleRequestUncheckedCreateWithoutUserInput = {
+    id?: string
+    status?: $Enums.OrganizerApplicationStatus
+    requestedAt?: Date | string
+    reviewedAt?: Date | string | null
+    reviewedById?: string | null
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrganizerRoleRequestCreateOrConnectWithoutUserInput = {
+    where: OrganizerRoleRequestWhereUniqueInput
+    create: XOR<OrganizerRoleRequestCreateWithoutUserInput, OrganizerRoleRequestUncheckedCreateWithoutUserInput>
+  }
+
+  export type OrganizerRoleRequestCreateWithoutReviewedByInput = {
+    id?: string
+    status?: $Enums.OrganizerApplicationStatus
+    requestedAt?: Date | string
+    reviewedAt?: Date | string | null
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutOrganizerRoleRequestInput
+  }
+
+  export type OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput = {
+    id?: string
+    userId: string
+    status?: $Enums.OrganizerApplicationStatus
+    requestedAt?: Date | string
+    reviewedAt?: Date | string | null
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OrganizerRoleRequestCreateOrConnectWithoutReviewedByInput = {
+    where: OrganizerRoleRequestWhereUniqueInput
+    create: XOR<OrganizerRoleRequestCreateWithoutReviewedByInput, OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput>
+  }
+
+  export type OrganizerRoleRequestCreateManyReviewedByInputEnvelope = {
+    data: OrganizerRoleRequestCreateManyReviewedByInput | OrganizerRoleRequestCreateManyReviewedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type EventUpsertWithWhereUniqueWithoutOrganizerInput = {
     where: EventWhereUniqueInput
     update: XOR<EventUpdateWithoutOrganizerInput, EventUncheckedUpdateWithoutOrganizerInput>
@@ -12818,6 +15458,20 @@ export namespace Prisma {
     requirements?: StringNullableFilter<"Event"> | string | null
     skillsNeeded?: StringNullableListFilter<"Event">
     status?: EnumEventStatusFilter<"Event"> | $Enums.EventStatus
+    submittedForModerationAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    lastModeratedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    approvedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    approvedById?: UuidNullableFilter<"Event"> | string | null
+    rejectedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    rejectedById?: UuidNullableFilter<"Event"> | string | null
+    rejectionReason?: StringNullableFilter<"Event"> | string | null
+    suspendedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    suspendedById?: UuidNullableFilter<"Event"> | string | null
+    suspensionReason?: StringNullableFilter<"Event"> | string | null
+    archivedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
+    archivedById?: UuidNullableFilter<"Event"> | string | null
+    moderationIteration?: IntFilter<"Event"> | number
+    moderationVersion?: IntFilter<"Event"> | number
     tags?: StringNullableListFilter<"Event">
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
@@ -12978,6 +15632,302 @@ export namespace Prisma {
     data: XOR<CertificateUpdateManyMutationInput, CertificateUncheckedUpdateManyWithoutIssuedByInput>
   }
 
+  export type OrganizerRoleRequestUpsertWithoutUserInput = {
+    update: XOR<OrganizerRoleRequestUpdateWithoutUserInput, OrganizerRoleRequestUncheckedUpdateWithoutUserInput>
+    create: XOR<OrganizerRoleRequestCreateWithoutUserInput, OrganizerRoleRequestUncheckedCreateWithoutUserInput>
+    where?: OrganizerRoleRequestWhereInput
+  }
+
+  export type OrganizerRoleRequestUpdateToOneWithWhereWithoutUserInput = {
+    where?: OrganizerRoleRequestWhereInput
+    data: XOR<OrganizerRoleRequestUpdateWithoutUserInput, OrganizerRoleRequestUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OrganizerRoleRequestUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrganizerApplicationStatusFieldUpdateOperationsInput | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedBy?: UserUpdateOneWithoutReviewedOrganizerRequestsNestedInput
+  }
+
+  export type OrganizerRoleRequestUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrganizerApplicationStatusFieldUpdateOperationsInput | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrganizerRoleRequestUpsertWithWhereUniqueWithoutReviewedByInput = {
+    where: OrganizerRoleRequestWhereUniqueInput
+    update: XOR<OrganizerRoleRequestUpdateWithoutReviewedByInput, OrganizerRoleRequestUncheckedUpdateWithoutReviewedByInput>
+    create: XOR<OrganizerRoleRequestCreateWithoutReviewedByInput, OrganizerRoleRequestUncheckedCreateWithoutReviewedByInput>
+  }
+
+  export type OrganizerRoleRequestUpdateWithWhereUniqueWithoutReviewedByInput = {
+    where: OrganizerRoleRequestWhereUniqueInput
+    data: XOR<OrganizerRoleRequestUpdateWithoutReviewedByInput, OrganizerRoleRequestUncheckedUpdateWithoutReviewedByInput>
+  }
+
+  export type OrganizerRoleRequestUpdateManyWithWhereWithoutReviewedByInput = {
+    where: OrganizerRoleRequestScalarWhereInput
+    data: XOR<OrganizerRoleRequestUpdateManyMutationInput, OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByInput>
+  }
+
+  export type OrganizerRoleRequestScalarWhereInput = {
+    AND?: OrganizerRoleRequestScalarWhereInput | OrganizerRoleRequestScalarWhereInput[]
+    OR?: OrganizerRoleRequestScalarWhereInput[]
+    NOT?: OrganizerRoleRequestScalarWhereInput | OrganizerRoleRequestScalarWhereInput[]
+    id?: UuidFilter<"OrganizerRoleRequest"> | string
+    userId?: UuidFilter<"OrganizerRoleRequest"> | string
+    status?: EnumOrganizerApplicationStatusFilter<"OrganizerRoleRequest"> | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFilter<"OrganizerRoleRequest"> | Date | string
+    reviewedAt?: DateTimeNullableFilter<"OrganizerRoleRequest"> | Date | string | null
+    reviewedById?: UuidNullableFilter<"OrganizerRoleRequest"> | string | null
+    rejectionReason?: StringNullableFilter<"OrganizerRoleRequest"> | string | null
+    createdAt?: DateTimeFilter<"OrganizerRoleRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"OrganizerRoleRequest"> | Date | string
+  }
+
+  export type UserCreateWithoutOrganizerRoleRequestInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name: string
+    role: $Enums.Role
+    phone?: string | null
+    bio?: string | null
+    avatarUrl?: string | null
+    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
+    organizationName?: string | null
+    organizationDescription?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    events?: EventCreateNestedManyWithoutOrganizerInput
+    registrations?: EventRegistrationCreateNestedManyWithoutVolunteerInput
+    volunteerHours?: VolunteerHourCreateNestedManyWithoutVolunteerInput
+    certificates?: CertificateCreateNestedManyWithoutVolunteerInput
+    verifiedHours?: VolunteerHourCreateNestedManyWithoutVerifiedByInput
+    reviewedRegistrations?: EventRegistrationCreateNestedManyWithoutReviewedByInput
+    issuedCertificates?: CertificateCreateNestedManyWithoutIssuedByInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserUncheckedCreateWithoutOrganizerRoleRequestInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name: string
+    role: $Enums.Role
+    phone?: string | null
+    bio?: string | null
+    avatarUrl?: string | null
+    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
+    organizationName?: string | null
+    organizationDescription?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    events?: EventUncheckedCreateNestedManyWithoutOrganizerInput
+    registrations?: EventRegistrationUncheckedCreateNestedManyWithoutVolunteerInput
+    volunteerHours?: VolunteerHourUncheckedCreateNestedManyWithoutVolunteerInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutVolunteerInput
+    verifiedHours?: VolunteerHourUncheckedCreateNestedManyWithoutVerifiedByInput
+    reviewedRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    issuedCertificates?: CertificateUncheckedCreateNestedManyWithoutIssuedByInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedCreateNestedManyWithoutReviewedByInput
+  }
+
+  export type UserCreateOrConnectWithoutOrganizerRoleRequestInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOrganizerRoleRequestInput, UserUncheckedCreateWithoutOrganizerRoleRequestInput>
+  }
+
+  export type UserCreateWithoutReviewedOrganizerRequestsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name: string
+    role: $Enums.Role
+    phone?: string | null
+    bio?: string | null
+    avatarUrl?: string | null
+    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
+    organizationName?: string | null
+    organizationDescription?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    events?: EventCreateNestedManyWithoutOrganizerInput
+    registrations?: EventRegistrationCreateNestedManyWithoutVolunteerInput
+    volunteerHours?: VolunteerHourCreateNestedManyWithoutVolunteerInput
+    certificates?: CertificateCreateNestedManyWithoutVolunteerInput
+    verifiedHours?: VolunteerHourCreateNestedManyWithoutVerifiedByInput
+    reviewedRegistrations?: EventRegistrationCreateNestedManyWithoutReviewedByInput
+    issuedCertificates?: CertificateCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReviewedOrganizerRequestsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name: string
+    role: $Enums.Role
+    phone?: string | null
+    bio?: string | null
+    avatarUrl?: string | null
+    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
+    organizationName?: string | null
+    organizationDescription?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    events?: EventUncheckedCreateNestedManyWithoutOrganizerInput
+    registrations?: EventRegistrationUncheckedCreateNestedManyWithoutVolunteerInput
+    volunteerHours?: VolunteerHourUncheckedCreateNestedManyWithoutVolunteerInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutVolunteerInput
+    verifiedHours?: VolunteerHourUncheckedCreateNestedManyWithoutVerifiedByInput
+    reviewedRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    issuedCertificates?: CertificateUncheckedCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReviewedOrganizerRequestsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReviewedOrganizerRequestsInput, UserUncheckedCreateWithoutReviewedOrganizerRequestsInput>
+  }
+
+  export type UserUpsertWithoutOrganizerRoleRequestInput = {
+    update: XOR<UserUpdateWithoutOrganizerRoleRequestInput, UserUncheckedUpdateWithoutOrganizerRoleRequestInput>
+    create: XOR<UserCreateWithoutOrganizerRoleRequestInput, UserUncheckedCreateWithoutOrganizerRoleRequestInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOrganizerRoleRequestInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOrganizerRoleRequestInput, UserUncheckedUpdateWithoutOrganizerRoleRequestInput>
+  }
+
+  export type UserUpdateWithoutOrganizerRoleRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
+    organizationName?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    events?: EventUpdateManyWithoutOrganizerNestedInput
+    registrations?: EventRegistrationUpdateManyWithoutVolunteerNestedInput
+    volunteerHours?: VolunteerHourUpdateManyWithoutVolunteerNestedInput
+    certificates?: CertificateUpdateManyWithoutVolunteerNestedInput
+    verifiedHours?: VolunteerHourUpdateManyWithoutVerifiedByNestedInput
+    reviewedRegistrations?: EventRegistrationUpdateManyWithoutReviewedByNestedInput
+    issuedCertificates?: CertificateUpdateManyWithoutIssuedByNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOrganizerRoleRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
+    organizationName?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    events?: EventUncheckedUpdateManyWithoutOrganizerNestedInput
+    registrations?: EventRegistrationUncheckedUpdateManyWithoutVolunteerNestedInput
+    volunteerHours?: VolunteerHourUncheckedUpdateManyWithoutVolunteerNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutVolunteerNestedInput
+    verifiedHours?: VolunteerHourUncheckedUpdateManyWithoutVerifiedByNestedInput
+    reviewedRegistrations?: EventRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    issuedCertificates?: CertificateUncheckedUpdateManyWithoutIssuedByNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByNestedInput
+  }
+
+  export type UserUpsertWithoutReviewedOrganizerRequestsInput = {
+    update: XOR<UserUpdateWithoutReviewedOrganizerRequestsInput, UserUncheckedUpdateWithoutReviewedOrganizerRequestsInput>
+    create: XOR<UserCreateWithoutReviewedOrganizerRequestsInput, UserUncheckedCreateWithoutReviewedOrganizerRequestsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReviewedOrganizerRequestsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReviewedOrganizerRequestsInput, UserUncheckedUpdateWithoutReviewedOrganizerRequestsInput>
+  }
+
+  export type UserUpdateWithoutReviewedOrganizerRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
+    organizationName?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    events?: EventUpdateManyWithoutOrganizerNestedInput
+    registrations?: EventRegistrationUpdateManyWithoutVolunteerNestedInput
+    volunteerHours?: VolunteerHourUpdateManyWithoutVolunteerNestedInput
+    certificates?: CertificateUpdateManyWithoutVolunteerNestedInput
+    verifiedHours?: VolunteerHourUpdateManyWithoutVerifiedByNestedInput
+    reviewedRegistrations?: EventRegistrationUpdateManyWithoutReviewedByNestedInput
+    issuedCertificates?: CertificateUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReviewedOrganizerRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
+    organizationName?: NullableStringFieldUpdateOperationsInput | string | null
+    organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    events?: EventUncheckedUpdateManyWithoutOrganizerNestedInput
+    registrations?: EventRegistrationUncheckedUpdateManyWithoutVolunteerNestedInput
+    volunteerHours?: VolunteerHourUncheckedUpdateManyWithoutVolunteerNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutVolunteerNestedInput
+    verifiedHours?: VolunteerHourUncheckedUpdateManyWithoutVerifiedByNestedInput
+    reviewedRegistrations?: EventRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    issuedCertificates?: CertificateUncheckedUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedUpdateOneWithoutUserNestedInput
+  }
+
   export type UserCreateWithoutEventsInput = {
     id?: string
     email: string
@@ -12999,6 +15949,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutEventsInput = {
@@ -13022,6 +15974,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUncheckedCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateUncheckedCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutEventsInput = {
@@ -13117,6 +16071,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EventModerationRequestCreateWithoutEventInput = {
+    id?: string
+    iteration: number
+    status?: $Enums.EventModerationStatus
+    submittedById: string
+    submittedAt?: Date | string
+    decisionById?: string | null
+    decisionAt?: Date | string | null
+    decisionReason?: string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventModerationRequestUncheckedCreateWithoutEventInput = {
+    id?: string
+    iteration: number
+    status?: $Enums.EventModerationStatus
+    submittedById: string
+    submittedAt?: Date | string
+    decisionById?: string | null
+    decisionAt?: Date | string | null
+    decisionReason?: string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventModerationRequestCreateOrConnectWithoutEventInput = {
+    where: EventModerationRequestWhereUniqueInput
+    create: XOR<EventModerationRequestCreateWithoutEventInput, EventModerationRequestUncheckedCreateWithoutEventInput>
+  }
+
+  export type EventModerationRequestCreateManyEventInputEnvelope = {
+    data: EventModerationRequestCreateManyEventInput | EventModerationRequestCreateManyEventInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutEventsInput = {
     update: XOR<UserUpdateWithoutEventsInput, UserUncheckedUpdateWithoutEventsInput>
     create: XOR<UserCreateWithoutEventsInput, UserUncheckedCreateWithoutEventsInput>
@@ -13149,6 +16143,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventsInput = {
@@ -13172,6 +16168,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUncheckedUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUncheckedUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type EventRegistrationUpsertWithWhereUniqueWithoutEventInput = {
@@ -13206,6 +16204,213 @@ export namespace Prisma {
     data: XOR<VolunteerHourUpdateManyMutationInput, VolunteerHourUncheckedUpdateManyWithoutEventInput>
   }
 
+  export type EventModerationRequestUpsertWithWhereUniqueWithoutEventInput = {
+    where: EventModerationRequestWhereUniqueInput
+    update: XOR<EventModerationRequestUpdateWithoutEventInput, EventModerationRequestUncheckedUpdateWithoutEventInput>
+    create: XOR<EventModerationRequestCreateWithoutEventInput, EventModerationRequestUncheckedCreateWithoutEventInput>
+  }
+
+  export type EventModerationRequestUpdateWithWhereUniqueWithoutEventInput = {
+    where: EventModerationRequestWhereUniqueInput
+    data: XOR<EventModerationRequestUpdateWithoutEventInput, EventModerationRequestUncheckedUpdateWithoutEventInput>
+  }
+
+  export type EventModerationRequestUpdateManyWithWhereWithoutEventInput = {
+    where: EventModerationRequestScalarWhereInput
+    data: XOR<EventModerationRequestUpdateManyMutationInput, EventModerationRequestUncheckedUpdateManyWithoutEventInput>
+  }
+
+  export type EventModerationRequestScalarWhereInput = {
+    AND?: EventModerationRequestScalarWhereInput | EventModerationRequestScalarWhereInput[]
+    OR?: EventModerationRequestScalarWhereInput[]
+    NOT?: EventModerationRequestScalarWhereInput | EventModerationRequestScalarWhereInput[]
+    id?: UuidFilter<"EventModerationRequest"> | string
+    eventId?: UuidFilter<"EventModerationRequest"> | string
+    iteration?: IntFilter<"EventModerationRequest"> | number
+    status?: EnumEventModerationStatusFilter<"EventModerationRequest"> | $Enums.EventModerationStatus
+    submittedById?: UuidFilter<"EventModerationRequest"> | string
+    submittedAt?: DateTimeFilter<"EventModerationRequest"> | Date | string
+    decisionById?: UuidNullableFilter<"EventModerationRequest"> | string | null
+    decisionAt?: DateTimeNullableFilter<"EventModerationRequest"> | Date | string | null
+    decisionReason?: StringNullableFilter<"EventModerationRequest"> | string | null
+    snapshot?: JsonNullableFilter<"EventModerationRequest">
+    version?: IntFilter<"EventModerationRequest"> | number
+    createdAt?: DateTimeFilter<"EventModerationRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"EventModerationRequest"> | Date | string
+  }
+
+  export type EventCreateWithoutModerationRequestsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    activityType: string
+    eventDate: Date | string
+    startTime: Date | string
+    endTime: Date | string
+    location: string
+    address?: string | null
+    requiredHours: number
+    maxParticipants?: number | null
+    currentParticipants?: number | null
+    requirements?: string | null
+    skillsNeeded?: EventCreateskillsNeededInput | string[]
+    status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
+    tags?: EventCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    organizer: UserCreateNestedOneWithoutEventsInput
+    registrations?: EventRegistrationCreateNestedManyWithoutEventInput
+    volunteerHours?: VolunteerHourCreateNestedManyWithoutEventInput
+  }
+
+  export type EventUncheckedCreateWithoutModerationRequestsInput = {
+    id?: string
+    organizerId: string
+    title: string
+    description?: string | null
+    activityType: string
+    eventDate: Date | string
+    startTime: Date | string
+    endTime: Date | string
+    location: string
+    address?: string | null
+    requiredHours: number
+    maxParticipants?: number | null
+    currentParticipants?: number | null
+    requirements?: string | null
+    skillsNeeded?: EventCreateskillsNeededInput | string[]
+    status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
+    tags?: EventCreatetagsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishedAt?: Date | string | null
+    registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
+    volunteerHours?: VolunteerHourUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type EventCreateOrConnectWithoutModerationRequestsInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutModerationRequestsInput, EventUncheckedCreateWithoutModerationRequestsInput>
+  }
+
+  export type EventUpsertWithoutModerationRequestsInput = {
+    update: XOR<EventUpdateWithoutModerationRequestsInput, EventUncheckedUpdateWithoutModerationRequestsInput>
+    create: XOR<EventCreateWithoutModerationRequestsInput, EventUncheckedCreateWithoutModerationRequestsInput>
+    where?: EventWhereInput
+  }
+
+  export type EventUpdateToOneWithWhereWithoutModerationRequestsInput = {
+    where?: EventWhereInput
+    data: XOR<EventUpdateWithoutModerationRequestsInput, EventUncheckedUpdateWithoutModerationRequestsInput>
+  }
+
+  export type EventUpdateWithoutModerationRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    activityType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    requiredHours?: IntFieldUpdateOperationsInput | number
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
+    currentParticipants?: NullableIntFieldUpdateOperationsInput | number | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    skillsNeeded?: EventUpdateskillsNeededInput | string[]
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
+    tags?: EventUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    organizer?: UserUpdateOneRequiredWithoutEventsNestedInput
+    registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
+    volunteerHours?: VolunteerHourUpdateManyWithoutEventNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutModerationRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizerId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    activityType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    endTime?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    requiredHours?: IntFieldUpdateOperationsInput | number
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
+    currentParticipants?: NullableIntFieldUpdateOperationsInput | number | null
+    requirements?: NullableStringFieldUpdateOperationsInput | string | null
+    skillsNeeded?: EventUpdateskillsNeededInput | string[]
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
+    tags?: EventUpdatetagsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
+    volunteerHours?: VolunteerHourUncheckedUpdateManyWithoutEventNestedInput
+  }
+
   export type EventCreateWithoutRegistrationsInput = {
     id?: string
     title: string
@@ -13222,12 +16427,27 @@ export namespace Prisma {
     requirements?: string | null
     skillsNeeded?: EventCreateskillsNeededInput | string[]
     status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     organizer: UserCreateNestedOneWithoutEventsInput
     volunteerHours?: VolunteerHourCreateNestedManyWithoutEventInput
+    moderationRequests?: EventModerationRequestCreateNestedManyWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutRegistrationsInput = {
@@ -13247,11 +16467,26 @@ export namespace Prisma {
     requirements?: string | null
     skillsNeeded?: EventCreateskillsNeededInput | string[]
     status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     volunteerHours?: VolunteerHourUncheckedCreateNestedManyWithoutEventInput
+    moderationRequests?: EventModerationRequestUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutRegistrationsInput = {
@@ -13280,6 +16515,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutRegistrationsInput = {
@@ -13303,6 +16540,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUncheckedCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateUncheckedCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -13331,6 +16570,8 @@ export namespace Prisma {
     certificates?: CertificateCreateNestedManyWithoutVolunteerInput
     verifiedHours?: VolunteerHourCreateNestedManyWithoutVerifiedByInput
     issuedCertificates?: CertificateCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutReviewedRegistrationsInput = {
@@ -13354,6 +16595,8 @@ export namespace Prisma {
     certificates?: CertificateUncheckedCreateNestedManyWithoutVolunteerInput
     verifiedHours?: VolunteerHourUncheckedCreateNestedManyWithoutVerifiedByInput
     issuedCertificates?: CertificateUncheckedCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutReviewedRegistrationsInput = {
@@ -13432,12 +16675,27 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizer?: UserUpdateOneRequiredWithoutEventsNestedInput
     volunteerHours?: VolunteerHourUpdateManyWithoutEventNestedInput
+    moderationRequests?: EventModerationRequestUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutRegistrationsInput = {
@@ -13457,11 +16715,26 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     volunteerHours?: VolunteerHourUncheckedUpdateManyWithoutEventNestedInput
+    moderationRequests?: EventModerationRequestUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type UserUpsertWithoutRegistrationsInput = {
@@ -13496,6 +16769,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRegistrationsInput = {
@@ -13519,6 +16794,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUncheckedUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUncheckedUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUpsertWithoutReviewedRegistrationsInput = {
@@ -13553,6 +16830,8 @@ export namespace Prisma {
     certificates?: CertificateUpdateManyWithoutVolunteerNestedInput
     verifiedHours?: VolunteerHourUpdateManyWithoutVerifiedByNestedInput
     issuedCertificates?: CertificateUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewedRegistrationsInput = {
@@ -13576,6 +16855,8 @@ export namespace Prisma {
     certificates?: CertificateUncheckedUpdateManyWithoutVolunteerNestedInput
     verifiedHours?: VolunteerHourUncheckedUpdateManyWithoutVerifiedByNestedInput
     issuedCertificates?: CertificateUncheckedUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type VolunteerHourUpsertWithWhereUniqueWithoutRegistrationInput = {
@@ -13615,6 +16896,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutVolunteerHoursInput = {
@@ -13638,6 +16921,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUncheckedCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateUncheckedCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutVolunteerHoursInput = {
@@ -13661,12 +16946,27 @@ export namespace Prisma {
     requirements?: string | null
     skillsNeeded?: EventCreateskillsNeededInput | string[]
     status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     organizer: UserCreateNestedOneWithoutEventsInput
     registrations?: EventRegistrationCreateNestedManyWithoutEventInput
+    moderationRequests?: EventModerationRequestCreateNestedManyWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutVolunteerHoursInput = {
@@ -13686,11 +16986,26 @@ export namespace Prisma {
     requirements?: string | null
     skillsNeeded?: EventCreateskillsNeededInput | string[]
     status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     registrations?: EventRegistrationUncheckedCreateNestedManyWithoutEventInput
+    moderationRequests?: EventModerationRequestUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutVolunteerHoursInput = {
@@ -13758,6 +17073,8 @@ export namespace Prisma {
     certificates?: CertificateCreateNestedManyWithoutVolunteerInput
     reviewedRegistrations?: EventRegistrationCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedHoursInput = {
@@ -13781,6 +17098,8 @@ export namespace Prisma {
     certificates?: CertificateUncheckedCreateNestedManyWithoutVolunteerInput
     reviewedRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateUncheckedCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedHoursInput = {
@@ -13820,6 +17139,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVolunteerHoursInput = {
@@ -13843,6 +17164,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUncheckedUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUncheckedUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type EventUpsertWithoutVolunteerHoursInput = {
@@ -13872,12 +17195,27 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     organizer?: UserUpdateOneRequiredWithoutEventsNestedInput
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
+    moderationRequests?: EventModerationRequestUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutVolunteerHoursInput = {
@@ -13897,11 +17235,26 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
+    moderationRequests?: EventModerationRequestUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type EventRegistrationUpsertWithoutVolunteerHoursInput = {
@@ -13981,6 +17334,8 @@ export namespace Prisma {
     certificates?: CertificateUpdateManyWithoutVolunteerNestedInput
     reviewedRegistrations?: EventRegistrationUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedHoursInput = {
@@ -14004,6 +17359,8 @@ export namespace Prisma {
     certificates?: CertificateUncheckedUpdateManyWithoutVolunteerNestedInput
     reviewedRegistrations?: EventRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUncheckedUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserCreateWithoutCertificatesInput = {
@@ -14027,6 +17384,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -14050,6 +17409,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUncheckedCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
     issuedCertificates?: CertificateUncheckedCreateNestedManyWithoutIssuedByInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -14078,6 +17439,8 @@ export namespace Prisma {
     certificates?: CertificateCreateNestedManyWithoutVolunteerInput
     verifiedHours?: VolunteerHourCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationCreateNestedManyWithoutReviewedByInput
+    organizerRoleRequest?: OrganizerRoleRequestCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserUncheckedCreateWithoutIssuedCertificatesInput = {
@@ -14101,6 +17464,8 @@ export namespace Prisma {
     certificates?: CertificateUncheckedCreateNestedManyWithoutVolunteerInput
     verifiedHours?: VolunteerHourUncheckedCreateNestedManyWithoutVerifiedByInput
     reviewedRegistrations?: EventRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedCreateNestedOneWithoutUserInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedCreateNestedManyWithoutReviewedByInput
   }
 
   export type UserCreateOrConnectWithoutIssuedCertificatesInput = {
@@ -14140,6 +17505,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -14163,6 +17530,8 @@ export namespace Prisma {
     verifiedHours?: VolunteerHourUncheckedUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
     issuedCertificates?: CertificateUncheckedUpdateManyWithoutIssuedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUpsertWithoutIssuedCertificatesInput = {
@@ -14197,6 +17566,8 @@ export namespace Prisma {
     certificates?: CertificateUpdateManyWithoutVolunteerNestedInput
     verifiedHours?: VolunteerHourUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUpdateManyWithoutReviewedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUpdateManyWithoutReviewedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutIssuedCertificatesInput = {
@@ -14220,6 +17591,8 @@ export namespace Prisma {
     certificates?: CertificateUncheckedUpdateManyWithoutVolunteerNestedInput
     verifiedHours?: VolunteerHourUncheckedUpdateManyWithoutVerifiedByNestedInput
     reviewedRegistrations?: EventRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    organizerRoleRequest?: OrganizerRoleRequestUncheckedUpdateOneWithoutUserNestedInput
+    reviewedOrganizerRequests?: OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByNestedInput
   }
 
   export type EventCreateManyOrganizerInput = {
@@ -14238,6 +17611,20 @@ export namespace Prisma {
     requirements?: string | null
     skillsNeeded?: EventCreateskillsNeededInput | string[]
     status?: $Enums.EventStatus
+    submittedForModerationAt?: Date | string | null
+    lastModeratedAt?: Date | string | null
+    approvedAt?: Date | string | null
+    approvedById?: string | null
+    rejectedAt?: Date | string | null
+    rejectedById?: string | null
+    rejectionReason?: string | null
+    suspendedAt?: Date | string | null
+    suspendedById?: string | null
+    suspensionReason?: string | null
+    archivedAt?: Date | string | null
+    archivedById?: string | null
+    moderationIteration?: number
+    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14336,6 +17723,17 @@ export namespace Prisma {
     issuedAt?: Date | string
   }
 
+  export type OrganizerRoleRequestCreateManyReviewedByInput = {
+    id?: string
+    userId: string
+    status?: $Enums.OrganizerApplicationStatus
+    requestedAt?: Date | string
+    reviewedAt?: Date | string | null
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type EventUpdateWithoutOrganizerInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -14352,12 +17750,27 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrations?: EventRegistrationUpdateManyWithoutEventNestedInput
     volunteerHours?: VolunteerHourUpdateManyWithoutEventNestedInput
+    moderationRequests?: EventModerationRequestUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutOrganizerInput = {
@@ -14376,12 +17789,27 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     registrations?: EventRegistrationUncheckedUpdateManyWithoutEventNestedInput
     volunteerHours?: VolunteerHourUncheckedUpdateManyWithoutEventNestedInput
+    moderationRequests?: EventModerationRequestUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateManyWithoutOrganizerInput = {
@@ -14400,6 +17828,20 @@ export namespace Prisma {
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     skillsNeeded?: EventUpdateskillsNeededInput | string[]
     status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+    submittedForModerationAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastModeratedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
+    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
+    moderationIteration?: IntFieldUpdateOperationsInput | number
+    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14686,6 +18128,39 @@ export namespace Prisma {
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OrganizerRoleRequestUpdateWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrganizerApplicationStatusFieldUpdateOperationsInput | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutOrganizerRoleRequestNestedInput
+  }
+
+  export type OrganizerRoleRequestUncheckedUpdateWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrganizerApplicationStatusFieldUpdateOperationsInput | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OrganizerRoleRequestUncheckedUpdateManyWithoutReviewedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumOrganizerApplicationStatusFieldUpdateOperationsInput | $Enums.OrganizerApplicationStatus
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type EventRegistrationCreateManyEventInput = {
     id?: string
     volunteerId: string
@@ -14715,6 +18190,21 @@ export namespace Prisma {
     verifiedById?: string | null
     verifiedAt?: Date | string | null
     source?: $Enums.SourceType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventModerationRequestCreateManyEventInput = {
+    id?: string
+    iteration: number
+    status?: $Enums.EventModerationStatus
+    submittedById: string
+    submittedAt?: Date | string
+    decisionById?: string | null
+    decisionAt?: Date | string | null
+    decisionReason?: string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14816,6 +18306,51 @@ export namespace Prisma {
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     source?: EnumSourceTypeFieldUpdateOperationsInput | $Enums.SourceType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventModerationRequestUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    iteration?: IntFieldUpdateOperationsInput | number
+    status?: EnumEventModerationStatusFieldUpdateOperationsInput | $Enums.EventModerationStatus
+    submittedById?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionById?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventModerationRequestUncheckedUpdateWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    iteration?: IntFieldUpdateOperationsInput | number
+    status?: EnumEventModerationStatusFieldUpdateOperationsInput | $Enums.EventModerationStatus
+    submittedById?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionById?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventModerationRequestUncheckedUpdateManyWithoutEventInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    iteration?: IntFieldUpdateOperationsInput | number
+    status?: EnumEventModerationStatusFieldUpdateOperationsInput | $Enums.EventModerationStatus
+    submittedById?: StringFieldUpdateOperationsInput | string
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    decisionById?: NullableStringFieldUpdateOperationsInput | string | null
+    decisionAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    decisionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    snapshot?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

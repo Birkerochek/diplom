@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 
 import { nextAuthOptions } from "@shared/config/nextAuth";
+import { canAccessVolunteerScope } from "@shared/lib/access";
 import { cancelVolunteerApplication } from "../services/cancelVolunteerApplication";
 
 type RouteParams = { params: Promise<{ registrationId: string }> };
@@ -17,7 +18,7 @@ export async function PATCH(_request: Request, context: RouteParams) {
       );
     }
 
-    if (session.user.role !== "volunteer") {
+    if (!canAccessVolunteerScope(session.user.role)) {
       return NextResponse.json(
         { message: "Доступ разрешен только волонтерам" },
         { status: 403 }

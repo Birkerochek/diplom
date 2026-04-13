@@ -3,10 +3,18 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 import { PAGES, ROLES } from "@shared/constants";
 import { authDefaultValues, RegisterFormValues, registerSchema } from "@shared/zod";
 import { registerUser, signInAfterRegister, fetchSession } from "../api/register";
 import { getPasswordRequirementList } from "./requirementsList";
+
+type RegisterResponse = {
+  success: boolean;
+  assignedRole: "volunteer" | "organizer";
+  organizerApplicationStatus: "pending" | null;
+  message: string;
+};
 
 export const useRegisterForm = () => {
   const router = useRouter();
@@ -32,12 +40,13 @@ export const useRegisterForm = () => {
         setServerError(null);
 
         clearErrors();
-        await registerUser(values);
+        const response = await registerUser(values);
+        const data = response.data as RegisterResponse;
 
         const redirectTo =
-          values.role === ROLES.VOLUNTEER
-            ? PAGES.VOLUNTEER_DASHBOARD
-            : PAGES.ORGANIZER_DASHBOARD;
+          values.role === ROLES.ORGANIZER
+            ? `${PAGES.VOLUNTEER_DASHBOARD}?organizerApplication=pending`
+            : PAGES.VOLUNTEER_DASHBOARD;
 
         const signInResult = await signInAfterRegister(values.email, values.password);
 
@@ -47,6 +56,10 @@ export const useRegisterForm = () => {
           );
           router.push(PAGES.LOGIN);
           return;
+        }
+
+        if (data.message) {
+          toast.success(data.message);
         }
 
         await fetchSession();
@@ -74,7 +87,7 @@ export const useRegisterForm = () => {
         setIsSubmitting(false);
       }
     },
-    [router]
+    [clearErrors, router, setError]
   );
 
   const setRole = useCallback(

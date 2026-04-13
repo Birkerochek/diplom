@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PAGES, ROLES } from "@shared/constants";
+import { canAccessOrganizerScope } from "@shared/lib/access";
 import { loginUser, fetchUserSession } from "../api/login";
 import { LoginFormValues } from "@shared/zod";
 
@@ -25,7 +26,12 @@ export const useLoginForm = () => {
         const session = await fetchUserSession();
         const role = session?.user?.role;
 
-        const redirectTo = role === ROLES.ORGANIZER ? PAGES.ORGANIZER_DASHBOARD : PAGES.VOLUNTEER_DASHBOARD;
+        const redirectTo =
+          role === ROLES.ADMIN
+            ? PAGES.ADMIN_DASHBOARD
+            : canAccessOrganizerScope(role)
+              ? PAGES.ORGANIZER_DASHBOARD
+              : PAGES.VOLUNTEER_DASHBOARD;
 
         router.push(redirectTo);
         router.refresh();

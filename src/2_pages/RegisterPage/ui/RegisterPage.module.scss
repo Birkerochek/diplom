@@ -139,6 +139,72 @@
   }
 }
 
+.checkboxWrapper {
+  display: grid;
+  gap: 8px;
+}
+
+.checkboxField {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.checkboxInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checkboxControl {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid #c8d2cd;
+  background: #ffffff;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.checkboxText {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #4e5a55;
+
+  a {
+    color: #007c4f;
+    font-weight: 600;
+    text-decoration: none;
+  }
+}
+
+.checkboxField:hover .checkboxControl {
+  border-color: #007c4f;
+}
+
+.checkboxInput:focus-visible + .checkboxControl {
+  box-shadow: 0 0 0 3px rgba(0, 124, 79, 0.14);
+}
+
+.checkboxInput:checked + .checkboxControl {
+  border-color: #007c4f;
+  background: #007c4f;
+  color: #ffffff;
+}
+
+.checkboxError {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #d14343;
+}
+
 .footer {
   text-align: center;
   font-size: 14px;

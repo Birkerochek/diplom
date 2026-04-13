@@ -137,6 +137,18 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.OrganizerRoleRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  requestedAt: 'requestedAt',
+  reviewedAt: 'reviewedAt',
+  reviewedById: 'reviewedById',
+  rejectionReason: 'rejectionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.EventScalarFieldEnum = {
   id: 'id',
   organizerId: 'organizerId',
@@ -154,10 +166,40 @@ exports.Prisma.EventScalarFieldEnum = {
   requirements: 'requirements',
   skillsNeeded: 'skillsNeeded',
   status: 'status',
+  submittedForModerationAt: 'submittedForModerationAt',
+  lastModeratedAt: 'lastModeratedAt',
+  approvedAt: 'approvedAt',
+  approvedById: 'approvedById',
+  rejectedAt: 'rejectedAt',
+  rejectedById: 'rejectedById',
+  rejectionReason: 'rejectionReason',
+  suspendedAt: 'suspendedAt',
+  suspendedById: 'suspendedById',
+  suspensionReason: 'suspensionReason',
+  archivedAt: 'archivedAt',
+  archivedById: 'archivedById',
+  moderationIteration: 'moderationIteration',
+  moderationVersion: 'moderationVersion',
   tags: 'tags',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   publishedAt: 'publishedAt'
+};
+
+exports.Prisma.EventModerationRequestScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  iteration: 'iteration',
+  status: 'status',
+  submittedById: 'submittedById',
+  submittedAt: 'submittedAt',
+  decisionById: 'decisionById',
+  decisionAt: 'decisionAt',
+  decisionReason: 'decisionReason',
+  snapshot: 'snapshot',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.EventRegistrationScalarFieldEnum = {
@@ -209,22 +251,14 @@ exports.Prisma.CertificateScalarFieldEnum = {
   issuedAt: 'issuedAt'
 };
 
-exports.Prisma.ActivityTypeScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  slug: 'slug',
-  description: 'description',
-  icon: 'icon',
-  color: 'color',
-  category: 'category',
-  orderIndex: 'orderIndex',
-  isActive: 'isActive',
-  createdAt: 'createdAt'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -236,16 +270,40 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
 exports.Role = exports.$Enums.Role = {
   volunteer: 'volunteer',
-  organizer: 'organizer'
+  organizer: 'organizer',
+  admin: 'admin'
+};
+
+exports.OrganizerApplicationStatus = exports.$Enums.OrganizerApplicationStatus = {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected'
 };
 
 exports.EventStatus = exports.$Enums.EventStatus = {
   draft: 'draft',
+  pending_moderation: 'pending_moderation',
+  rejected: 'rejected',
   active: 'active',
+  suspended: 'suspended',
   completed: 'completed',
-  cancelled: 'cancelled'
+  cancelled: 'cancelled',
+  archived: 'archived'
+};
+
+exports.EventModerationStatus = exports.$Enums.EventModerationStatus = {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected',
+  revoked: 'revoked'
 };
 
 exports.RegistrationStatus = exports.$Enums.RegistrationStatus = {
@@ -263,11 +321,12 @@ exports.SourceType = exports.$Enums.SourceType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  OrganizerRoleRequest: 'OrganizerRoleRequest',
   Event: 'Event',
+  EventModerationRequest: 'EventModerationRequest',
   EventRegistration: 'EventRegistration',
   VolunteerHour: 'VolunteerHour',
-  Certificate: 'Certificate',
-  ActivityType: 'ActivityType'
+  Certificate: 'Certificate'
 };
 
 /**

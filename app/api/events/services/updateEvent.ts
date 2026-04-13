@@ -7,7 +7,8 @@ import { z } from "zod";
 // Types
 // -----------------------------------------------------------------------------
 type UpdateEventInput = {
-  organizerId: string;
+  actorId: string;
+  actorRole: "organizer" | "admin";
   eventId: string;
   payload: unknown;
 };
@@ -19,6 +20,7 @@ type UpdateEventResult =
 const eventUpdateSchema = eventCreateSchema
   .safeExtend({
     status: z.nativeEnum(EventStatus).optional(),
+    rejectionReason: z.string().trim().min(3).max(1000).nullable().optional(),
   })
   .partial()
   .refine((value) => Object.keys(value).length > 0, {
@@ -28,7 +30,7 @@ const eventUpdateSchema = eventCreateSchema
 // -----------------------------------------------------------------------------
 // Public API
 // -----------------------------------------------------------------------------
-export const updateEvent = async ({ organizerId, eventId, payload }: UpdateEventInput) => {
+export const updateEvent = async ({ actorId, actorRole, eventId, payload }: UpdateEventInput) => {
   const isObject = (value: unknown): value is Record<string, unknown> =>
     typeof value === "object" && value !== null && !Array.isArray(value);
 
@@ -45,7 +47,7 @@ export const updateEvent = async ({ organizerId, eventId, payload }: UpdateEvent
     return { status: 404, body: { message: "Мероприятие не найдено" } } satisfies UpdateEventResult;
   }
 
-  if (target.organizerId !== organizerId) {
+  if (actorRole === "organizer" && target.organizerId !== actorId) {
     return { status: 403, body: { message: "Недостаточно прав" } } satisfies UpdateEventResult;
   }
 
@@ -85,7 +87,60 @@ export const updateEvent = async ({ organizerId, eventId, payload }: UpdateEvent
   if (hasOwn("skillsNeeded") && Array.isArray(data.skillsNeeded)) {
     updateData.skillsNeeded = data.skillsNeeded;
   }
-  if (data.status) updateData.status = data.status;
+    if (data.status) {
+    if (actorRole === "organizer") {
+      const allowedOrganizerStatuses = new Set<EventStatus>(Object.values(EventStatus));
+
+      if (!allowedOrganizerStatuses.has(data.status)) {
+        return {
+          status: 403,
+          body: { message: "Организатор не может установить этот статус" },
+        } satisfies UpdateEventResult;
+      }
+
+    }
+
+    updateData.status = data.status;
+  }
+
+  if (hasOwn("rejectionReason")) {
+    updateData.rejectionReason = data.rejectionReason ?? null;
+  }
+
+  if (data.status === EventStatus.pending_moderation) {
+    updateData.submittedForModerationAt = new Date();
+    updateData.rejectionReason = null;
+    updateData.rejectedAt = null;
+    updateData.rejectedById = null;
+    updateData.suspensionReason = null;
+    updateData.suspendedAt = null;
+    updateData.suspendedById = null;
+    updateData.moderationIteration = { increment: 1 };
+  }
+
+  if (actorRole === "admin" && data.status === EventStatus.active) {
+    const now = new Date();
+
+    updateData.lastModeratedAt = now;
+    updateData.approvedAt = now;
+    updateData.approvedById = actorId;
+    updateData.rejectionReason = null;
+    updateData.rejectedAt = null;
+    updateData.rejectedById = null;
+    updateData.suspensionReason = null;
+    updateData.suspendedAt = null;
+    updateData.suspendedById = null;
+  }
+
+  if (actorRole === "admin" && data.status === EventStatus.rejected) {
+    const now = new Date();
+
+    updateData.lastModeratedAt = now;
+    updateData.rejectedAt = now;
+    updateData.rejectedById = actorId;
+    updateData.approvedAt = null;
+    updateData.approvedById = null;
+  }
 
   if (data.startDateTime && data.endDateTime) {
     const start = new Date(data.startDateTime);
@@ -127,6 +182,37 @@ export const updateEvent = async ({ organizerId, eventId, payload }: UpdateEvent
       await tx.event.update({
         where: { id: eventId },
         data: { currentParticipants: 0 },
+      });
+    });
+  } else if (data.status === EventStatus.pending_moderation) {
+    await prisma.$transaction(async (tx) => {
+      const updatedEvent = await tx.event.update({
+        where: { id: eventId },
+        data: updateData,
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          activityType: true,
+          eventDate: true,
+          startTime: true,
+          endTime: true,
+          location: true,
+          address: true,
+          maxParticipants: true,
+          requirements: true,
+          skillsNeeded: true,
+          moderationIteration: true,
+        },
+      });
+
+      await tx.eventModerationRequest.create({
+        data: {
+          eventId,
+          iteration: updatedEvent.moderationIteration,
+          submittedById: actorId,
+          snapshot: updatedEvent,
+        },
       });
     });
   } else {

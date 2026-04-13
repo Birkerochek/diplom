@@ -52,7 +52,7 @@ export const EditEventPage = ({ eventId }: EditEventPageProps) => {
         <Typography variant="body" color="secondary">
           Не удалось получить данные мероприятия. Попробуйте ещё раз.
         </Typography>
-        <Button color="primary" onClick={() => eventQuery.refetch()}>
+        <Button color="primary" onClick={() => eventQuery.refetch()} disabled={eventQuery.isFetching}>
           Повторить запрос
         </Button>
       </Container>

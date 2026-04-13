@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@shared/config/nextAuth";
+import { canAccessOrganizerScope, isKnownRole } from "@shared/lib/access";
 import { createEvent } from "./services/createEvent";
 import { listEvents } from "./services/listEvents";
 
-type AllowedRole = "organizer" | "volunteer";
+type AllowedRole = "organizer" | "volunteer" | "admin";
 
 // -----------------------------------------------------------------------------
 // GET /api/events — список мероприятий
@@ -52,7 +53,7 @@ export async function POST(request: Request) {
 
     const role = resolveRole(session.user.role);
 
-    if (role !== "organizer") {
+    if (!canAccessOrganizerScope(role)) {
       return NextResponse.json({ message: "Недостаточно прав" }, { status: 403 });
     }
 
@@ -73,7 +74,7 @@ export async function POST(request: Request) {
 // Helpers
 // -----------------------------------------------------------------------------
 const resolveRole = (role: string | undefined | null): AllowedRole | null => {
-  if (role === "organizer" || role === "volunteer") {
+  if (isKnownRole(role)) {
     return role;
   }
 

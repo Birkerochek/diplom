@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@shared/config/nextAuth";
+import { isKnownRole } from "@shared/lib/access";
 import { deleteEvent } from "../services/deleteEvent";
 import { getEvent } from "../services/getEvent";
 import { updateEvent } from "../services/updateEvent";
@@ -55,13 +56,14 @@ export async function PATCH(request: Request, context: RouteParams) {
 
     const role = resolveRole(session.user.role);
 
-    if (role !== "organizer") {
+  if (role !== "organizer" && role !== "admin") {
       return NextResponse.json({ message: "Недостаточно прав" }, { status: 403 });
     }
 
     const payload = await request.json();
     const result = await updateEvent({
-      organizerId: session.user.id,
+      actorId: session.user.id,
+      actorRole: role,
       eventId: params.eventId,
       payload,
     });
@@ -90,12 +92,13 @@ export async function DELETE(_request: Request, context: RouteParams) {
 
     const role = resolveRole(session.user.role);
 
-    if (role !== "organizer") {
+  if (role !== "organizer" && role !== "admin") {
       return NextResponse.json({ message: "Недостаточно прав" }, { status: 403 });
     }
 
     const result = await deleteEvent({
-      organizerId: session.user.id,
+      actorId: session.user.id,
+      actorRole: role,
       eventId: params.eventId,
     });
 
@@ -113,7 +116,7 @@ export async function DELETE(_request: Request, context: RouteParams) {
 // Helpers
 // -----------------------------------------------------------------------------
 const resolveRole = (role: string | undefined | null) => {
-  if (role === "organizer" || role === "volunteer") {
+  if (isKnownRole(role)) {
     return role;
   }
 

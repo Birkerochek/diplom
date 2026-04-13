@@ -52,7 +52,7 @@ export const VolunteerEventDetailsPage = ({ eventId }: VolunteerEventDetailsPage
         <Typography variant="body" color="secondary">
           Не удалось загрузить событие. Попробуйте обновить страницу.
         </Typography>
-        <Button color="primary" onClick={() => refetch()}>
+        <Button color="primary" onClick={() => refetch()} disabled={isFetching}>
           Обновить данные
         </Button>
       </Container>

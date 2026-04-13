@@ -12,6 +12,7 @@ export type UpdateEventResponse = {
 
 export type EventUpdatePayload = Partial<EventCreatePayload> & {
   status?: EventStatus;
+  rejectionReason?: string | null;
 };
 
 export const updateEvent = async (eventId: string, payload: EventUpdatePayload) => {

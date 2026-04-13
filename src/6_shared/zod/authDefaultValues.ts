@@ -10,4 +10,5 @@ export const authDefaultValues: DefaultValues<RegisterFormValues> = {
   organizationName: "",
   password: "",
   confirmPassword: "",
+  acceptPersonalData: false,
 };

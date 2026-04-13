@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@shared/config/nextAuth";
+import { canAccessOrganizerScope } from "@shared/lib/access";
 import { getDashboardStats } from "./services/getDashboardStats";
 
 export async function GET() {
@@ -14,7 +15,7 @@ export async function GET() {
       );
     }
 
-    if (session.user.role !== "organizer") {
+    if (!canAccessOrganizerScope(session.user.role)) {
       return NextResponse.json(
         { message: "Недостаточно прав для просмотра панели" },
         { status: 403 }

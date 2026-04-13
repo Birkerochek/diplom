@@ -32,3 +32,27 @@
   background: transparent;
   border: 1px solid #111827;
 }
+
+.badgePendingModeration {
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+}
+
+.badgeRejected {
+  color: #991b1b;
+  background: #fee2e2;
+  border: 1px solid #f87171;
+}
+
+.badgeSuspended {
+  color: #5b21b6;
+  background: #ede9fe;
+  border: 1px solid #c4b5fd;
+}
+
+.badgeArchived {
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+}

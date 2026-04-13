@@ -1,4 +1,4 @@
-import { EventStatus } from "../../../generated/prisma";
+import { EventModerationStatus, EventStatus } from "../../../generated/prisma";
 import { prisma } from "@shared/lib/prisma";
 import { eventCreateSchema } from "@shared/zod";
 
@@ -11,7 +11,13 @@ type CreateEventInput = {
 };
 
 type CreateEventResult =
-  | { status: 201; body: { success: true; data: { id: string } } }
+  | {
+      status: 201;
+      body: {
+        success: true;
+        data: { id: string; status: EventStatus; moderationMessage: string };
+      };
+    }
   | { status: 400; body: { message: string } };
 
 // -----------------------------------------------------------------------------
@@ -30,28 +36,64 @@ export const createEvent = async ({ organizerId, payload }: CreateEventInput) =>
   const end = new Date(data.endDateTime);
   const durationHours = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / 3_600_000));
 
-  const created = await prisma.event.create({
-    data: {
-      organizerId,
-      title: data.title.trim(),
-      description: data.description.trim(),
-      activityType: data.activityType.trim(),
-      eventDate: new Date(data.eventDate),
-      startTime: start,
-      endTime: end,
-      location: data.location.trim(),
-      address: data.address,
-      requiredHours: durationHours,
-      maxParticipants: data.maxParticipants,
-      requirements: data.requirements ?? undefined,
-      skillsNeeded: data.skillsNeeded,
-      status: EventStatus.draft,
-    },
-    select: { id: true },
+  const created = await prisma.$transaction(async (tx) => {
+    const event = await tx.event.create({
+      data: {
+        organizerId,
+        title: data.title.trim(),
+        description: data.description.trim(),
+        activityType: data.activityType.trim(),
+        eventDate: new Date(data.eventDate),
+        startTime: start,
+        endTime: end,
+        location: data.location.trim(),
+        address: data.address,
+        requiredHours: durationHours,
+        maxParticipants: data.maxParticipants,
+        requirements: data.requirements ?? undefined,
+        skillsNeeded: data.skillsNeeded,
+        status: EventStatus.pending_moderation,
+        submittedForModerationAt: new Date(),
+        moderationIteration: 1,
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        activityType: true,
+        eventDate: true,
+        startTime: true,
+        endTime: true,
+        location: true,
+        address: true,
+        maxParticipants: true,
+        requirements: true,
+        skillsNeeded: true,
+      },
+    });
+
+    await tx.eventModerationRequest.create({
+      data: {
+        eventId: event.id,
+        iteration: 1,
+        status: EventModerationStatus.pending,
+        submittedById: organizerId,
+        snapshot: event,
+      },
+    });
+
+    return event;
   });
 
   return {
     status: 201,
-    body: { success: true, data: created },
+    body: {
+      success: true,
+      data: {
+        id: created.id,
+        status: EventStatus.pending_moderation,
+        moderationMessage: "Мероприятие отправлено на модерацию",
+      },
+    },
   } satisfies CreateEventResult;
 };

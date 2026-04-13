@@ -14,10 +14,11 @@ import {
 // Types
 // -----------------------------------------------------------------------------
 type SessionRole = "organizer" | "volunteer";
+type ExtendedSessionRole = SessionRole | "admin";
 
 type ListEventsInput = {
   userId: string;
-  role: SessionRole;
+  role: ExtendedSessionRole;
   url: string;
 };
 
@@ -88,10 +89,10 @@ export const listEvents = async ({ userId, role, url }: ListEventsInput) => {
       orderBy: sort.orderBy,
       skip: pagination.skip,
       take: pagination.perPage,
-    include: {
+      include: {
         organizer: { select: { id: true, name: true, email: true, phone: true } },
       },
-    }),
+    }) as Promise<EventWithOrganizer[]>,
     prisma.event.groupBy({ by: ["status"], where, _count: { _all: true } }),
     prisma.event.groupBy({ by: ["activityType"], where, _count: { _all: true } }),
   ]);
@@ -140,7 +141,7 @@ const parseSorting = (params: URLSearchParams): SortResult => {
 
 const buildWhere = (
   params: URLSearchParams,
-  context: { userId: string; role: SessionRole }
+  context: { userId: string; role: ExtendedSessionRole }
 ) => {
   const where: Prisma.EventWhereInput = {};
   const andFilters: Prisma.EventWhereInput[] = [];
@@ -151,7 +152,7 @@ const buildWhere = (
 
   const requestedStatuses = parseStatusFilter(params.get("status"));
 
-  if (context.role === "organizer") {
+  if (context.role === "organizer" || context.role === "admin") {
     if (requestedStatuses?.length) {
       where.status = { in: requestedStatuses };
     }
@@ -352,6 +353,8 @@ const serializeEvent = (
     id: event.id,
     title: event.title,
     description: event.description,
+    requirements: event.requirements,
+    skillsNeeded: event.skillsNeeded,
     status: event.status,
     activityType: normalizedActivityType,
     schedule: {
@@ -375,6 +378,15 @@ const serializeEvent = (
       volunteerHours: volunteerHours.get(event.id) ?? 0,
     },
     organizer: event.organizer,
+    moderation: {
+      rejectionReason: event.rejectionReason,
+      suspensionReason: event.suspensionReason,
+      submittedForModerationAt: event.submittedForModerationAt
+        ? event.submittedForModerationAt.toISOString()
+        : null,
+      lastModeratedAt: event.lastModeratedAt ? event.lastModeratedAt.toISOString() : null,
+      moderationIteration: event.moderationIteration,
+    },
     tags: event.tags,
     timestamps: {
       createdAt: event.createdAt.toISOString(),

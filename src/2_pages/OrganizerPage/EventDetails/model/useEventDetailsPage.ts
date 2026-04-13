@@ -12,6 +12,13 @@ import { PAGES } from "@shared/constants";
 
 import { useVolunteerActions } from "./useVolunteerActions";
 
+const ORGANIZER_STATUS_OPTIONS: EventStatus[] = [
+  EventStatus.draft,
+  EventStatus.active,
+  EventStatus.completed,
+  EventStatus.suspended,
+];
+
 type UseEventDetailsPageParams = {
   eventId: string;
 };
@@ -32,7 +39,9 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
   const deleteEventMutation = useDeleteEvent();
   const updateEventStatusMutation = useUpdateEvent(eventId);
 
-  const statusOptions = Object.values(EventStatus).map((status) => ({
+  const availableStatuses = event ? ORGANIZER_STATUS_OPTIONS : [];
+
+  const statusOptions = availableStatuses.map((status) => ({
     value: status,
     label: mapEventStatusToLabel(status),
   }));
@@ -41,6 +50,7 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
   const statusValue = statusOverride ?? event?.status ?? null;
 
   const isDeleteDisabled = event?.status === EventStatus.completed;
+  const isCompleteDisabled = !event || updateEventStatusMutation.isPending;
 
   const handleOpenDeleteModal = useCallback(() => {
     if (isDeleteDisabled) {
@@ -95,7 +105,13 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
 
       try {
         await updateEventStatusMutation.mutateAsync({ status: nextStatus });
-        toast.success("Статус мероприятия успешно изменен");
+        toast.success(
+          nextStatus === EventStatus.pending_moderation
+            ? "Мероприятие отправлено на модерацию"
+            : nextStatus === EventStatus.completed
+              ? "Мероприятие завершено"
+              : "Статус мероприятия успешно изменен"
+        );
         await refetch();
       } catch (error) {
         console.error("Update event status error", error);
@@ -105,6 +121,10 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
     },
     [event, refetch, updateEventStatusMutation]
   );
+
+  const handleCompleteEvent = useCallback(async () => {
+    await handleStatusChange(EventStatus.completed);
+  }, [handleStatusChange]);
 
   const rawMaxParticipants = event?.capacity.maxParticipants;
   const maxParticipants = typeof rawMaxParticipants === "number" ? rawMaxParticipants : null;
@@ -125,6 +145,12 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
       value: String(statusValue ?? ""),
       onChange: handleStatusChange,
       isUpdating: updateEventStatusMutation.isPending,
+      isVisible: event?.status !== EventStatus.pending_moderation,
+    },
+    completeAction: {
+      complete: handleCompleteEvent,
+      isDisabled: isCompleteDisabled,
+      isLoading: updateEventStatusMutation.isPending,
     },
     deleteDialog: {
       state: deleteModalState.state,
@@ -144,6 +170,16 @@ export const useEventDetailsPage = ({ eventId }: UseEventDetailsPageParams) => {
       fillRate,
       availableSeats,
       maxParticipants,
+    },
+    moderationInfo: {
+      submittedForModerationAt: event?.moderation.submittedForModerationAt ?? null,
+      lastModeratedAt: event?.moderation.lastModeratedAt ?? null,
+      rejectionReason: event?.moderation.rejectionReason ?? null,
+      suspensionReason: event?.moderation.suspensionReason ?? null,
+      canResubmit:
+        event?.status === EventStatus.rejected || event?.status === EventStatus.suspended,
+      resubmit: () => handleStatusChange(EventStatus.pending_moderation),
+      isSubmittingToModeration: updateEventStatusMutation.isPending,
     },
   };
 };

@@ -117,22 +117,30 @@ export const CreateEventPage = () => {
           <div className={s.timeRow}>
             <Input
               className={s.timeField}
-              type="time"
+              type="text"
+              inputMode="numeric"
               label="Время начала"
               required
-              placeholder="--:--"
+              placeholder="00:00"
               error={errors.startTime?.message}
               icon={<Clock size={18} />}
+              maskOptions={{
+                mask: "00:00",
+              }}
               {...register("startTime")}
             />
             <Input
               className={s.timeField}
-              type="time"
+              type="text"
+              inputMode="numeric"
               label="Время окончания"
               required
-              placeholder="--:--"
+              placeholder="00:00"
               error={errors.endTime?.message}
               icon={<Clock size={18} />}
+              maskOptions={{
+                mask: "00:00",
+              }}
               {...register("endTime")}
             />
           </div>
@@ -218,7 +226,7 @@ export const CreateEventPage = () => {
             color="primary"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Сохраняем..." : "Создать мероприятие"}
+            {isSubmitting ? "Отправляем..." : "Отправить на модерацию"}
           </Button>
         </div>
       </form>

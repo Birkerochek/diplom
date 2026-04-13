@@ -9,10 +9,11 @@ import { prisma } from "@shared/lib/prisma";
 // Types
 // -----------------------------------------------------------------------------
 type SessionRole = "organizer" | "volunteer";
+type ExtendedSessionRole = SessionRole | "admin";
 
 type GetEventInput = {
   userId: string;
-  role: SessionRole;
+  role: ExtendedSessionRole;
   eventId: string;
 };
 
@@ -54,7 +55,7 @@ export const getEvent = async ({ userId, role, eventId }: GetEventInput) => {
     include: {
       organizer: { select: { id: true, name: true, email: true, phone: true } },
     },
-  });
+  }) as EventWithOrganizer | null;
 
   if (!event) {
     return { status: 404, body: { message: "Мероприятие не найдено" } } as const;
@@ -230,6 +231,17 @@ const serializeEvent = (
     organizer: event.organizer,
     requirements: event.requirements,
     skillsNeeded: event.skillsNeeded,
+    moderation: {
+      rejectionReason: event.rejectionReason,
+      suspensionReason: event.suspensionReason,
+      submittedForModerationAt: event.submittedForModerationAt
+        ? event.submittedForModerationAt.toISOString()
+        : null,
+      lastModeratedAt: event.lastModeratedAt ? event.lastModeratedAt.toISOString() : null,
+      approvedAt: event.approvedAt ? event.approvedAt.toISOString() : null,
+      rejectedAt: event.rejectedAt ? event.rejectedAt.toISOString() : null,
+      moderationIteration: event.moderationIteration,
+    },
     volunteers: registrationDetails.map((registration) => ({
       id: registration.id,
       status: registration.status,

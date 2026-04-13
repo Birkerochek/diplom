@@ -82,20 +82,43 @@ export async function POST(request: Request) {
 
     const name = [firstName.trim(), lastName.trim()].filter(Boolean).join(" ");
 
+    const shouldCreateOrganizerRequest = role === "organizer";
+
     await prisma.user.create({
       data: {
         email,
         passwordHash,
         name,
-        role,
+        role: shouldCreateOrganizerRequest ? "volunteer" : role,
         phone,
-        organizationName: role === "organizer" ? organizationName ?? null : null,
+        organizationName: shouldCreateOrganizerRequest ? organizationName ?? null : null,
+        organizerRoleRequest: shouldCreateOrganizerRequest
+          ? {
+              create: {
+                status: "pending",
+              },
+            }
+          : undefined,
       },
     });
 
-    console.info("[Register API] user created", { email, role });
+    console.info("[Register API] user created", {
+      email,
+      requestedRole: role,
+      assignedRole: shouldCreateOrganizerRequest ? "volunteer" : role,
+    });
 
-    return NextResponse.json({ success: true }, { status: 201 });
+    return NextResponse.json(
+      {
+        success: true,
+        assignedRole: shouldCreateOrganizerRequest ? "volunteer" : role,
+        organizerApplicationStatus: shouldCreateOrganizerRequest ? "pending" : null,
+        message: shouldCreateOrganizerRequest
+          ? "С вами свяжутся для подтверждения аккаунта"
+          : "Регистрация прошла успешно",
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("[Register API] unexpected error", error);
     return NextResponse.json(

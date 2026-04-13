@@ -47,6 +47,9 @@ export const registerSchema = z
         message: "Нужна хотя бы одна цифра",
       }),
     confirmPassword: z.string(),
+    acceptPersonalData: z.boolean().refine((value) => value, {
+      message: "Необходимо принять политику обработки персональных данных",
+    }),
   })
   .superRefine((data, ctx) => {
     if (data.role === "organizer" && !data.organizationName) {

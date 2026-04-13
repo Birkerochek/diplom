@@ -50,6 +50,16 @@ export interface EventTimestamps {
   publishedAt: string | null;
 }
 
+export interface EventModerationInfo {
+  rejectionReason: string | null;
+  suspensionReason: string | null;
+  submittedForModerationAt: string | null;
+  lastModeratedAt: string | null;
+  approvedAt?: string | null;
+  rejectedAt?: string | null;
+  moderationIteration: number;
+}
+
 /**
  * Сводка по статусам регистраций с общим числом участников.
  */
@@ -91,6 +101,8 @@ export interface EventBase {
   id: string;
   title: string;
   description: string | null;
+  requirements: string | null;
+  skillsNeeded: string[];
   status: EventStatus;
   activityType: string;
   schedule: EventSchedule;
@@ -98,6 +110,7 @@ export interface EventBase {
   capacity: EventCapacity;
   stats: EventStats;
   organizer: EventOrganizer;
+  moderation: EventModerationInfo;
   tags: string[];
   timestamps: EventTimestamps;
 }
@@ -111,8 +124,6 @@ export type EventListItem = EventBase;
  * Расширенная структура события, используемая на детальной странице.
  */
 export interface EventDetails extends EventBase {
-  requirements: string | null;
-  skillsNeeded: string[];
   volunteers: EventVolunteer[];
 }
 

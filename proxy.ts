@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { canAccessAdminScope, canAccessOrganizerScope, canAccessVolunteerScope } from "@shared/lib/access";
 
 const VOLUNTEER_ROOT = "/volunteer";
 const ORGANIZER_ROOT = "/organizer";
+const ADMIN_ROOT = "/admin";
 const LOGIN_PATH = "/auth/login";
 
 export async function proxy(req: NextRequest) {
@@ -33,16 +35,24 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  if (pathname.startsWith(VOLUNTEER_ROOT) && role !== "volunteer") {
+  if (pathname.startsWith(VOLUNTEER_ROOT) && !canAccessVolunteerScope(role)) {
     const redirectUrl = req.nextUrl.clone();
-    redirectUrl.pathname = ORGANIZER_ROOT + "/dashboard";
+    redirectUrl.pathname = role === "admin" ? ADMIN_ROOT : ORGANIZER_ROOT + "/dashboard";
     redirectUrl.searchParams.delete("callbackUrl");
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (pathname.startsWith(ORGANIZER_ROOT) && role !== "organizer") {
+  if (pathname.startsWith(ORGANIZER_ROOT) && !canAccessOrganizerScope(role)) {
     const redirectUrl = req.nextUrl.clone();
-    redirectUrl.pathname = VOLUNTEER_ROOT + "/dashboard";
+    redirectUrl.pathname = role === "admin" ? ADMIN_ROOT : VOLUNTEER_ROOT + "/dashboard";
+    redirectUrl.searchParams.delete("callbackUrl");
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  if (pathname.startsWith(ADMIN_ROOT) && !canAccessAdminScope(role)) {
+    const redirectUrl = req.nextUrl.clone();
+    redirectUrl.pathname =
+      role === "organizer" ? ORGANIZER_ROOT + "/dashboard" : VOLUNTEER_ROOT + "/dashboard";
     redirectUrl.searchParams.delete("callbackUrl");
     return NextResponse.redirect(redirectUrl);
   }
@@ -51,5 +61,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/volunteer/:path*", "/organizer/:path*"],
+  matcher: ["/volunteer/:path*", "/organizer/:path*", "/admin/:path*"],
 };

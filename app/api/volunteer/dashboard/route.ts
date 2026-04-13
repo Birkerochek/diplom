@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 
 import { nextAuthOptions } from "@shared/config/nextAuth";
+import { canAccessVolunteerScope } from "@shared/lib/access";
 import { getVolunteerDashboardStats } from "./services/getVolunteerDashboardStats";
 
 export async function GET() {
@@ -15,7 +16,7 @@ export async function GET() {
       );
     }
 
-    if (session.user.role !== "volunteer") {
+    if (!canAccessVolunteerScope(session.user.role)) {
       return NextResponse.json(
         { message: "Недостаточно прав для доступа к ресурсам волонтёра" },
         { status: 403 }

@@ -1,7 +1,13 @@
 export const PAGES = {
   HOME: "/",
+  PRIVACY: "/privacy",
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
+  ADMIN_DASHBOARD: "/admin",
+  ADMIN_EVENTS: "/admin/events",
+  ADMIN_ACTIVE_EVENTS: "/admin/active-events",
+  ADMIN_VOLUNTEERS: "/admin/volunteers",
+  ADMIN_ORGANIZER_REQUESTS: "/admin/organizer-requests",
   ORGANIZER_DASHBOARD: "/organizer/dashboard",
   VOLUNTEER_DASHBOARD: "/volunteer/dashboard",
   ORGANIZER_EVENTS: "/organizer/events",
