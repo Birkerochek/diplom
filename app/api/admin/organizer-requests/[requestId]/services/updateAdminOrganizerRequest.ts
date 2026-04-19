@@ -72,7 +72,10 @@ export const updateAdminOrganizerRequest = async ({
     return { status: 404, body: { message: "Заявка не найдена" } };
   }
 
-  if (currentRequest.status === parsed.data.action) {
+  const nextStatus = parsed.data.action === "approve" ? "approved" : "rejected";
+  const nextRole = parsed.data.action === "approve" ? "organizer" : "volunteer";
+
+  if (currentRequest.status === nextStatus) {
     return {
       status: 400,
       body: {
@@ -83,9 +86,6 @@ export const updateAdminOrganizerRequest = async ({
       },
     };
   }
-
-  const nextStatus = parsed.data.action === "approve" ? "approved" : "rejected";
-  const nextRole = parsed.data.action === "approve" ? "organizer" : "volunteer";
 
   const result = await prisma.$transaction(async (tx) => {
     const updatedRequest = await tx.organizerRoleRequest.update({
@@ -119,7 +119,7 @@ export const updateAdminOrganizerRequest = async ({
       success: true,
       data: {
         id: result.id,
-        status: result.status,
+        status: nextStatus,
         userId: result.userId,
         role: nextRole,
       },

@@ -27,7 +27,7 @@ const RejectModalBase = ({
     title={<Typography variant="h3">Отклонить заявку</Typography>}
     description={
       <Typography variant="body" color="gray">
-        Укажите причину отказа — волонтёр увидит её в личном кабинете.
+        Укажите причину отказа – волонтёр увидит её в личном кабинете.
       </Typography>
     }
     footer={

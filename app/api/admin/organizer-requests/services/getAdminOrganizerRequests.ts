@@ -2,6 +2,9 @@ import { prisma } from "@shared/lib/prisma";
 
 const DEFAULT_LIMIT = 30;
 const MAX_LIMIT = 100;
+const organizerRequestStatuses = ["pending", "approved", "rejected"] as const;
+
+type OrganizerRequestStatus = (typeof organizerRequestStatuses)[number];
 
 const parseLimit = (searchParams: URLSearchParams) => {
   const raw = Number(searchParams.get("limit"));
@@ -13,11 +16,11 @@ const parseLimit = (searchParams: URLSearchParams) => {
   return Math.min(Math.floor(raw), MAX_LIMIT);
 };
 
-const parseStatus = (searchParams: URLSearchParams) => {
+const parseStatus = (searchParams: URLSearchParams): OrganizerRequestStatus | null => {
   const status = searchParams.get("status")?.trim();
 
-  if (status === "pending" || status === "approved" || status === "rejected") {
-    return status;
+  if (status && organizerRequestStatuses.includes(status as OrganizerRequestStatus)) {
+    return status as OrganizerRequestStatus;
   }
 
   return null;

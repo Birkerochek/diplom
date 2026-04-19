@@ -60,7 +60,7 @@ export const EventInfoWidget = ({ description, schedule, location, capacity, req
         <InfoItem
           icon={<Users size={20} />}
           label="Волонтёры"
-          value={`${currentParticipants} из ${maxParticipants || "—"}`}
+          value={`${currentParticipants} из ${maxParticipants || "–"}`}
         />
       </div>
 

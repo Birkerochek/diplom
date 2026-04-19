@@ -1,15 +1,17 @@
+@use "@shared/styles/mixins.scss" as *;
 @use "@shared/styles/variables.scss" as *;
 
 .card {
-  background: $color-basic-white;
- 
-  border: 1px solid $color-brand-primary;
-  border-radius: $br-12;
   padding: 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    border-color: $color-brand-primary;
+    background: $color-basic-white-v2;
+  }
 }
 
 .card__header {

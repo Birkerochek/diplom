@@ -28,7 +28,7 @@ export const EventStatsWidget = ({ fillRate, maxParticipants, registrations, ava
       </div>
 
       <dl className={styles.statsList}>
-        <StatRow label="Всего мест" value={maxParticipants ?? "—"} />
+        <StatRow label="Всего мест" value={maxParticipants ?? "–"} />
         <StatRow label="Зарегистрировано" value={registrations.total} />
         <StatRow
           label="Одобрено"
@@ -42,7 +42,7 @@ export const EventStatsWidget = ({ fillRate, maxParticipants, registrations, ava
         />
         <StatRow
           label="Свободно мест"
-          value={availableSeats ?? "—"}
+          value={availableSeats ?? "–"}
           color="gray"
         />
       </dl>

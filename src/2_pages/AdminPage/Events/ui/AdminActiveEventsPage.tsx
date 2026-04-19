@@ -75,7 +75,7 @@ export const AdminActiveEventsPage = () => {
                       </Typography>
                       <Typography variant="body">{formatEventDate(event.schedule.eventDate)}</Typography>
                       <Typography variant="body">
-                        {formatEventTime(event.schedule.startTime)} — {formatEventTime(event.schedule.endTime)}
+                        {formatEventTime(event.schedule.startTime)} – {formatEventTime(event.schedule.endTime)}
                       </Typography>
                     </div>
                     <div className={styles.detailsCard}>

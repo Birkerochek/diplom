@@ -222,7 +222,7 @@ export const EventCard: FC<EventCardProps> = ({
           </Typography>
         ) : null}
         <Typography variant="body" color="gray">
-          {currentParticipants} / {maxParticipants || "—"}
+          {currentParticipants} / {maxParticipants || "–"}
         </Typography>
       </div>
 
