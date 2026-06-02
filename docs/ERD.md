@@ -1,5 +1,59 @@
 ```mermaid
 erDiagram
+
+        Role {
+            volunteer volunteer
+organizer organizer
+admin admin
+        }
+    
+
+
+        OrganizerApplicationStatus {
+            pending pending
+approved approved
+rejected rejected
+        }
+    
+
+
+        EventStatus {
+            draft draft
+pending_moderation pending_moderation
+rejected rejected
+active active
+suspended suspended
+completed completed
+cancelled cancelled
+archived archived
+        }
+    
+
+
+        EventModerationStatus {
+            pending pending
+approved approved
+rejected rejected
+revoked revoked
+        }
+    
+
+
+        RegistrationStatus {
+            pending pending
+approved approved
+rejected rejected
+cancelled cancelled
+completed completed
+        }
+    
+
+
+        SourceType {
+            auto auto
+manual manual
+        }
+    
   "users" {
     String id "🗝️"
     String email 
@@ -51,7 +105,13 @@ erDiagram
     DateTime rejectedAt "❓"
     String rejectedById "❓"
     String rejectionReason "❓"
+    DateTime suspendedAt "❓"
+    String suspendedById "❓"
+    String suspensionReason "❓"
+    DateTime archivedAt "❓"
+    String archivedById "❓"
     Int moderationIteration 
+    Int moderationVersion 
     String tags 
     DateTime createdAt 
     DateTime updatedAt 
@@ -115,6 +175,7 @@ erDiagram
     DateTime issuedAt 
     }
   
+    "users" o|--|| "Role" : "enum:role"
     "users" o{--}o "events" : "events"
     "users" o{--}o "event_registrations" : "registrations"
     "users" o{--}o "volunteer_hours" : "volunteerHours"
@@ -124,17 +185,22 @@ erDiagram
     "users" o{--}o "certificates" : "issuedCertificates"
     "users" o{--}o "organizer_role_requests" : "organizerRoleRequest"
     "users" o{--}o "organizer_role_requests" : "reviewedOrganizerRequests"
+    "organizer_role_requests" o|--|| "OrganizerApplicationStatus" : "enum:status"
     "organizer_role_requests" o|--|| "users" : "user"
     "organizer_role_requests" o|--|o "users" : "reviewedBy"
+    "events" o|--|| "EventStatus" : "enum:status"
     "events" o|--|| "users" : "organizer"
     "events" o{--}o "event_registrations" : "registrations"
     "events" o{--}o "volunteer_hours" : "volunteerHours"
     "events" o{--}o "event_moderation_requests" : "moderationRequests"
+    "event_moderation_requests" o|--|| "EventModerationStatus" : "enum:status"
     "event_moderation_requests" o|--|| "events" : "event"
+    "event_registrations" o|--|| "RegistrationStatus" : "enum:status"
     "event_registrations" o|--|| "events" : "event"
     "event_registrations" o|--|| "users" : "volunteer"
     "event_registrations" o|--|o "users" : "reviewedBy"
     "event_registrations" o{--}o "volunteer_hours" : "volunteerHours"
+    "volunteer_hours" o|--|| "SourceType" : "enum:source"
     "volunteer_hours" o|--|| "users" : "volunteer"
     "volunteer_hours" o|--|o "events" : "event"
     "volunteer_hours" o|--|o "event_registrations" : "registration"

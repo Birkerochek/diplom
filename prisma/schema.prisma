@@ -150,7 +150,13 @@ model Event {
   rejectedAt          DateTime?
   rejectedById        String?     @db.Uuid
   rejectionReason     String?
+  suspendedAt         DateTime?
+  suspendedById       String?     @db.Uuid
+  suspensionReason    String?
+  archivedAt          DateTime?
+  archivedById        String?     @db.Uuid
   moderationIteration Int         @default(0)
+  moderationVersion   Int         @default(0)
   tags                String[]    @default([])
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
