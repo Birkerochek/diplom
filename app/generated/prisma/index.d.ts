@@ -1716,7 +1716,6 @@ export namespace Prisma {
     phone: number
     bio: number
     avatarUrl: number
-    preferredActivities: number
     organizationName: number
     organizationDescription: number
     isActive: number
@@ -1767,7 +1766,6 @@ export namespace Prisma {
     phone?: true
     bio?: true
     avatarUrl?: true
-    preferredActivities?: true
     organizationName?: true
     organizationDescription?: true
     isActive?: true
@@ -1857,7 +1855,6 @@ export namespace Prisma {
     phone: string | null
     bio: string | null
     avatarUrl: string | null
-    preferredActivities: string[]
     organizationName: string | null
     organizationDescription: string | null
     isActive: boolean
@@ -1891,7 +1888,6 @@ export namespace Prisma {
     phone?: boolean
     bio?: boolean
     avatarUrl?: boolean
-    preferredActivities?: boolean
     organizationName?: boolean
     organizationDescription?: boolean
     isActive?: boolean
@@ -1918,7 +1914,6 @@ export namespace Prisma {
     phone?: boolean
     bio?: boolean
     avatarUrl?: boolean
-    preferredActivities?: boolean
     organizationName?: boolean
     organizationDescription?: boolean
     isActive?: boolean
@@ -1935,7 +1930,6 @@ export namespace Prisma {
     phone?: boolean
     bio?: boolean
     avatarUrl?: boolean
-    preferredActivities?: boolean
     organizationName?: boolean
     organizationDescription?: boolean
     isActive?: boolean
@@ -1952,7 +1946,6 @@ export namespace Prisma {
     phone?: boolean
     bio?: boolean
     avatarUrl?: boolean
-    preferredActivities?: boolean
     organizationName?: boolean
     organizationDescription?: boolean
     isActive?: boolean
@@ -1960,7 +1953,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "role" | "phone" | "bio" | "avatarUrl" | "preferredActivities" | "organizationName" | "organizationDescription" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "role" | "phone" | "bio" | "avatarUrl" | "organizationName" | "organizationDescription" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     events?: boolean | User$eventsArgs<ExtArgs>
     registrations?: boolean | User$registrationsArgs<ExtArgs>
@@ -1998,7 +1991,6 @@ export namespace Prisma {
       phone: string | null
       bio: string | null
       avatarUrl: string | null
-      preferredActivities: string[]
       organizationName: string | null
       organizationDescription: string | null
       isActive: boolean
@@ -2444,7 +2436,6 @@ export namespace Prisma {
     readonly phone: FieldRef<"User", 'String'>
     readonly bio: FieldRef<"User", 'String'>
     readonly avatarUrl: FieldRef<"User", 'String'>
-    readonly preferredActivities: FieldRef<"User", 'String[]'>
     readonly organizationName: FieldRef<"User", 'String'>
     readonly organizationDescription: FieldRef<"User", 'String'>
     readonly isActive: FieldRef<"User", 'Boolean'>
@@ -4221,7 +4212,6 @@ export namespace Prisma {
     maxParticipants: number | null
     currentParticipants: number | null
     moderationIteration: number | null
-    moderationVersion: number | null
   }
 
   export type EventSumAggregateOutputType = {
@@ -4229,7 +4219,6 @@ export namespace Prisma {
     maxParticipants: number | null
     currentParticipants: number | null
     moderationIteration: number | null
-    moderationVersion: number | null
   }
 
   export type EventMinAggregateOutputType = {
@@ -4255,13 +4244,7 @@ export namespace Prisma {
     rejectedAt: Date | null
     rejectedById: string | null
     rejectionReason: string | null
-    suspendedAt: Date | null
-    suspendedById: string | null
-    suspensionReason: string | null
-    archivedAt: Date | null
-    archivedById: string | null
     moderationIteration: number | null
-    moderationVersion: number | null
     createdAt: Date | null
     updatedAt: Date | null
     publishedAt: Date | null
@@ -4290,13 +4273,7 @@ export namespace Prisma {
     rejectedAt: Date | null
     rejectedById: string | null
     rejectionReason: string | null
-    suspendedAt: Date | null
-    suspendedById: string | null
-    suspensionReason: string | null
-    archivedAt: Date | null
-    archivedById: string | null
     moderationIteration: number | null
-    moderationVersion: number | null
     createdAt: Date | null
     updatedAt: Date | null
     publishedAt: Date | null
@@ -4326,13 +4303,7 @@ export namespace Prisma {
     rejectedAt: number
     rejectedById: number
     rejectionReason: number
-    suspendedAt: number
-    suspendedById: number
-    suspensionReason: number
-    archivedAt: number
-    archivedById: number
     moderationIteration: number
-    moderationVersion: number
     tags: number
     createdAt: number
     updatedAt: number
@@ -4346,7 +4317,6 @@ export namespace Prisma {
     maxParticipants?: true
     currentParticipants?: true
     moderationIteration?: true
-    moderationVersion?: true
   }
 
   export type EventSumAggregateInputType = {
@@ -4354,7 +4324,6 @@ export namespace Prisma {
     maxParticipants?: true
     currentParticipants?: true
     moderationIteration?: true
-    moderationVersion?: true
   }
 
   export type EventMinAggregateInputType = {
@@ -4380,13 +4349,7 @@ export namespace Prisma {
     rejectedAt?: true
     rejectedById?: true
     rejectionReason?: true
-    suspendedAt?: true
-    suspendedById?: true
-    suspensionReason?: true
-    archivedAt?: true
-    archivedById?: true
     moderationIteration?: true
-    moderationVersion?: true
     createdAt?: true
     updatedAt?: true
     publishedAt?: true
@@ -4415,13 +4378,7 @@ export namespace Prisma {
     rejectedAt?: true
     rejectedById?: true
     rejectionReason?: true
-    suspendedAt?: true
-    suspendedById?: true
-    suspensionReason?: true
-    archivedAt?: true
-    archivedById?: true
     moderationIteration?: true
-    moderationVersion?: true
     createdAt?: true
     updatedAt?: true
     publishedAt?: true
@@ -4451,13 +4408,7 @@ export namespace Prisma {
     rejectedAt?: true
     rejectedById?: true
     rejectionReason?: true
-    suspendedAt?: true
-    suspendedById?: true
-    suspensionReason?: true
-    archivedAt?: true
-    archivedById?: true
     moderationIteration?: true
-    moderationVersion?: true
     tags?: true
     createdAt?: true
     updatedAt?: true
@@ -4575,13 +4526,7 @@ export namespace Prisma {
     rejectedAt: Date | null
     rejectedById: string | null
     rejectionReason: string | null
-    suspendedAt: Date | null
-    suspendedById: string | null
-    suspensionReason: string | null
-    archivedAt: Date | null
-    archivedById: string | null
     moderationIteration: number
-    moderationVersion: number
     tags: string[]
     createdAt: Date
     updatedAt: Date
@@ -4631,13 +4576,7 @@ export namespace Prisma {
     rejectedAt?: boolean
     rejectedById?: boolean
     rejectionReason?: boolean
-    suspendedAt?: boolean
-    suspendedById?: boolean
-    suspensionReason?: boolean
-    archivedAt?: boolean
-    archivedById?: boolean
     moderationIteration?: boolean
-    moderationVersion?: boolean
     tags?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4673,13 +4612,7 @@ export namespace Prisma {
     rejectedAt?: boolean
     rejectedById?: boolean
     rejectionReason?: boolean
-    suspendedAt?: boolean
-    suspendedById?: boolean
-    suspensionReason?: boolean
-    archivedAt?: boolean
-    archivedById?: boolean
     moderationIteration?: boolean
-    moderationVersion?: boolean
     tags?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4711,13 +4644,7 @@ export namespace Prisma {
     rejectedAt?: boolean
     rejectedById?: boolean
     rejectionReason?: boolean
-    suspendedAt?: boolean
-    suspendedById?: boolean
-    suspensionReason?: boolean
-    archivedAt?: boolean
-    archivedById?: boolean
     moderationIteration?: boolean
-    moderationVersion?: boolean
     tags?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4749,20 +4676,14 @@ export namespace Prisma {
     rejectedAt?: boolean
     rejectedById?: boolean
     rejectionReason?: boolean
-    suspendedAt?: boolean
-    suspendedById?: boolean
-    suspensionReason?: boolean
-    archivedAt?: boolean
-    archivedById?: boolean
     moderationIteration?: boolean
-    moderationVersion?: boolean
     tags?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     publishedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizerId" | "title" | "description" | "activityType" | "eventDate" | "startTime" | "endTime" | "location" | "address" | "requiredHours" | "maxParticipants" | "currentParticipants" | "requirements" | "skillsNeeded" | "status" | "submittedForModerationAt" | "lastModeratedAt" | "approvedAt" | "approvedById" | "rejectedAt" | "rejectedById" | "rejectionReason" | "suspendedAt" | "suspendedById" | "suspensionReason" | "archivedAt" | "archivedById" | "moderationIteration" | "moderationVersion" | "tags" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizerId" | "title" | "description" | "activityType" | "eventDate" | "startTime" | "endTime" | "location" | "address" | "requiredHours" | "maxParticipants" | "currentParticipants" | "requirements" | "skillsNeeded" | "status" | "submittedForModerationAt" | "lastModeratedAt" | "approvedAt" | "approvedById" | "rejectedAt" | "rejectedById" | "rejectionReason" | "moderationIteration" | "tags" | "createdAt" | "updatedAt" | "publishedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organizer?: boolean | UserDefaultArgs<ExtArgs>
     registrations?: boolean | Event$registrationsArgs<ExtArgs>
@@ -4809,13 +4730,7 @@ export namespace Prisma {
       rejectedAt: Date | null
       rejectedById: string | null
       rejectionReason: string | null
-      suspendedAt: Date | null
-      suspendedById: string | null
-      suspensionReason: string | null
-      archivedAt: Date | null
-      archivedById: string | null
       moderationIteration: number
-      moderationVersion: number
       tags: string[]
       createdAt: Date
       updatedAt: Date
@@ -5270,13 +5185,7 @@ export namespace Prisma {
     readonly rejectedAt: FieldRef<"Event", 'DateTime'>
     readonly rejectedById: FieldRef<"Event", 'String'>
     readonly rejectionReason: FieldRef<"Event", 'String'>
-    readonly suspendedAt: FieldRef<"Event", 'DateTime'>
-    readonly suspendedById: FieldRef<"Event", 'String'>
-    readonly suspensionReason: FieldRef<"Event", 'String'>
-    readonly archivedAt: FieldRef<"Event", 'DateTime'>
-    readonly archivedById: FieldRef<"Event", 'String'>
     readonly moderationIteration: FieldRef<"Event", 'Int'>
-    readonly moderationVersion: FieldRef<"Event", 'Int'>
     readonly tags: FieldRef<"Event", 'String[]'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
@@ -6977,12 +6886,10 @@ export namespace Prisma {
 
   export type EventRegistrationAvgAggregateOutputType = {
     hoursCompleted: number | null
-    rating: number | null
   }
 
   export type EventRegistrationSumAggregateOutputType = {
     hoursCompleted: number | null
-    rating: number | null
   }
 
   export type EventRegistrationMinAggregateOutputType = {
@@ -6994,8 +6901,6 @@ export namespace Prisma {
     rejectionReason: string | null
     attended: boolean | null
     hoursCompleted: number | null
-    feedback: string | null
-    rating: number | null
     reviewedById: string | null
     registeredAt: Date | null
     reviewedAt: Date | null
@@ -7011,8 +6916,6 @@ export namespace Prisma {
     rejectionReason: string | null
     attended: boolean | null
     hoursCompleted: number | null
-    feedback: string | null
-    rating: number | null
     reviewedById: string | null
     registeredAt: Date | null
     reviewedAt: Date | null
@@ -7028,8 +6931,6 @@ export namespace Prisma {
     rejectionReason: number
     attended: number
     hoursCompleted: number
-    feedback: number
-    rating: number
     reviewedById: number
     registeredAt: number
     reviewedAt: number
@@ -7040,12 +6941,10 @@ export namespace Prisma {
 
   export type EventRegistrationAvgAggregateInputType = {
     hoursCompleted?: true
-    rating?: true
   }
 
   export type EventRegistrationSumAggregateInputType = {
     hoursCompleted?: true
-    rating?: true
   }
 
   export type EventRegistrationMinAggregateInputType = {
@@ -7057,8 +6956,6 @@ export namespace Prisma {
     rejectionReason?: true
     attended?: true
     hoursCompleted?: true
-    feedback?: true
-    rating?: true
     reviewedById?: true
     registeredAt?: true
     reviewedAt?: true
@@ -7074,8 +6971,6 @@ export namespace Prisma {
     rejectionReason?: true
     attended?: true
     hoursCompleted?: true
-    feedback?: true
-    rating?: true
     reviewedById?: true
     registeredAt?: true
     reviewedAt?: true
@@ -7091,8 +6986,6 @@ export namespace Prisma {
     rejectionReason?: true
     attended?: true
     hoursCompleted?: true
-    feedback?: true
-    rating?: true
     reviewedById?: true
     registeredAt?: true
     reviewedAt?: true
@@ -7195,8 +7088,6 @@ export namespace Prisma {
     rejectionReason: string | null
     attended: boolean
     hoursCompleted: number | null
-    feedback: string | null
-    rating: number | null
     reviewedById: string | null
     registeredAt: Date
     reviewedAt: Date | null
@@ -7231,8 +7122,6 @@ export namespace Prisma {
     rejectionReason?: boolean
     attended?: boolean
     hoursCompleted?: boolean
-    feedback?: boolean
-    rating?: boolean
     reviewedById?: boolean
     registeredAt?: boolean
     reviewedAt?: boolean
@@ -7253,8 +7142,6 @@ export namespace Prisma {
     rejectionReason?: boolean
     attended?: boolean
     hoursCompleted?: boolean
-    feedback?: boolean
-    rating?: boolean
     reviewedById?: boolean
     registeredAt?: boolean
     reviewedAt?: boolean
@@ -7273,8 +7160,6 @@ export namespace Prisma {
     rejectionReason?: boolean
     attended?: boolean
     hoursCompleted?: boolean
-    feedback?: boolean
-    rating?: boolean
     reviewedById?: boolean
     registeredAt?: boolean
     reviewedAt?: boolean
@@ -7293,15 +7178,13 @@ export namespace Prisma {
     rejectionReason?: boolean
     attended?: boolean
     hoursCompleted?: boolean
-    feedback?: boolean
-    rating?: boolean
     reviewedById?: boolean
     registeredAt?: boolean
     reviewedAt?: boolean
     completedAt?: boolean
   }
 
-  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "volunteerId" | "motivationLetter" | "status" | "rejectionReason" | "attended" | "hoursCompleted" | "feedback" | "rating" | "reviewedById" | "registeredAt" | "reviewedAt" | "completedAt", ExtArgs["result"]["eventRegistration"]>
+  export type EventRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "volunteerId" | "motivationLetter" | "status" | "rejectionReason" | "attended" | "hoursCompleted" | "reviewedById" | "registeredAt" | "reviewedAt" | "completedAt", ExtArgs["result"]["eventRegistration"]>
   export type EventRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     volunteer?: boolean | UserDefaultArgs<ExtArgs>
@@ -7337,8 +7220,6 @@ export namespace Prisma {
       rejectionReason: string | null
       attended: boolean
       hoursCompleted: number | null
-      feedback: string | null
-      rating: number | null
       reviewedById: string | null
       registeredAt: Date
       reviewedAt: Date | null
@@ -7778,8 +7659,6 @@ export namespace Prisma {
     readonly rejectionReason: FieldRef<"EventRegistration", 'String'>
     readonly attended: FieldRef<"EventRegistration", 'Boolean'>
     readonly hoursCompleted: FieldRef<"EventRegistration", 'Int'>
-    readonly feedback: FieldRef<"EventRegistration", 'String'>
-    readonly rating: FieldRef<"EventRegistration", 'Int'>
     readonly reviewedById: FieldRef<"EventRegistration", 'String'>
     readonly registeredAt: FieldRef<"EventRegistration", 'DateTime'>
     readonly reviewedAt: FieldRef<"EventRegistration", 'DateTime'>
@@ -10764,7 +10643,6 @@ export namespace Prisma {
     phone: 'phone',
     bio: 'bio',
     avatarUrl: 'avatarUrl',
-    preferredActivities: 'preferredActivities',
     organizationName: 'organizationName',
     organizationDescription: 'organizationDescription',
     isActive: 'isActive',
@@ -10814,13 +10692,7 @@ export namespace Prisma {
     rejectedAt: 'rejectedAt',
     rejectedById: 'rejectedById',
     rejectionReason: 'rejectionReason',
-    suspendedAt: 'suspendedAt',
-    suspendedById: 'suspendedById',
-    suspensionReason: 'suspensionReason',
-    archivedAt: 'archivedAt',
-    archivedById: 'archivedById',
     moderationIteration: 'moderationIteration',
-    moderationVersion: 'moderationVersion',
     tags: 'tags',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -10858,8 +10730,6 @@ export namespace Prisma {
     rejectionReason: 'rejectionReason',
     attended: 'attended',
     hoursCompleted: 'hoursCompleted',
-    feedback: 'feedback',
-    rating: 'rating',
     reviewedById: 'reviewedById',
     registeredAt: 'registeredAt',
     reviewedAt: 'reviewedAt',
@@ -11129,7 +10999,6 @@ export namespace Prisma {
     phone?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
     avatarUrl?: StringNullableFilter<"User"> | string | null
-    preferredActivities?: StringNullableListFilter<"User">
     organizationName?: StringNullableFilter<"User"> | string | null
     organizationDescription?: StringNullableFilter<"User"> | string | null
     isActive?: BoolFilter<"User"> | boolean
@@ -11155,7 +11024,6 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
-    preferredActivities?: SortOrder
     organizationName?: SortOrderInput | SortOrder
     organizationDescription?: SortOrderInput | SortOrder
     isActive?: SortOrder
@@ -11185,7 +11053,6 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     bio?: StringNullableFilter<"User"> | string | null
     avatarUrl?: StringNullableFilter<"User"> | string | null
-    preferredActivities?: StringNullableListFilter<"User">
     organizationDescription?: StringNullableFilter<"User"> | string | null
     isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -11210,7 +11077,6 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
-    preferredActivities?: SortOrder
     organizationName?: SortOrderInput | SortOrder
     organizationDescription?: SortOrderInput | SortOrder
     isActive?: SortOrder
@@ -11233,7 +11099,6 @@ export namespace Prisma {
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
     bio?: StringNullableWithAggregatesFilter<"User"> | string | null
     avatarUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
-    preferredActivities?: StringNullableListFilter<"User">
     organizationName?: StringNullableWithAggregatesFilter<"User"> | string | null
     organizationDescription?: StringNullableWithAggregatesFilter<"User"> | string | null
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
@@ -11346,13 +11211,7 @@ export namespace Prisma {
     rejectedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
     rejectedById?: UuidNullableFilter<"Event"> | string | null
     rejectionReason?: StringNullableFilter<"Event"> | string | null
-    suspendedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
-    suspendedById?: UuidNullableFilter<"Event"> | string | null
-    suspensionReason?: StringNullableFilter<"Event"> | string | null
-    archivedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
-    archivedById?: UuidNullableFilter<"Event"> | string | null
     moderationIteration?: IntFilter<"Event"> | number
-    moderationVersion?: IntFilter<"Event"> | number
     tags?: StringNullableListFilter<"Event">
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
@@ -11387,13 +11246,7 @@ export namespace Prisma {
     rejectedAt?: SortOrderInput | SortOrder
     rejectedById?: SortOrderInput | SortOrder
     rejectionReason?: SortOrderInput | SortOrder
-    suspendedAt?: SortOrderInput | SortOrder
-    suspendedById?: SortOrderInput | SortOrder
-    suspensionReason?: SortOrderInput | SortOrder
-    archivedAt?: SortOrderInput | SortOrder
-    archivedById?: SortOrderInput | SortOrder
     moderationIteration?: SortOrder
-    moderationVersion?: SortOrder
     tags?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11431,13 +11284,7 @@ export namespace Prisma {
     rejectedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
     rejectedById?: UuidNullableFilter<"Event"> | string | null
     rejectionReason?: StringNullableFilter<"Event"> | string | null
-    suspendedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
-    suspendedById?: UuidNullableFilter<"Event"> | string | null
-    suspensionReason?: StringNullableFilter<"Event"> | string | null
-    archivedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
-    archivedById?: UuidNullableFilter<"Event"> | string | null
     moderationIteration?: IntFilter<"Event"> | number
-    moderationVersion?: IntFilter<"Event"> | number
     tags?: StringNullableListFilter<"Event">
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
@@ -11472,13 +11319,7 @@ export namespace Prisma {
     rejectedAt?: SortOrderInput | SortOrder
     rejectedById?: SortOrderInput | SortOrder
     rejectionReason?: SortOrderInput | SortOrder
-    suspendedAt?: SortOrderInput | SortOrder
-    suspendedById?: SortOrderInput | SortOrder
-    suspensionReason?: SortOrderInput | SortOrder
-    archivedAt?: SortOrderInput | SortOrder
-    archivedById?: SortOrderInput | SortOrder
     moderationIteration?: SortOrder
-    moderationVersion?: SortOrder
     tags?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11517,13 +11358,7 @@ export namespace Prisma {
     rejectedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
     rejectedById?: UuidNullableWithAggregatesFilter<"Event"> | string | null
     rejectionReason?: StringNullableWithAggregatesFilter<"Event"> | string | null
-    suspendedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
-    suspendedById?: UuidNullableWithAggregatesFilter<"Event"> | string | null
-    suspensionReason?: StringNullableWithAggregatesFilter<"Event"> | string | null
-    archivedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
-    archivedById?: UuidNullableWithAggregatesFilter<"Event"> | string | null
     moderationIteration?: IntWithAggregatesFilter<"Event"> | number
-    moderationVersion?: IntWithAggregatesFilter<"Event"> | number
     tags?: StringNullableListFilter<"Event">
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
@@ -11639,8 +11474,6 @@ export namespace Prisma {
     rejectionReason?: StringNullableFilter<"EventRegistration"> | string | null
     attended?: BoolFilter<"EventRegistration"> | boolean
     hoursCompleted?: IntNullableFilter<"EventRegistration"> | number | null
-    feedback?: StringNullableFilter<"EventRegistration"> | string | null
-    rating?: IntNullableFilter<"EventRegistration"> | number | null
     reviewedById?: UuidNullableFilter<"EventRegistration"> | string | null
     registeredAt?: DateTimeFilter<"EventRegistration"> | Date | string
     reviewedAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
@@ -11660,8 +11493,6 @@ export namespace Prisma {
     rejectionReason?: SortOrderInput | SortOrder
     attended?: SortOrder
     hoursCompleted?: SortOrderInput | SortOrder
-    feedback?: SortOrderInput | SortOrder
-    rating?: SortOrderInput | SortOrder
     reviewedById?: SortOrderInput | SortOrder
     registeredAt?: SortOrder
     reviewedAt?: SortOrderInput | SortOrder
@@ -11685,8 +11516,6 @@ export namespace Prisma {
     rejectionReason?: StringNullableFilter<"EventRegistration"> | string | null
     attended?: BoolFilter<"EventRegistration"> | boolean
     hoursCompleted?: IntNullableFilter<"EventRegistration"> | number | null
-    feedback?: StringNullableFilter<"EventRegistration"> | string | null
-    rating?: IntNullableFilter<"EventRegistration"> | number | null
     reviewedById?: UuidNullableFilter<"EventRegistration"> | string | null
     registeredAt?: DateTimeFilter<"EventRegistration"> | Date | string
     reviewedAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
@@ -11706,8 +11535,6 @@ export namespace Prisma {
     rejectionReason?: SortOrderInput | SortOrder
     attended?: SortOrder
     hoursCompleted?: SortOrderInput | SortOrder
-    feedback?: SortOrderInput | SortOrder
-    rating?: SortOrderInput | SortOrder
     reviewedById?: SortOrderInput | SortOrder
     registeredAt?: SortOrder
     reviewedAt?: SortOrderInput | SortOrder
@@ -11731,8 +11558,6 @@ export namespace Prisma {
     rejectionReason?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
     attended?: BoolWithAggregatesFilter<"EventRegistration"> | boolean
     hoursCompleted?: IntNullableWithAggregatesFilter<"EventRegistration"> | number | null
-    feedback?: StringNullableWithAggregatesFilter<"EventRegistration"> | string | null
-    rating?: IntNullableWithAggregatesFilter<"EventRegistration"> | number | null
     reviewedById?: UuidNullableWithAggregatesFilter<"EventRegistration"> | string | null
     registeredAt?: DateTimeWithAggregatesFilter<"EventRegistration"> | Date | string
     reviewedAt?: DateTimeNullableWithAggregatesFilter<"EventRegistration"> | Date | string | null
@@ -11954,7 +11779,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -11980,7 +11804,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -12006,7 +11829,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -12032,7 +11854,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -12058,7 +11879,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -12075,7 +11895,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -12092,7 +11911,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -12205,13 +12023,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12246,13 +12058,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12285,13 +12091,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12326,13 +12126,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12366,13 +12160,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12402,13 +12190,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12439,13 +12221,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12570,8 +12346,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
     completedAt?: Date | string | null
@@ -12590,8 +12364,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     reviewedById?: string | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
@@ -12606,8 +12378,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12626,8 +12396,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12644,8 +12412,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     reviewedById?: string | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
@@ -12659,8 +12425,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12675,8 +12439,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12950,14 +12712,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -13043,7 +12797,6 @@ export namespace Prisma {
     phone?: SortOrder
     bio?: SortOrder
     avatarUrl?: SortOrder
-    preferredActivities?: SortOrder
     organizationName?: SortOrder
     organizationDescription?: SortOrder
     isActive?: SortOrder
@@ -13303,6 +13056,14 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type EnumEventStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EventStatus | EnumEventStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
@@ -13344,13 +13105,7 @@ export namespace Prisma {
     rejectedAt?: SortOrder
     rejectedById?: SortOrder
     rejectionReason?: SortOrder
-    suspendedAt?: SortOrder
-    suspendedById?: SortOrder
-    suspensionReason?: SortOrder
-    archivedAt?: SortOrder
-    archivedById?: SortOrder
     moderationIteration?: SortOrder
-    moderationVersion?: SortOrder
     tags?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13362,7 +13117,6 @@ export namespace Prisma {
     maxParticipants?: SortOrder
     currentParticipants?: SortOrder
     moderationIteration?: SortOrder
-    moderationVersion?: SortOrder
   }
 
   export type EventMaxOrderByAggregateInput = {
@@ -13388,13 +13142,7 @@ export namespace Prisma {
     rejectedAt?: SortOrder
     rejectedById?: SortOrder
     rejectionReason?: SortOrder
-    suspendedAt?: SortOrder
-    suspendedById?: SortOrder
-    suspensionReason?: SortOrder
-    archivedAt?: SortOrder
-    archivedById?: SortOrder
     moderationIteration?: SortOrder
-    moderationVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrder
@@ -13423,13 +13171,7 @@ export namespace Prisma {
     rejectedAt?: SortOrder
     rejectedById?: SortOrder
     rejectionReason?: SortOrder
-    suspendedAt?: SortOrder
-    suspendedById?: SortOrder
-    suspensionReason?: SortOrder
-    archivedAt?: SortOrder
-    archivedById?: SortOrder
     moderationIteration?: SortOrder
-    moderationVersion?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrder
@@ -13440,7 +13182,6 @@ export namespace Prisma {
     maxParticipants?: SortOrder
     currentParticipants?: SortOrder
     moderationIteration?: SortOrder
-    moderationVersion?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -13633,8 +13374,6 @@ export namespace Prisma {
     rejectionReason?: SortOrder
     attended?: SortOrder
     hoursCompleted?: SortOrder
-    feedback?: SortOrder
-    rating?: SortOrder
     reviewedById?: SortOrder
     registeredAt?: SortOrder
     reviewedAt?: SortOrder
@@ -13643,7 +13382,6 @@ export namespace Prisma {
 
   export type EventRegistrationAvgOrderByAggregateInput = {
     hoursCompleted?: SortOrder
-    rating?: SortOrder
   }
 
   export type EventRegistrationMaxOrderByAggregateInput = {
@@ -13655,8 +13393,6 @@ export namespace Prisma {
     rejectionReason?: SortOrder
     attended?: SortOrder
     hoursCompleted?: SortOrder
-    feedback?: SortOrder
-    rating?: SortOrder
     reviewedById?: SortOrder
     registeredAt?: SortOrder
     reviewedAt?: SortOrder
@@ -13672,8 +13408,6 @@ export namespace Prisma {
     rejectionReason?: SortOrder
     attended?: SortOrder
     hoursCompleted?: SortOrder
-    feedback?: SortOrder
-    rating?: SortOrder
     reviewedById?: SortOrder
     registeredAt?: SortOrder
     reviewedAt?: SortOrder
@@ -13682,7 +13416,6 @@ export namespace Prisma {
 
   export type EventRegistrationSumOrderByAggregateInput = {
     hoursCompleted?: SortOrder
-    rating?: SortOrder
   }
 
   export type EnumRegistrationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -13834,10 +13567,6 @@ export namespace Prisma {
     totalHours?: SortOrder
   }
 
-  export type UserCreatepreferredActivitiesInput = {
-    set: string[]
-  }
-
   export type EventCreateNestedManyWithoutOrganizerInput = {
     create?: XOR<EventCreateWithoutOrganizerInput, EventUncheckedCreateWithoutOrganizerInput> | EventCreateWithoutOrganizerInput[] | EventUncheckedCreateWithoutOrganizerInput[]
     connectOrCreate?: EventCreateOrConnectWithoutOrganizerInput | EventCreateOrConnectWithoutOrganizerInput[]
@@ -13972,11 +13701,6 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
-  }
-
-  export type UserUpdatepreferredActivitiesInput = {
-    set?: string[]
-    push?: string | string[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -15050,13 +14774,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15089,13 +14807,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15122,8 +14834,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
     completedAt?: Date | string | null
@@ -15140,8 +14850,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     reviewedById?: string | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
@@ -15290,8 +14998,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
     completedAt?: Date | string | null
@@ -15309,8 +15015,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
     completedAt?: Date | string | null
@@ -15465,13 +15169,7 @@ export namespace Prisma {
     rejectedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
     rejectedById?: UuidNullableFilter<"Event"> | string | null
     rejectionReason?: StringNullableFilter<"Event"> | string | null
-    suspendedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
-    suspendedById?: UuidNullableFilter<"Event"> | string | null
-    suspensionReason?: StringNullableFilter<"Event"> | string | null
-    archivedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
-    archivedById?: UuidNullableFilter<"Event"> | string | null
     moderationIteration?: IntFilter<"Event"> | number
-    moderationVersion?: IntFilter<"Event"> | number
     tags?: StringNullableListFilter<"Event">
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
@@ -15506,8 +15204,6 @@ export namespace Prisma {
     rejectionReason?: StringNullableFilter<"EventRegistration"> | string | null
     attended?: BoolFilter<"EventRegistration"> | boolean
     hoursCompleted?: IntNullableFilter<"EventRegistration"> | number | null
-    feedback?: StringNullableFilter<"EventRegistration"> | string | null
-    rating?: IntNullableFilter<"EventRegistration"> | number | null
     reviewedById?: UuidNullableFilter<"EventRegistration"> | string | null
     registeredAt?: DateTimeFilter<"EventRegistration"> | Date | string
     reviewedAt?: DateTimeNullableFilter<"EventRegistration"> | Date | string | null
@@ -15705,7 +15401,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -15730,7 +15425,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -15760,7 +15454,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -15785,7 +15478,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -15826,7 +15518,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -15851,7 +15542,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -15887,7 +15577,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -15912,7 +15601,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -15937,7 +15625,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -15962,7 +15649,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -15990,8 +15676,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
     completedAt?: Date | string | null
@@ -16008,8 +15692,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     reviewedById?: string | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
@@ -16131,7 +15813,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -16156,7 +15837,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -16262,13 +15942,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16302,13 +15976,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16356,13 +16024,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16396,13 +16058,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16434,13 +16090,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16474,13 +16124,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16503,7 +16147,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -16528,7 +16171,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -16558,7 +16200,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -16583,7 +16224,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -16682,13 +16322,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16722,13 +16356,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16757,7 +16385,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -16782,7 +16409,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -16818,7 +16444,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -16843,7 +16468,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -16884,7 +16508,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -16909,7 +16532,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -16953,13 +16575,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16993,13 +16609,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17020,8 +16630,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
     completedAt?: Date | string | null
@@ -17039,8 +16647,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     reviewedById?: string | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
@@ -17061,7 +16667,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -17086,7 +16691,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -17127,7 +16731,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17152,7 +16755,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17202,13 +16804,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17242,13 +16838,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17275,8 +16865,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17294,8 +16882,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17322,7 +16908,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17347,7 +16932,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17372,7 +16956,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -17397,7 +16980,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -17427,7 +17009,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -17452,7 +17033,6 @@ export namespace Prisma {
     phone?: string | null
     bio?: string | null
     avatarUrl?: string | null
-    preferredActivities?: UserCreatepreferredActivitiesInput | string[]
     organizationName?: string | null
     organizationDescription?: string | null
     isActive?: boolean
@@ -17493,7 +17073,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17518,7 +17097,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17554,7 +17132,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17579,7 +17156,6 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredActivities?: UserUpdatepreferredActivitiesInput | string[]
     organizationName?: NullableStringFieldUpdateOperationsInput | string | null
     organizationDescription?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -17618,13 +17194,7 @@ export namespace Prisma {
     rejectedAt?: Date | string | null
     rejectedById?: string | null
     rejectionReason?: string | null
-    suspendedAt?: Date | string | null
-    suspendedById?: string | null
-    suspensionReason?: string | null
-    archivedAt?: Date | string | null
-    archivedById?: string | null
     moderationIteration?: number
-    moderationVersion?: number
     tags?: EventCreatetagsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17639,8 +17209,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     reviewedById?: string | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
@@ -17703,8 +17271,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
     completedAt?: Date | string | null
@@ -17757,13 +17323,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17796,13 +17356,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17835,13 +17389,7 @@ export namespace Prisma {
     rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rejectedById?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    suspendedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    suspendedById?: NullableStringFieldUpdateOperationsInput | string | null
-    suspensionReason?: NullableStringFieldUpdateOperationsInput | string | null
-    archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    archivedById?: NullableStringFieldUpdateOperationsInput | string | null
     moderationIteration?: IntFieldUpdateOperationsInput | number
-    moderationVersion?: IntFieldUpdateOperationsInput | number
     tags?: EventUpdatetagsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17855,8 +17403,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17873,8 +17419,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17890,8 +17434,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18046,8 +17588,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18065,8 +17605,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18082,8 +17620,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18169,8 +17705,6 @@ export namespace Prisma {
     rejectionReason?: string | null
     attended?: boolean
     hoursCompleted?: number | null
-    feedback?: string | null
-    rating?: number | null
     reviewedById?: string | null
     registeredAt?: Date | string
     reviewedAt?: Date | string | null
@@ -18216,8 +17750,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18234,8 +17766,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18251,8 +17781,6 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     attended?: BoolFieldUpdateOperationsInput | boolean
     hoursCompleted?: NullableIntFieldUpdateOperationsInput | number | null
-    feedback?: NullableStringFieldUpdateOperationsInput | string | null
-    rating?: NullableIntFieldUpdateOperationsInput | number | null
     reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
     registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

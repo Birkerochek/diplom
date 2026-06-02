@@ -70,7 +70,7 @@ export async function POST(request: Request) {
         console.warn("[Register API] duplicate organization attempt", { organizationName });
         return NextResponse.json(
           {
-            message: "Organization is already registered",
+            message: "Такая организация уже зарегистрирована",
             field: "organizationName",
           },
           { status: 409 }

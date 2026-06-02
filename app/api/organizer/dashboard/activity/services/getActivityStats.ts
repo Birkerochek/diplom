@@ -30,8 +30,8 @@ export const getActivityStats = async (
       to_char(date_trunc('month', vh.date), 'YYYY-MM') AS month,
       COUNT(DISTINCT vh."volunteerId") AS volunteers,
       COALESCE(SUM(vh.hours), 0) AS hours
-    FROM "VolunteerHour" vh
-    INNER JOIN "Event" e ON e.id = vh."eventId"
+    FROM "volunteer_hours" vh
+    INNER JOIN "events" e ON e.id = vh."eventId"
     WHERE e."organizerId" = ${organizerId}::uuid
       AND vh.date >= ${startDate}
       AND vh.date < ${endDate}

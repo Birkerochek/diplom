@@ -5,6 +5,11 @@ generator client {
   binaryTargets = ["native", "linux-musl-openssl-3.0.x" ]
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "../docs/ERD.md"
+}
+
 
 datasource db {
   provider = "postgresql"
@@ -73,8 +78,6 @@ model User {
   phone               String?  @unique
   bio                 String?
   avatarUrl           String?
-  preferredActivities String[] @default([])
-
   organizationName        String? @unique
   organizationDescription String?
 
@@ -147,13 +150,7 @@ model Event {
   rejectedAt          DateTime?
   rejectedById        String?     @db.Uuid
   rejectionReason     String?
-  suspendedAt         DateTime?
-  suspendedById       String?     @db.Uuid
-  suspensionReason    String?
-  archivedAt          DateTime?
-  archivedById        String?     @db.Uuid
   moderationIteration Int         @default(0)
-  moderationVersion   Int         @default(0)
   tags                String[]    @default([])
   createdAt           DateTime    @default(now())
   updatedAt           DateTime    @updatedAt
@@ -209,8 +206,6 @@ model EventRegistration {
   rejectionReason  String?
   attended         Boolean            @default(false)
   hoursCompleted   Int?
-  feedback         String?
-  rating           Int?
   reviewedById     String?            @db.Uuid
   registeredAt     DateTime           @default(now())
   reviewedAt       DateTime?
