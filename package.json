@@ -60,7 +60,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.0",
     "prisma": "^6.15.0",
-    "prisma-erd-generator": "^1.11.2",
     "puppeteer": "^24.33.0",
     "sass": "^1.93.2",
     "tailwindcss": "^4.1.14",

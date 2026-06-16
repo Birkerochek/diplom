@@ -5,12 +5,6 @@ generator client {
   binaryTargets = ["native", "linux-musl-openssl-3.0.x" ]
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "../docs/ERD.md"
-}
-
-
 datasource db {
   provider = "postgresql"
   url = env("DATABASE_URL")
